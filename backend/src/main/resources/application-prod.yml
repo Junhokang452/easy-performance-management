@@ -1,0 +1,38 @@
+# prod profile — 자매품 9호 단계 1 BE-CC-1 진입 (2026-06-08).
+# LIVE 안전 가시화: 모든 값은 ${} 환경 변수, dev fallback 금지.
+# 단계 2 Model B 진입 시 datasource.url 을 Neon per-tenant 라우팅으로 전환.
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    com.easyperformance: INFO
+    org.hibernate.SQL: WARN
+
+# LIVE 안전 — 게이트는 명시 환경 변수만 ON (기본 OFF). 단계별 점진 전환.
+easyplatform:
+  tenantctx:
+    enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:false}
+  rls:
+    tenant:
+      enabled: ${EASYPLATFORM_RLS_TENANT_ENABLED:false}
+  b2c:
+    enabled: ${EASYPLATFORM_B2C_ENABLED:false}
+  error:
+    enabled: ${EASYPLATFORM_ERROR_ENABLED:false}
+  audit:
+    enabled: ${EASYPLATFORM_AUDIT_ENABLED:false}
+  jwt:
+    secret: ${JWT_SECRET}                    # fail-fast (HS512 ≥64바이트)
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}                  # 부팅 fail-fast

@@ -1,0 +1,31 @@
+# dev profile — 자매품 9호 단계 1 BE-CC-1 진입 (2026-06-08).
+# 로컬 PostgreSQL 단일 DB + lib autoconfig 게이트 ON (tenantctx + error + audit).
+# jobeval dev profile 정합.
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/easy_performance_management}
+    username: ${DB_USERNAME:easy_performance_management}
+    password: ${DB_PASSWORD:postgres}
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.easyperformance: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+# lib autoconfig 게이트 — dev 진입 ON (단계 1 = tenantctx + error + audit).
+# rls.tenant + b2c 는 단계 2/5 진입 시 ON 으로 전환.
+easyplatform:
+  tenantctx:
+    enabled: true
+  error:
+    enabled: true
+  audit:
+    enabled: true

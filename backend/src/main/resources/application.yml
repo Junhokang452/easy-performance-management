@@ -1,0 +1,151 @@
+# easy-performance-management 기본 application 설정 (단계 1 BE-CC-1, 2026-06-08).
+# 자매품 9호 — ADR-022 정식 편입 + ADR-030 듀얼 모드 5호. 옵션 A 보수 — lib autoconfig 게이트는 dev 만 ON.
+#
+# Profile:
+#   default = 본 파일 (안전 fallback, LIVE 호환 게이트 OFF)
+#   dev = application-dev.yml (lib 게이트 ON, localhost PG)
+#   prod = application-prod.yml (LIVE 가시화, ${} 환경 변수)
+
+server:
+  port: ${PORT:8087}
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: easy-performance-management-backend
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/easy_performance_management}
+    username: ${DB_USERNAME:easy_performance_management}
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: false
+
+  jpa:
+    open-in-view: false        # easy-standards 03 — OIV=false (N+1 / LazyInitializationException 차단)
+    hibernate:
+      ddl-auto: validate       # 스키마는 Flyway 가 소유 (ADR-006)
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: public
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 20
+          batch_versioned_data: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    # 단계 1 = 단일 DB. 단계 2 진입 시 control plane 스키마 분리 (lib BE 14 TenantBootstrap fan-out).
+    # 단계 5 진입 시 b2c 마이그 추가 (db/b2c).
+    locations: classpath:db/migration
+    schemas: public
+    default-schema: public
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=10m
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: Asia/Seoul
+
+logging:
+  level:
+    com.easyperformance: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# springdoc OpenAPI (EC-FE-7) — 단계 4 EC-FE 진입 시 FE openapi-typescript 가 spec fetch.
+# 단계 5 진입 시 B2C 그룹 분리 (/v3/api-docs/b2c).
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  show-actuator: false
+
+# lib autoconfig 게이트 — 옵션 A 보수 (기본 OFF) + dev 명시 ON.
+# 단계 1 진입 = tenantctx + error 만 ON. 나머지는 단계 2~5 진입 시 ON.
+easyplatform:
+  tenantctx:
+    enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:false}
+    header-name: ${EASYPLATFORM_TENANTCTX_HEADER:X-Tenant-Id}
+  # 단계 2 진입 시 ON (Model B + RLS 정책 SQL 박제 후)
+  rls:
+    tenant:
+      enabled: ${EASYPLATFORM_RLS_TENANT_ENABLED:false}
+  # 단계 5 진입 시 ON (B2C 공통 테넌트 + RLS user_id, ADR-029 정합)
+  b2c:
+    enabled: ${EASYPLATFORM_B2C_ENABLED:false}
+  # 단계 1 진입 시 ON (GlobalExceptionHandler 자동 등록)
+  error:
+    enabled: ${EASYPLATFORM_ERROR_ENABLED:false}
+  # 단계 3 BE-CC-2 진입 시 활용. jjwt 0.12.6 HS512 ≥64바이트 fail-fast.
+  jwt:
+    secret: ${JWT_SECRET:}
+    algorithm: HS512
+  # 단계 1 진입 시 ON (AuditEventRecorder, lib BE-CC-1 W4)
+  audit:
+    enabled: ${EASYPLATFORM_AUDIT_ENABLED:false}
+
+# 제품 고유 설정 (단계 3 BE-CC-2 진입 시 본격 활용)
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:}                                      # 부팅 fail-fast (HS512 ≥64바이트)
+      expiration: ${JWT_EXPIRATION_MS:900000}                     # access 15m
+      refresh-expiration: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # refresh 7d
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+
+# performance-management 자매품 모드 — ADR-030 듀얼 진입 (단계 5 본격 활용)
+performance:
+  mode: ${PERFORMANCE_MODE:b2b-only}    # b2b-only (단계 1~4) / dual (단계 5, B2B + B2C)
+  b2c:
+    # 단계 5 진입 시 공통 테넌트 DB URL (현재 단일 DB fallback)
+    shared-db-url: ${B2C_SHARED_DB_URL:${spring.datasource.url}}
+
+# easy-platform-core (공유 lib) 의 easyware.neon.* 키 — 게이트 OFF (단계 1 기본) 면 lib 멀티테넌시 빈 미로드
+# → 로컬 단일 DB 부팅. 단계 2 Model B 진입 시 control-plane-owner=false (자매품 공유 control DB 소비).
+easyware:
+  neon:
+    multitenancy-enabled: ${APP_NEON_MULTITENANCY_ENABLED:false}
+    control-db-url: ${CONTROL_DB_URL:${spring.datasource.url}}
+    control-db-username: ${CONTROL_DB_USERNAME:${spring.datasource.username}}
+    control-db-password: ${CONTROL_DB_PASSWORD:${spring.datasource.password:}}
+    api-key: ${NEON_API_KEY:}
+    organization-id: ${NEON_ORGANIZATION_ID:}
+    credential-encryption-key: ${TENANT_DB_CREDENTIAL_ENCRYPTION_KEY:}
+    platform-admin-username: ${PLATFORM_ADMIN_USERNAME:}
+    platform-admin-password: ${PLATFORM_ADMIN_PASSWORD:}
+    control-plane-owner: ${APP_NEON_CONTROL_PLANE_OWNER:false}
