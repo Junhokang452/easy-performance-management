@@ -1,0 +1,28 @@
+# build
+build/
+.gradle/
+out/
+*.class
+
+# node
+node_modules/
+dist/
+.vite/
+
+# env
+*.env
+.env.*
+!.env.example
+
+# logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
