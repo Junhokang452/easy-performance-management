@@ -119,6 +119,18 @@ easyplatform:
   jwt:
     secret: ${JWT_SECRET:}
     algorithm: HS512
+
+  # lib BE 22 JwtRefreshAspect cutover (G127.6 D=A, Task #159, 2026-06-08).
+  # lib commit 346306c — 자매품 7 동일 흐름 (RefreshTokenStore SPI + InMemoryRefreshTokenStore +
+  # JwtRefreshService + JwtRefreshAutoConfiguration) 일반화. 자매품 lib BE 22 cutover 6호 (그린필드 모범 2호).
+  # 활성 시: lib InMemoryRefreshTokenStore (ConditionalOnMissingBean) + JwtRefreshService 빈 자동 등록 →
+  #   AuthService 가 lib JwtRefreshService.issueRefresh/rotate/logout 위임 → ~100+ LOC 감축 실증.
+  # 옵션 A 채택 (그린필드, breaking change 0): 자체 RefreshTokenStore 빈 삭제 → lib 자동 등록.
+  # 박제: backend/_workspace/PERFORMANCE_LIB_BE_22_CUTOVER_2026-06-08.md
+  auth:
+    refresh:
+      enabled: ${EASYPLATFORM_AUTH_REFRESH_ENABLED:true}
+      ttl: ${EASYPLATFORM_AUTH_REFRESH_TTL:PT168H}     # 7일 — JwtService refreshTtlMs 와 정합
   # 단계 1 진입 시 ON (AuditEventRecorder, lib BE-CC-1 W4)
   audit:
     enabled: ${EASYPLATFORM_AUDIT_ENABLED:false}

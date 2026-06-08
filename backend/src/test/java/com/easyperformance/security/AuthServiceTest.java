@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 
@@ -18,13 +19,17 @@ import com.easyperformance.error.PerformanceErrorCode;
 import com.easyware.platform.auth.JwtAlgorithm;
 import com.easyware.platform.auth.JwtTokenIssuer;
 import com.easyware.platform.auth.JwtTokenParser;
+import com.easyware.platform.auth.refresh.InMemoryRefreshTokenStore;
+import com.easyware.platform.auth.refresh.JwtRefreshService;
+import com.easyware.platform.auth.refresh.RefreshTokenStore;
 import com.easyware.platform.error.ApiException;
 
 /**
  * AuthService 단위 테스트 — 단계 3 BE-CC-2 JWT 5분리 (G84 D=A, Task #122, 2026-06-08).
  *
- * <p>login + refresh rotation + logout 흐름 회귀 가드.
- * jobeval AuthService 그린필드 모범 정합 + Clock 주입 (jobstructure 추종).
+ * <p>lib BE 22 cutover (G127.6 D=A, Task #159, 2026-06-08) — lib {@link JwtRefreshService} +
+ * {@link InMemoryRefreshTokenStore} 위임. login + refresh rotation + logout 흐름 회귀 가드.
+ * jobeval 옵션 A 그린필드 모범 정합 + Clock 주입.
  */
 class AuthServiceTest {
 
@@ -41,8 +46,10 @@ class AuthServiceTest {
         JwtTokenIssuer issuer = new JwtTokenIssuer(SECRET, JwtAlgorithm.HS512);
         JwtTokenParser parser = new JwtTokenParser(SECRET);
         JwtService jwtService = new JwtService(issuer, parser, 300_000L, 604_800_000L);
-        store = new RefreshTokenStore(clock);
-        authService = new AuthService(jwtService, store, issuer, parser, DEFAULT_TENANT, clock);
+        store = new InMemoryRefreshTokenStore(clock);
+        JwtRefreshService libRefreshService = new JwtRefreshService(
+            issuer, parser, store, Duration.ofMillis(604_800_000L), clock);
+        authService = new AuthService(jwtService, libRefreshService, DEFAULT_TENANT);
     }
 
     @Test
@@ -70,7 +77,7 @@ class AuthServiceTest {
         // 같은 이메일 → 같은 stub userId 재사용 (단계 4 격상 시 사용자 엔티티 1:1 매핑).
         assertThat(second.userId()).isEqualTo(first.userId());
         assertThat(second.tenantId()).isEqualTo(first.tenantId());
-        // fixed Clock + 동일 claims → 동일 refresh 토큰 발급. store size 는 1 또는 2 (jjwt iat precision 영향).
+        // lib JwtRefreshService 는 jti claim (UUID.randomUUID) 으로 토큰 충돌 방지 — 동일 시각 + 동일 sub 라도 분리.
         assertThat(store.size()).isGreaterThanOrEqualTo(1);
     }
 
@@ -83,14 +90,12 @@ class AuthServiceTest {
     }
 
     @Test
-    void refresh_rotatesTokens_andRevokesOldOne() throws InterruptedException {
+    void refresh_rotatesTokens_andRevokesOldOne() {
         AuthDtos.TokenResponse initial = authService.login(
             new AuthDtos.LoginRequest("carol@example.com", "any"));
         String oldRefresh = initial.refreshToken();
 
-        // jjwt iat 은 초 단위 — 동일 시각 발급 시 토큰이 같아질 수 있으므로 1초 양보.
-        Thread.sleep(1100);
-
+        // lib JwtRefreshService 는 jti claim 으로 동일 시각도 신규 토큰 보장 — Thread.sleep 불필요.
         AuthDtos.TokenResponse rotated = authService.refresh(
             new AuthDtos.RefreshRequest(oldRefresh));
 
@@ -107,10 +112,11 @@ class AuthServiceTest {
 
     @Test
     void refresh_invalidToken_throwsAuthRefreshTokenInvalid() {
+        // lib rotate 는 store validate 가 먼저 — 미등록 토큰 → IllegalStateException → AUTH_REFRESH_TOKEN_EXPIRED.
         assertThatThrownBy(() -> authService.refresh(new AuthDtos.RefreshRequest("not-a-jwt")))
             .isInstanceOf(ApiException.class)
             .extracting(e -> ((ApiException) e).errorCode())
-            .isEqualTo(PerformanceErrorCode.AUTH_REFRESH_TOKEN_INVALID);
+            .isEqualTo(PerformanceErrorCode.AUTH_REFRESH_TOKEN_EXPIRED);
     }
 
     @Test
