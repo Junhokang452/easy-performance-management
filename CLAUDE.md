@@ -1,10 +1,12 @@
 # easy-performance-management — 성과 관리 자매품 (Performance Management)
 
-> **위상**: ADR-022(2026-06-06) 자매품 정식 편입 + ADR-030(2026-06-06) 듀얼 모드 일반화 + ADR-013 Neon Model B 정합. **자매품 9호** (8 → 9 진화 마일스톤, 듀얼 모드 5호 = sign + mra + jobstructure + jobeval + **performance-management 신규**).
+> **위상**: ADR-022(2026-06-06) 자매품 정식 편입 + **ADR-031 B2B-Enterprise per-tenant + SMB Shared 분류** (2026-06-08 정정, ware/hcm/recruit 패턴 정합) + ADR-013 Neon Model B 정합. **자매품 9호** (8 → 9 진화 마일스톤). ~~듀얼 모드 5호~~ → **B2B-Enterprise + SMB 옵션 4** (ware/hcm/recruit/**performance**, 본 정정 2026-06-08, Task #98).
 >
-> **본질**: HR Tech 성과 관리 카테고리 (Performance Management) — 성과 평가 + OKR + 회고 + 1:1 피드백 + CFR (Conversations / Feedback / Recognition) 4 도메인 통합. 15Five / Lattice / Culture Amp 시장 모범 정합. 기존 easy-hcm 성과평가 영역에서 분리 (D1.4=B 완전 그린필드).
+> **본질**: HR Tech 성과 관리 카테고리 (Performance Management) — 성과 평가 + OKR + 회고 + 1:1 피드백 + CFR (Conversations / Feedback / Recognition) 4 도메인 통합. 15Five / Lattice / Culture Amp 시장 모범 정합. **기업 본질** — 워크플로우 + HR 부서 SoR + 매니저-팀원 1:1 + 성과 사이클 관리. 기존 easy-hcm 성과평가 영역에서 분리 (D1.4=B 완전 그린필드).
 >
 > **공통표준 SoT**: `~/code/easy-standards` (현재 v0.5.0). 본 프로젝트는 표준을 우선 적용하고, 아래 **델타**만 예외로 둔다.
+>
+> **토폴로지 정정 (2026-06-08, Task #98)**: 사용자 명시 "easy-performance-management는 SMB는 있지만 B2C는 없음". 듀얼 모드 5호 박제 폐기 → B2B-Enterprise per-tenant + SMB Shared (ADR-031 정합, ware/hcm/recruit 패턴). 단계 5 SMB Shared 진입 옵션. 상세: `_workspace/PERFORMANCE_TOPOLOGY_CORRECTION_2026-06-08.md`.
 
 ## 적용 표준
 
@@ -16,53 +18,50 @@
 | 기술스택 | `00-principles/10-tech-stack.md` (ADR-010/014) |
 | 자매품 통합·SoR | `00-principles/11-suite-architecture.md` + **ADR-019** (Job Architecture SoR — 단계 4 진입 시 BE-CC-4 Outbox-light + S2S consume) |
 | HR 도메인 참고 | `90-conformance/easy-hr-foundation-data-and-legal-entity.md` |
-| 멀티테넌시 | **ADR-013** Neon Model B + **ADR-024** 1 고객사 = 1 Neon 프로젝트 + **ADR-029** B2C 공통 테넌트 예외 (sign 1차 모범) + **ADR-030** 자매품 B2C 듀얼 모드 일반화 |
+| 멀티테넌시 | **ADR-013** Neon Model B + **ADR-024** 1 고객사 = 1 Neon 프로젝트 + **ADR-031** 자매품 9 × 3 토폴로지 (B2B-Enterprise per-tenant + SMB Shared) |
 
-## 제품 델타 (easy-performance-management, 단계 0 baseline 기준)
+## 제품 델타 (easy-performance-management, 단계 1 cutover 기준 + 2026-06-08 토폴로지 정정 반영)
 
-| 항목 | 표준 | 본 프로젝트 (단계 0) | 격상 단계 |
+| 항목 | 표준 | 본 프로젝트 (단계 1) | 격상 단계 |
 |------|------|---------------------|----------|
-| 패키지 루트 | `com.easyware` 등 | `com.easyplatform.performance` (가칭) | 단계 1 진입 시 결정 |
-| 멀티테넌트 | Neon Model B + control plane | **미적용** — 단일 DB baseline | 단계 1 BE-CC-1 TenantAware → 단계 2 Model B |
-| `tenant_id` / RLS | 필수(목표) | **없음** — 단일 테넌트 가정 | 단계 1 컬럼 추가 → 단계 2 RLS 정책 |
-| 인증 (JWT 5분리) | BE-CC-2 | **미구현** | 단계 3 BE-CC-2 JWT (dual-claim 비파괴) |
+| 패키지 루트 | `com.easyware` 등 | `com.easyperformance` | 단계 1 ✅ 결정 완료 |
+| 멀티테넌트 | Neon Model B + control plane | **단일 DB + tenant_id 컬럼** (단계 1 흉내) | 단계 1 BE-CC-1 ✅ → 단계 2 Model B |
+| `tenant_id` / RLS | 필수(목표) | tenant_id 컬럼 ✅ / RLS 정책 미적용 | 단계 1 컬럼 ✅ → 단계 2 RLS 정책 |
+| 인증 (JWT 5분리) | BE-CC-2 | **미구현** (단계 1 minimal Security) | 단계 3 BE-CC-2 JWT |
 | FE 디자인 | EC-FE openapi-typescript + ApiError SoT | **미구현** | 단계 4 EC-FE |
-| 듀얼 모드 (B2C 공통 테넌트) | ADR-029/030 | **미적용** — B2B-only baseline | 단계 5 `shared-customer-easy-performance` + RLS user_id (mra G31.5 패턴 정합) |
+| ~~듀얼 모드 (B2C 공통 테넌트)~~ | ~~ADR-029/030~~ | **❌ 적용 대상 아님** (정정 2026-06-08) | ~~~~ |
+| **SMB Shared 진입 옵션** | ADR-031 | **미진입** | **단계 5 옵션** (`shared-smb-easy-performance-management` + RLS tenant_id 격리, ware/hcm/recruit 패턴) |
 
 ## 기술스택 (ADR-010/014 정렬)
 
-- **백엔드**: Java 21, Spring Boot 3.4.x, Kotlin 2.0 (jobstructure 정합), Gradle KDSL, JPA, Flyway, PostgreSQL(Neon 목표)
+- **백엔드**: Java 21, Spring Boot 3.4.5 ✅, Gradle KDSL ✅, JPA, Flyway, PostgreSQL(Neon 목표)
 - **프론트**: React 19.2+, Mantine v9, Vite 8, TypeScript strict 5, react-router 7, TanStack Query 5
-- **lib 재사용** (94% 자연 활용 — 18/19 단위): BE 13~18 풀 + FE 12~13 풀 + BE 19 MonthlyQuotaGuard 검토 (B2C quota 진입 시)
+- **lib 재사용**: BE 13~18 풀 + FE 12~13 풀 (~~BE 19 MonthlyQuotaGuard 검토~~ 폐기 — B2C 부재로 불필요)
 - **산출물**: `_workspace/` 격리
 
-## 도메인 entity 6건 (단계 1 후속 진입)
+## 도메인 entity 4건 (단계 1 cutover 완료 ✅)
 
 ### B2B 도메인 (분기/연간 정기 평가 — 기업 본질)
-1. **PerformanceReview** (성과 평가) — 상태 머신 DRAFT → SELF_PENDING → MANAGER_PENDING → CALIBRATION → FINALIZED → ARCHIVED
-2. **Okr** (목표 + Key Results) — 회사 → 팀 → 개인 3 계층 alignment
-3. **PerformanceCycle** (평가 주기 관리) — Q1~Q4 + 연간 사이클, HR 어드민 entity
-
-### B2C 도메인 (개인 성장 — 공통 테넌트 + RLS user_id, 단계 5)
-4. **SelfAssessment** (자기평가) — B2B sub-aggregate + B2C 독립 entity
-5. **Retrospective** (회고) — KPT / 4Ls / SSC 방법론
-6. **OneOnOneFeedback** (1:1 피드백 + CFR) — 4 모드 (MANAGER_REPORT / REPORT_MANAGER / MENTOR_MENTEE / PEER_RECOGNITION)
+1. **SelfEvaluation** (자기평가) — DRAFT / SUBMITTED / REVIEWED / FINALIZED
+2. **PersonalOkr** (개인 OKR) — ACTIVE / AT_RISK / COMPLETED / ARCHIVED
+3. **ReflectionJournal** (회고 저널) — KPT / FOUR_LS / SSC 방법론
+4. **MentorFeedback** (멘토 피드백) — GROWTH / RECOGNITION / COACHING / CONVERSATION
 
 **S2S 의존**: `hcm.Employee` (피평가자 + 평가자) + `hcm.Organization` (부서 단위 평가) + ADR-019 Job Architecture (jobstructure FK 참조).
 
-## 격상 4단계 로드맵 (단계 5 듀얼 모드 진입)
+## 격상 4단계 + SMB 옵션 단계 5 로드맵 (2026-06-08 정정)
 
 | 단계 | 작업 | 추정 기간 | 비고 |
 |------|------|----------|------|
-| **단계 0** | git init + baseline (jobstructure G30 옵션 C-1 패턴 정합) | 0.5주 | **본 진입 ✅** |
-| 단계 1 | BE-CC-1 TenantAware…AuditEntity + 단일 DB → 멀티테넌트 컬럼 + 도메인 entity 6건 P0 (PerformanceReview + Okr) 구현 | 1~1.5주 | jobeval 단계 1 패턴 정합 |
-| 단계 2 | Model B 단번 전환 (per-tenant DB 분리, ADR-013 + ADR-024) + Flyway fan-out + lib BE 14 TenantBootstrap 3 SPI seam 결합 | 1주 | mra G31 단계 2 패턴 정합 |
-| 단계 3 | BE-CC-2 JWT 5분리 + dual-claim 비파괴 + lib BE 17 v2 TenantContextResolver 자연 결합 | 1주 | jobeval 단계 3 패턴 정합 |
-| 단계 4 | EC-FE openapi-typescript + ApiError SoT + FE 디자인 업그레이드 (Mantine v9 + STD-FE 5 정합) + 도메인 P1~P3 (Self/Retro/1:1/Cycle 4) 구현 | 2주 | jobeval 단계 4 패턴 정합 |
-| **단계 5** | B2C 공통 테넌트 진입 (`shared-customer-easy-performance` + RLS user_id + ADR-029 정합) + JWT 분기 (B2B `tid` / B2C `tenant_mode: B2C` + `user_id`) + Monthly quota MonthlyQuotaGuard (lib BE 19 검토) | 1주 | mra G31.5 패턴 정합 (V1~V5 86% 재사용) |
-| 통합 검증 | 9/9 통합 회귀 0 게이트 통과 (G36 가칭 게이트) | 0.5주 | 자매품 매트릭스 9/9 진화 마일스톤 |
+| **단계 0** ✅ | git init + baseline + tag `v0.0.0-baseline` (jobstructure G30 옵션 C-1 패턴 정합) | 0.5주 | 완료 `58bf09d` (2026-06-07) |
+| **단계 1** ✅ | BE-CC-1 TenantAware…AuditEntity + 단일 DB → 멀티테넌트 컬럼 + 도메인 entity 4건 구현 + Flyway V1 + lib BE 17 v2 thin adapter | 1~1.5주 | 완료 `b83acac` (2026-06-08, 42 파일 +2762 lines, BUILD SUCCESSFUL, UuidV7Test 통과, G46 풀 통과) |
+| 단계 2 | Model B 단번 전환 (per-tenant DB 분리, ADR-013 + ADR-024) + Flyway fan-out + lib BE 14 TenantBootstrap 3 SPI seam 결합 | 1주 | G65 사용자 결정 대기 (jobeval 단계 2 `bd46134` 패턴 정합) |
+| 단계 3 | BE-CC-2 JWT 5분리 + lib BE 17 v2 TenantContextResolver 자연 결합 (~~dual-claim 비파괴~~ — dual-claim 불필요, B2C 부재) | 1주 | jobeval 단계 3 패턴 정합 |
+| 단계 4 | EC-FE openapi-typescript + ApiError SoT + FE 디자인 업그레이드 (Mantine v9 + STD-FE 5 정합) | 2주 | jobeval 단계 4 패턴 정합 |
+| **단계 5 (옵션)** | **SMB Shared 진입** (`shared-smb-easy-performance-management` Neon 프로젝트 + RLS tenant_id 격리, ware/hcm/recruit 패턴 정합) — 선택, 자매품 8/9 풀 안정 + PIPA 정합 분석 후 | 1주 | G67 (신규 후보 게이트) — 권고 ware/hcm SMB 진입 누적 안정성 후 |
+| 통합 검증 | 9/9 통합 회귀 0 게이트 통과 (G36 가칭 게이트) | 0.5주 | 자매품 매트릭스 9/9 진화 마일스톤 ✅ (단계 0 풀 완성 `58bf09d` 시점 도달) |
 
-**합계 추정**: ~9주 ≈ **2개월** (lib 재사용 94% + 듀얼 모드 박제 재사용 80% 효과로 자매품 8 중 최소 진입 비용).
+**합계 추정**: ~6.5주 ≈ **1.5개월** (단계 5 SMB 옵션 제외, B2C 듀얼 모드 진입 불필요로 ~80% 진입 비용 절감).
 
 ## 개발 하네스
 
@@ -70,12 +69,15 @@
 
 ## 박제 가이드 cross-link (easy-standards)
 
-- `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_DOMAIN_DEFINITION_2026-06-07.md` — 도메인 정의 (entity 6 + 자매품 8 → 9 진화 + HR Tech 시장 모범)
-- `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_ENTRY_ROADMAP_2026-06-07.md` — 정식 진입 4단계 + 도메인 P0~P3 + Core Master S2S + lib 재사용 + 듀얼 모드 게이트
-- `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_DUAL_MODE_DEFINITION_2026-06-07.md` — ADR-030 듀얼 모드 정합 + V1~V5 통합 검증 재사용 매트릭스
+- `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_DOMAIN_DEFINITION_2026-06-07.md` — 도메인 정의 (entity 4 + 자매품 8 → 9 진화 + HR Tech 시장 모범)
+- `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_ENTRY_ROADMAP_2026-06-07.md` — 정식 진입 4단계 + 도메인 P0~P3 + Core Master S2S + lib 재사용 + ~~듀얼 모드 게이트~~ (정정 후 SMB 게이트)
+- ~~`easy-standards/_workspace/PERFORMANCE_MANAGEMENT_DUAL_MODE_DEFINITION_2026-06-07.md`~~ — **폐기** (듀얼 모드 5호 박제 폐기 — 본 정정 2026-06-08)
+- `easy-standards/_workspace/ADR_031_SIBLING_9_TOPOLOGY_MATRIX_2026-06-07.md` — 자매품 9 × 3 토폴로지 적용성 매트릭스 (performance cell 정정 후)
 
 ## 변경 이력
 
 | 날짜 | 변경 내용 | 대상 | 사유 |
 |------|----------|------|------|
-| 2026-06-07 | 자매품 정식 진입 — 단계 0 baseline (ADR-022 + ADR-030, jobstructure G30 옵션 C-1 패턴 정합) | `CLAUDE.md` + `.gitignore` + `_workspace/README.md` + `_workspace/PERFORMANCE_MANAGEMENT_STAGE0_BASELINE_2026-06-07.md` + git init + baseline commit + tag `v0.0.0-baseline` | 사용자 D1=A 결정 (P0 1순위 분리 진입) + D4=A 결정 (performance 1순위, finance 2순위 강등). 자매품 매트릭스 9호 진화 (8 → 9, 듀얼 모드 5호 = sign + mra + jobstructure + jobeval + **performance-management 신규**). 본 슬라이스 = 디렉토리 + 박제 + git init + baseline + tag만 (BE/FE 코드는 단계 1 후속). LIVE 영향 0. |
+| 2026-06-07 | 자매품 정식 진입 — 단계 0 baseline (ADR-022 + ADR-030, jobstructure G30 옵션 C-1 패턴 정합) | `CLAUDE.md` + `.gitignore` + `_workspace/README.md` + `_workspace/PERFORMANCE_MANAGEMENT_STAGE0_BASELINE_2026-06-07.md` + git init + baseline commit + tag `v0.0.0-baseline` | 사용자 D1=A 결정 (P0 1순위 분리 진입) + D4=A 결정 (performance 1순위, finance 2순위 강등). 자매품 매트릭스 9호 진화 (8 → 9). 본 슬라이스 = 디렉토리 + 박제 + git init + baseline + tag만 (BE/FE 코드는 단계 1 후속). LIVE 영향 0. |
+| 2026-06-08 | 단계 1 BE-CC-1 cutover ✅ — Spring Boot 3.4.5 + Gradle KDSL + easy-platform-core composite + 4 도메인 스캐폴드 + Flyway V1 + tenant_id 선두 복합 인덱스 + lib BE 17 v2 thin adapter + ADR-026 명명 + 42 파일 +2762 lines + BUILD SUCCESSFUL + UuidV7Test 통과 | `backend/` + `_workspace/PERFORMANCE_MANAGEMENT_STAGE1_CUTOVER_2026-06-08.md` + commit `b83acac` | G46 D=A 풀 통과. 단계 0 baseline `58bf09d` 후속 단계 1 진입. LIVE 영향 0. |
+| 2026-06-08 | **토폴로지 정정 (Task #98)** — 듀얼 모드 5호 박제 폐기 → **B2B-Enterprise per-tenant + SMB Shared** (ADR-031 정합, ware/hcm/recruit 패턴) + 단계 격상 5단계 → 4단계 + SMB 옵션 단계 5 + ADR-030 적용 대상 아님 | `CLAUDE.md` + `_workspace/README.md` + `_workspace/PERFORMANCE_TOPOLOGY_CORRECTION_2026-06-08.md` 신규 | 사용자 명시 정정: "easy-performance-management는 SMB는 있지만 B2C는 없음". 도메인 본질 = 기업 성과 평가 (워크플로우 + HR SoR + 매니저-팀원 1:1 + 성과 사이클). B2C 개인 자기진단은 도메인 본질에서 제외. ware/hcm/recruit 패턴 정합 (기업 본질 + SMB Shared 옵션). 듀얼 모드 4 유지 (sign + mra + jobstructure + jobeval, performance 5호 격상 폐기). 단계 0/1 cutover (`58bf09d`/`b83acac`) 보존 (코드 변경 0, 박제 분류만 정정). LIVE 영향 0. |

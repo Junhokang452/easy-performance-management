@@ -1,7 +1,9 @@
 # easy-performance-management — 단계 0 baseline 진입 박제 (2026-06-07)
 
-> **상위 가이드**: `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_DOMAIN_DEFINITION_2026-06-07.md` + `PERFORMANCE_MANAGEMENT_ENTRY_ROADMAP_2026-06-07.md` + `PERFORMANCE_MANAGEMENT_DUAL_MODE_DEFINITION_2026-06-07.md`.
-> **상위 ADR**: ADR-013 (Neon Model B) + ADR-022 (자매품 정식 편입 4단계) + ADR-024 (1 고객사 = 1 Neon 프로젝트) + ADR-029 (B2C 공통 테넌트 예외) + ADR-030 (자매품 B2C 듀얼 모드 일반화).
+> **⚠️ 토폴로지 정정 (2026-06-08, Task #98)**: 본 박제 작성 시점 위상은 "듀얼 모드 5호 (sign + mra + jobstructure + jobeval + performance 신규)"였으나, 사용자 명시 정정 "easy-performance-management는 SMB는 있지만 B2C는 없음" 후속 **B2B-Enterprise per-tenant + SMB Shared 분류 (ADR-031 정합, ware/hcm/recruit 패턴)** 로 정정됨. 단계 5 정의도 듀얼 모드 풀 진입 → SMB Shared 진입 옵션으로 정정. mra G31.5 V1~V5 86% 재사용 매트릭스는 폐기. 본 단계 0 baseline 코드는 보존 (영향 없음). ADR-030 듀얼 모드 4 유지 (sign + mra + jobstructure + jobeval). 정정 상세: `PERFORMANCE_TOPOLOGY_CORRECTION_2026-06-08.md`.
+>
+> **상위 가이드**: `easy-standards/_workspace/PERFORMANCE_MANAGEMENT_DOMAIN_DEFINITION_2026-06-07.md` + `PERFORMANCE_MANAGEMENT_ENTRY_ROADMAP_2026-06-07.md` + ~~`PERFORMANCE_MANAGEMENT_DUAL_MODE_DEFINITION_2026-06-07.md`~~ (폐기, 2026-06-08).
+> **상위 ADR**: ADR-013 (Neon Model B) + ADR-022 (자매품 정식 편입 4단계) + ADR-024 (1 고객사 = 1 Neon 프로젝트) + **ADR-031** (자매품 9 × 3 토폴로지 매트릭스) — ~~ADR-029 (B2C 공통 테넌트 예외)~~ + ~~ADR-030 (자매품 B2C 듀얼 모드 일반화)~~ 적용 대상 아님 (정정 2026-06-08).
 > **본 슬라이스**: 단계 0 baseline 진입 (디렉토리 + 박제 + git init + baseline commit + tag `v0.0.0-baseline`). 실 BE/FE 코드 변경 0, LIVE 영향 0.
 
 ---

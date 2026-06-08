@@ -1,6 +1,8 @@
 # easy-performance-management 단계 1 BE-CC-1 cutover 박제 (2026-06-08, Task #86)
 
-> **위상**: 자매품 9호 (ADR-022 정식 편입 + ADR-030 듀얼 모드 5호). 단계 0 baseline `58bf09d` + tag `v0.0.0-baseline` (2026-06-07) 후속 **단계 1 BE-CC-1 TenantAware…AuditEntity + 4 도메인 스캐폴드 진입**. easy-platform-core composite build (`includeBuild("../../easy-platform-core")`) 자연 결합 + lib BE 17 v2 TenantContextResolver thin adapter (`com.easyperformance.common.TenantSupport`) + ADR-013 정합 단계 1 컬럼 보유.
+> **⚠️ 토폴로지 정정 (2026-06-08, Task #98)**: 본 박제 작성 시점 위상은 "듀얼 모드 5호"였으나, 사용자 명시 정정 "easy-performance-management는 SMB는 있지만 B2C는 없음" 후속 **B2B-Enterprise per-tenant + SMB Shared 분류 (ADR-031 정합, ware/hcm/recruit 패턴)** 로 정정됨. 단계 5 정의도 듀얼 모드 풀 진입 → SMB Shared 진입 옵션으로 정정. 본 단계 1 cutover 코드는 보존 (영향 없음). 정정 상세: `PERFORMANCE_TOPOLOGY_CORRECTION_2026-06-08.md`.
+>
+> **위상 (정정 후)**: 자매품 9호 (ADR-022 정식 편입 + **ADR-031 B2B-Enterprise + SMB Shared**). 단계 0 baseline `58bf09d` + tag `v0.0.0-baseline` (2026-06-07) 후속 **단계 1 BE-CC-1 TenantAware…AuditEntity + 4 도메인 스캐폴드 진입**. easy-platform-core composite build (`includeBuild("../../easy-platform-core")`) 자연 결합 + lib BE 17 v2 TenantContextResolver thin adapter (`com.easyperformance.common.TenantSupport`) + ADR-013 정합 단계 1 컬럼 보유.
 >
 > **G46 D=A** (단계 1 진입 권고 풀 통과) — 사용자 D=A 결정 직후 진입.
 >
@@ -13,7 +15,7 @@
 - **저장소**: `/home/samsung/code/easy-performance-management/`
 - **단계 0 풀 완성** (2026-06-07): baseline + tag `v0.0.0-baseline` + GitHub 단독 저장소 패턴 자매품 9/9 도달 진입 시작.
 - **도메인 본질**: 성과 평가 (Performance Management) = 자기평가 + 개인 OKR + 회고 저널 + 멘토 피드백 (4 도메인 통합, jobeval 본질 정정 분리 인계, Task #70).
-- **격상 4단계** (CLAUDE.md): 단계 0 ✅ → **단계 1 BE-CC-1 ← 본 슬라이스** → 단계 2 Model B → 단계 3 BE-CC-2 JWT → 단계 4 EC-FE → 단계 5 듀얼 모드 풀 진입.
+- **격상 4단계** (CLAUDE.md, 2026-06-08 정정): 단계 0 ✅ → **단계 1 BE-CC-1 ← 본 슬라이스** → 단계 2 Model B → 단계 3 BE-CC-2 JWT → 단계 4 EC-FE → ~~단계 5 듀얼 모드 풀 진입~~ → **단계 5 (옵션): SMB Shared 진입** (`shared-smb-easy-performance-management` + RLS tenant_id 격리, ware/hcm/recruit 패턴 정합, ADR-031).
 
 ## 2. 단계 1 스캐폴드 산출물 (신규 파일 풀 리스트)
 
