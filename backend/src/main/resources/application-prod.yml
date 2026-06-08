@@ -11,10 +11,25 @@
 #   * SPRING_PROFILES_ACTIVE=smb   (SMB Shared 옵션, application-smb.yml 진입)
 
 spring:
+  # ==========================================================================
+  # 정적 파일 서빙 — Dockerfile Stage 3 단일 컨테이너 토폴로지 (Task #176)
+  # ==========================================================================
+  # Spring Boot 가 FE 빌드 산출물(Vite dist/) 을 /app/static/ 에서 서빙.
+  # 우선순위: file:/app/static/ → classpath:/static/ (fallback).
+  # 환경변수 SPRING_WEB_RESOURCES_STATIC_LOCATIONS 로 override 가능.
+  web:
+    resources:
+      static-locations: ${SPRING_WEB_RESOURCES_STATIC_LOCATIONS:file:/app/static/,classpath:/static/}
+
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    # Render LIVE per-tenant DB routing 은 easy-platform-core 의
+    # TenantRoutingDataSource (easyware.neon.multitenancy-enabled=true) 활성 시 위임.
+    # 본 항목은 control plane 기본 datasource (failover/health check 용).
+    # fallback chain: DB_URL → DATABASE_URL → SPRING_DATASOURCE_URL (fail-fast: 모두 미설정 시 unresolved).
+    # Render는 DATABASE_URL을 자동 매핑 안 함 — 명시 fallback chain으로 사용자 env 이름 자유 (recruit fix 정합).
+    url: ${DB_URL:${DATABASE_URL:${SPRING_DATASOURCE_URL}}}
+    username: ${DB_USERNAME:${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME}}}
+    password: ${DB_PASSWORD:${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD}}}
 
   jpa:
     show-sql: false
@@ -52,10 +67,21 @@ easyplatform:
     secret: ${JWT_SECRET}                    # fail-fast (HS512 ≥64바이트)
 
 # easy-platform-core 멀티테넌시 — LIVE 안전 가시화 패턴 (ware W3 모범 정렬)
+# CONTROL_DB_* placeholder default 추가 (recruit fix #3, Task #176, Phase Docker 사전 적용).
+# multitenancy-enabled=false 환경에서는 control DB 미사용 → datasource fallback.
+# multitenancy-enabled=true 진입 시 환경변수 명시 필요 (PlaceholderResolutionException 회피).
 easyware:
   neon:
     multitenancy-enabled: ${APP_NEON_MULTITENANCY_ENABLED:false}   # LIVE 안전 OFF 기본
     control-plane-owner: ${APP_NEON_CONTROL_PLANE_OWNER:false}
+    control-db-url: ${CONTROL_DB_URL:${spring.datasource.url:}}
+    control-db-username: ${CONTROL_DB_USERNAME:${spring.datasource.username:}}
+    control-db-password: ${CONTROL_DB_PASSWORD:${spring.datasource.password:}}
+    api-key: ${NEON_API_KEY:}
+    organization-id: ${NEON_ORGANIZATION_ID:}
+    credential-encryption-key: ${TENANT_DB_CREDENTIAL_ENCRYPTION_KEY:}
+    platform-admin-username: ${PLATFORM_ADMIN_USERNAME:}
+    platform-admin-password: ${PLATFORM_ADMIN_PASSWORD:}
 
 # Neon 프로비저닝 — LIVE 진입 시점은 사용자 결정 후 환경 변수 ON 전환
 neon:

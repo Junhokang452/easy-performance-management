@@ -1,0 +1,76 @@
+# ============================================================================
+# easy-performance-management .dockerignore — build context 최소화
+# (Phase Docker 사전 적용, Task #176, recruit 0ea4d0a 모범 정합)
+# ============================================================================
+# build context = easy-performance-management/ 자체.
+# lib/easy-platform 은 git submodule 로 lib/easy-platform-core 만 필요.
+# 나머지 lib/easy-platform 하위 (.git / _workspace / easy-standards / monitoring 등)는
+# 빌드에 불필요하므로 context 제외 → 이미지 빌드 속도/크기 ↓.
+# ============================================================================
+
+# submodule lib/easy-platform 하위 — easy-platform-core 만 필요, 나머지 제외.
+lib/easy-platform/.git
+lib/easy-platform/.gitignore
+lib/easy-platform/_workspace
+lib/easy-platform/easy-standards
+lib/easy-platform/monitoring
+lib/easy-platform/nginx
+lib/easy-platform/scripts
+lib/easy-platform/docker-compose.monitoring.yml
+lib/easy-platform/docker-compose.yml
+lib/easy-platform/DEPLOYMENT_GUIDE.md
+lib/easy-platform/README.md
+lib/easy-platform/package.json
+lib/easy-platform/tsconfig.base.json
+lib/easy-platform/settings.gradle.kts
+lib/easy-platform/packages
+lib/easy-platform/.env.example
+
+# easy-performance-management 자체 — git history / IDE / 빌드 산출물.
+.git
+.github
+.vscode
+.idea
+.claude
+.env
+.env.local
+.env.*.local
+
+# Node / npm
+**/node_modules
+**/dist
+**/build
+**/.cache
+**/coverage
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Java / Gradle
+**/.gradle
+**/build/
+**/out/
+**/*.class
+**/*.jar
+**/*.war
+**/hs_err_pid*
+
+# 박제 / 문서 (런타임 무관 — context 압축).
+_workspace
+docs
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# 테스트 / 임시
+**/*.tmp
+**/*.swp
+**/*.bak
+**/test-results
+**/playwright-report
+**/storybook-static
+
+# 라이선스 + README 는 보존 (이미지 메타데이터 + 법적 정합).
+!LICENSE
+!README.md
