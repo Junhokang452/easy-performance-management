@@ -1,10 +1,12 @@
 # easy-performance-management 기본 application 설정 (단계 1 BE-CC-1, 2026-06-08).
-# 자매품 9호 — ADR-022 정식 편입 + ADR-030 듀얼 모드 5호. 옵션 A 보수 — lib autoconfig 게이트는 dev 만 ON.
+# 자매품 9호 — ADR-022 정식 편입 + ADR-031 B2B-Enterprise per-tenant + SMB Shared (정정 2026-06-08, Task #98).
+# 옵션 A 보수 — lib autoconfig 게이트는 dev 만 ON.
 #
 # Profile:
 #   default = 본 파일 (안전 fallback, LIVE 호환 게이트 OFF)
-#   dev = application-dev.yml (lib 게이트 ON, localhost PG)
-#   prod = application-prod.yml (LIVE 가시화, ${} 환경 변수)
+#   dev     = application-dev.yml (lib 게이트 ON, localhost PG)
+#   prod    = application-prod.yml (LIVE 가시화 B2B-Enterprise per-tenant 본질, ${} 환경 변수)
+#   smb     = application-smb.yml (SMB Shared DB + RLS tenant_id 옵션, 단계 5 G67 D=A, Task #105)
 
 server:
   port: ${PORT:8087}
@@ -49,7 +51,8 @@ spring:
     enabled: true
     baseline-on-migrate: true
     # 단계 1 = 단일 DB. 단계 2 진입 시 control plane 스키마 분리 (lib BE 14 TenantBootstrap fan-out).
-    # 단계 5 진입 시 b2c 마이그 추가 (db/b2c).
+    # 단계 5 SMB Shared 진입 시 RLS 정책 SQL 추가 (db/smb, application-smb.yml 에서 location 합성).
+    # ~~단계 5 b2c~~ → ADR-031 정정 (2026-06-08, Task #98): performance 는 B2C 부재. SMB Shared 만 옵션.
     locations: classpath:db/migration
     schemas: public
     default-schema: public
@@ -83,7 +86,7 @@ management:
       application: ${spring.application.name}
 
 # springdoc OpenAPI (EC-FE-7) — 단계 4 EC-FE 진입 시 FE openapi-typescript 가 spec fetch.
-# 단계 5 진입 시 B2C 그룹 분리 (/v3/api-docs/b2c).
+# ~~단계 5 B2C 그룹 분리~~ → ADR-031 정정 (2026-06-08, Task #98): performance B2C 부재. SMB Shared 만 옵션.
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -106,6 +109,9 @@ easyplatform:
   # ~~단계 5 B2C~~ → ADR-031 정정 (2026-06-08, Task #98): performance 는 B2C 부재. SMB Shared 옵션은 별도.
   b2c:
     enabled: ${EASYPLATFORM_B2C_ENABLED:false}
+  # 단계 5 SMB Shared 옵션 게이트 (G67 D=A, Task #105, 2026-06-08) — application-smb.yml 진입 시 ON.
+  # 옵션 A 보수: default OFF / smb profile 명시 ON.
+  # 정합: ADR-031 자매품 9 × 3 토폴로지 — ware/hcm/recruit SMB 진입 패턴.
   # 단계 1 진입 시 ON (GlobalExceptionHandler 자동 등록)
   error:
     enabled: ${EASYPLATFORM_ERROR_ENABLED:false}
@@ -122,6 +128,8 @@ easyplatform:
   performance:
     stage2:
       enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED:false}
+    smb:
+      enabled: ${EASYPLATFORM_PERFORMANCE_SMB_ENABLED:false}
   # 단계 2 진입 — lib TenantBootstrap autoconfig 게이트 (NeonProvisioningService dev 검증).
   tenantbootstrap:
     enabled: ${EASYPLATFORM_TENANTBOOTSTRAP_ENABLED:false}
@@ -146,12 +154,14 @@ app:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
     allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
 
-# performance-management 자매품 모드 — ADR-030 듀얼 진입 (단계 5 본격 활용)
+# performance-management 자매품 모드 — ADR-031 정정 (2026-06-08, Task #98).
+# ~~ADR-030 듀얼 진입 (B2B+B2C)~~ → B2B-Enterprise per-tenant (본질) + SMB Shared (단계 5 옵션).
+# B2C 부재 (도메인 본질 = 기업 성과 평가 워크플로우 + HR SoR + 매니저-팀원 1:1).
 performance:
-  mode: ${PERFORMANCE_MODE:b2b-only}    # b2b-only (단계 1~4) / dual (단계 5, B2B + B2C)
-  b2c:
-    # 단계 5 진입 시 공통 테넌트 DB URL (현재 단일 DB fallback)
-    shared-db-url: ${B2C_SHARED_DB_URL:${spring.datasource.url}}
+  mode: ${PERFORMANCE_MODE:b2b-only}    # b2b-only (단계 1~4, 기본) / smb-shared (단계 5 옵션, application-smb.yml)
+  smb:
+    # 단계 5 진입 시 SMB Shared DB URL (application-smb.yml 에서 spring.datasource.url 로 라우팅)
+    shared-db-url: ${SMB_SHARED_DB_URL:${spring.datasource.url}}
 
 # easy-platform-core (공유 lib) 의 easyware.neon.* 키 — 게이트 OFF (단계 1 기본) 면 lib 멀티테넌시 빈 미로드
 # → 로컬 단일 DB 부팅. 단계 2 Model B 진입 시 control-plane-owner=false (자매품 공유 control DB 소비).

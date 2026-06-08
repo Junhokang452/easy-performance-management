@@ -1,0 +1,120 @@
+# SMB Shared profile — 자매품 9호 단계 5 SMB Shared 옵션 진입 (2026-06-08, G67 D=A, Task #105).
+#
+# 토폴로지: B2B-Enterprise per-tenant DB (본질, application-prod.yml) + SMB Shared (옵션, 본 파일).
+# 적용 패턴: ADR-031 자매품 9 × 3 토폴로지 정합 — ware/hcm/recruit SMB 진입 가이드 패턴 정합.
+#
+# 적용 대상:
+#   * 소규모 고객사 (5~50명) — cost optimization, Shared DB + RLS tenant_id 격리
+#   * 스타트업 트라이얼 (5명 미만, free plan)
+#   * SMB starter tier
+#
+# 비대조 대조 (B2B-Enterprise vs SMB Shared):
+#   * B2B-Enterprise = 1 고객사 = 1 Neon 프로젝트 (`easyrecord-performance-<tenant>`), per-tenant DB 물리 격리
+#   * SMB Shared     = 단일 Neon 프로젝트 (`shared-smb-easy-performance-management`),
+#                      단일 DB (`easyshare_performance_management`), RLS tenant_id 논리 격리 (Model A + RLS)
+#
+# 진입 방식:
+#   SPRING_PROFILES_ACTIVE=smb (deploy time 선택)
+#   기본값은 prod (B2B-Enterprise per-tenant DB 본질 보존)
+#
+# LIVE 영향:
+#   * application-prod.yml 기본 활성 → B2B-Enterprise 본질 보존
+#   * 본 smb profile 은 명시 진입 시에만 활성화 (LIVE 영향 0 by default)
+#
+# 박제:
+#   * _workspace/PERFORMANCE_STAGE5_SMB_OPTION_2026-06-08.md
+#   * _workspace/PERFORMANCE_SMB_ENTRY_GUIDE_2026-06-08.md
+#
+# 정합 참고:
+#   * easy-ware/_workspace/WARE_SMB_ENTRY_GUIDE_2026-06-07.md
+#   * easy-hcm/_workspace/HCM_SMB_ENTRY_GUIDE_2026-06-07.md
+#   * easy-recruit/backend-spring/_workspace/RECRUIT_SMB_ENTRY_GUIDE_2026-06-07.md
+
+spring:
+  datasource:
+    # SMB Shared 단일 DB — Neon 프로젝트 `shared-smb-easy-performance-management`
+    # LIVE 진입 시 NeonProvisioningService 에서 별도 프로젝트 발행 후 url 설정
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/easyshare_performance_management}
+    username: ${DB_USERNAME:easyshare_performance_management}
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 5
+      # SMB Shared = 다수 tenant 공유 → 풀 크기 약간 ↑ (B2B-Enterprise per-tenant 20 → SMB Shared 30)
+      maximum-pool-size: 30
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: false
+
+  jpa:
+    show-sql: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    # SMB Shared 진입 시 db/migration (단일 DB 단계 1 스키마) + db/smb (RLS 정책 SQL) 양쪽 적용
+    locations: classpath:db/migration,classpath:db/smb
+    schemas: public
+    default-schema: public
+
+logging:
+  level:
+    com.easyperformance: INFO
+    com.easyperformance.smb: INFO
+    org.hibernate.SQL: WARN
+
+# easy-platform lib autoconfig — SMB Shared profile 게이트 조합
+# 토폴로지: Model A (단일 DB) + RLS tenant_id 정책 강제 적용 (논리 격리)
+easyplatform:
+  tenantctx:
+    enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:true}              # JWT → TenantContext 추출 필수
+    header-name: ${EASYPLATFORM_TENANTCTX_HEADER:X-Tenant-Id}
+  # SMB Shared = Model A + RLS tenant_id 격리 (B2B-Enterprise per-tenant 와 달리 RLS 가 핵심)
+  rls:
+    tenant:
+      enabled: ${EASYPLATFORM_RLS_TENANT_ENABLED:true}            # RLS 정책 강제 적용 (논리 격리 필수)
+  # B2C 부재 — performance 는 B2B-Enterprise + SMB Shared 만 (ADR-031 정정 2026-06-08, Task #98)
+  b2c:
+    enabled: ${EASYPLATFORM_B2C_ENABLED:false}
+  error:
+    enabled: ${EASYPLATFORM_ERROR_ENABLED:true}
+  audit:
+    enabled: ${EASYPLATFORM_AUDIT_ENABLED:true}
+  # 단계 2 PerformanceTenantBootstrapConfig — SMB profile 에서는 OFF (단일 DB 모드)
+  performance:
+    stage2:
+      enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED:false}
+    # 단계 5 SMB Shared 진입 게이트 — 명시 ON (본 profile 핵심 식별자)
+    smb:
+      enabled: ${EASYPLATFORM_PERFORMANCE_SMB_ENABLED:true}
+  # 단계 2 lib TenantBootstrap autoconfig — SMB profile 에서는 OFF (단일 DB 모드)
+  tenantbootstrap:
+    enabled: ${EASYPLATFORM_TENANTBOOTSTRAP_ENABLED:false}
+  # 단계 3 BE-CC-2 진입 시 활용
+  jwt:
+    secret: ${JWT_SECRET}                    # fail-fast (HS512 ≥64바이트)
+
+# easy-platform-core 멀티테넌시 — SMB Shared 는 단일 DB 모드 (멀티테넌시 라우팅 OFF)
+easyware:
+  neon:
+    multitenancy-enabled: ${APP_NEON_MULTITENANCY_ENABLED:false}   # SMB Shared = 단일 DB
+    control-plane-owner: ${APP_NEON_CONTROL_PLANE_OWNER:false}
+
+# Neon 프로비저닝 — SMB Shared 는 별도 프로젝트 `shared-smb-easy-performance-management`
+neon:
+  api:
+    key: ${NEON_API_KEY:}
+  project:
+    # SMB Shared = 단일 공유 프로젝트 (B2B-Enterprise 는 prefix + tenant)
+    prefix: ${NEON_PROJECT_PREFIX:shared-smb-easy-performance-management}
+  region: ${NEON_REGION:ap-northeast-1}
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}                  # 부팅 fail-fast
+
+# performance-management 자매품 모드 — SMB Shared 모드 식별자
+performance:
+  mode: ${PERFORMANCE_MODE:smb-shared}      # b2b-only (단계 1~4) / smb-shared (단계 5 옵션)

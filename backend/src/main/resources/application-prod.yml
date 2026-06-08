@@ -1,6 +1,14 @@
 # prod profile — 자매품 9호 단계 1 BE-CC-1 진입 (2026-06-08).
 # LIVE 안전 가시화: 모든 값은 ${} 환경 변수, dev fallback 금지.
 # 단계 2 Model B 진입 시 datasource.url 을 Neon per-tenant 라우팅으로 전환.
+#
+# 토폴로지 (ADR-031 정합):
+#   * prod profile = B2B-Enterprise per-tenant DB (본질, default)
+#   * smb profile  = SMB Shared DB + RLS tenant_id (옵션, application-smb.yml)
+#
+# Deploy 시 토폴로지 선택:
+#   * SPRING_PROFILES_ACTIVE=prod  (default, B2B-Enterprise 본질 보존)
+#   * SPRING_PROFILES_ACTIVE=smb   (SMB Shared 옵션, application-smb.yml 진입)
 
 spring:
   datasource:
@@ -34,6 +42,9 @@ easyplatform:
   performance:
     stage2:
       enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED:false}
+    # 단계 5 SMB Shared 옵션 — LIVE 안전 OFF 기본 (smb profile 명시 진입 시에만 ON)
+    smb:
+      enabled: ${EASYPLATFORM_PERFORMANCE_SMB_ENABLED:false}
   # 단계 2 lib TenantBootstrap autoconfig — LIVE 안전 OFF 기본
   tenantbootstrap:
     enabled: ${EASYPLATFORM_TENANTBOOTSTRAP_ENABLED:false}
