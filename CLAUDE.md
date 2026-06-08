@@ -22,15 +22,15 @@
 
 ## 제품 델타 (easy-performance-management, 단계 1 cutover 기준 + 2026-06-08 토폴로지 정정 반영)
 
-| 항목 | 표준 | 본 프로젝트 (단계 1) | 격상 단계 |
+| 항목 | 표준 | 본 프로젝트 | 격상 단계 |
 |------|------|---------------------|----------|
 | 패키지 루트 | `com.easyware` 등 | `com.easyperformance` | 단계 1 ✅ 결정 완료 |
-| 멀티테넌트 | Neon Model B + control plane | **단일 DB + tenant_id 컬럼** (단계 1 흉내) | 단계 1 BE-CC-1 ✅ → 단계 2 Model B |
-| `tenant_id` / RLS | 필수(목표) | tenant_id 컬럼 ✅ / RLS 정책 미적용 | 단계 1 컬럼 ✅ → 단계 2 RLS 정책 |
-| 인증 (JWT 5분리) | BE-CC-2 | **미구현** (단계 1 minimal Security) | 단계 3 BE-CC-2 JWT |
-| FE 디자인 | EC-FE openapi-typescript + ApiError SoT | **미구현** | 단계 4 EC-FE |
+| 멀티테넌트 | Neon Model B + control plane | **단일 DB + tenant_id 컬럼** (단계 1 흉내) → Model B 단번 전환 | 단계 1 BE-CC-1 ✅ + 단계 2 Model B ✅ |
+| `tenant_id` / RLS | 필수(목표) | tenant_id 컬럼 ✅ | 단계 1 컬럼 ✅ + 단계 5 SMB RLS 정책 ✅ |
+| **인증 (JWT 5분리)** | BE-CC-2 | **✅ 단계 3 cutover 완료** (jobeval/mra/jobstructure 3 모범 정합) | 단계 3 ✅ `(본 슬라이스)` |
+| FE 디자인 | EC-FE openapi-typescript + ApiError SoT | ✅ Vite + Mantine v9 + STD-FE 5 정합 | 단계 4 ✅ `809f970` |
 | ~~듀얼 모드 (B2C 공통 테넌트)~~ | ~~ADR-029/030~~ | **❌ 적용 대상 아님** (정정 2026-06-08) | ~~~~ |
-| **SMB Shared 진입 옵션** | ADR-031 | **미진입** | **단계 5 옵션** (`shared-smb-easy-performance-management` + RLS tenant_id 격리, ware/hcm/recruit 패턴) |
+| **SMB Shared 진입 옵션** | ADR-031 | ✅ 단계 5 SMB Shared 옵션 진입 (RLS 정책 + application-smb.yml) | 단계 5 ✅ `27108e3` |
 
 ## 기술스택 (ADR-010/014 정렬)
 
@@ -55,9 +55,9 @@
 |------|------|----------|------|
 | **단계 0** ✅ | git init + baseline + tag `v0.0.0-baseline` (jobstructure G30 옵션 C-1 패턴 정합) | 0.5주 | 완료 `58bf09d` (2026-06-07) |
 | **단계 1** ✅ | BE-CC-1 TenantAware…AuditEntity + 단일 DB → 멀티테넌트 컬럼 + 도메인 entity 4건 구현 + Flyway V1 + lib BE 17 v2 thin adapter | 1~1.5주 | 완료 `b83acac` (2026-06-08, 42 파일 +2762 lines, BUILD SUCCESSFUL, UuidV7Test 통과, G46 풀 통과) |
-| 단계 2 | Model B 단번 전환 (per-tenant DB 분리, ADR-013 + ADR-024) + Flyway fan-out + lib BE 14 TenantBootstrap 3 SPI seam 결합 | 1주 | G65 사용자 결정 대기 (jobeval 단계 2 `bd46134` 패턴 정합) |
-| 단계 3 | BE-CC-2 JWT 5분리 + lib BE 17 v2 TenantContextResolver 자연 결합 (~~dual-claim 비파괴~~ — dual-claim 불필요, B2C 부재) | 1주 | jobeval 단계 3 패턴 정합 |
-| 단계 4 | EC-FE openapi-typescript + ApiError SoT + FE 디자인 업그레이드 (Mantine v9 + STD-FE 5 정합) | 2주 | jobeval 단계 4 패턴 정합 |
+| **단계 2** ✅ | Model B 단번 전환 (per-tenant DB 분리, ADR-013 + ADR-024) + Flyway fan-out + lib BE 14 TenantBootstrap 3 SPI seam 결합 | 1주 | 완료 `6895ba9` (2026-06-08, G65 D=A) |
+| **단계 3** ✅ | **BE-CC-2 JWT 5분리** + lib BE 17 v2 TenantContextResolver 자연 결합 (dual-claim 불필요, B2C 부재 + 그린필드) + jobeval `4dff03a` + mra `38e566d` + jobstructure `d64944e` 3 모범 정합 | 1주 | **완료 (본 슬라이스, 2026-06-08, G84 D=A, Task #122 — 26 tests / 0 failures + BUILD SUCCESSFUL)** |
+| **단계 4** ✅ | EC-FE openapi-typescript + ApiError SoT + FE 디자인 업그레이드 (Mantine v9 + STD-FE 5 정합) | 2주 | 완료 `809f970` (2026-06-08, G71 D=A) |
 | **단계 5 (옵션)** ✅ | **SMB Shared 옵션 진입** (`application-smb.yml` profile + `db/smb/V20260608_001__rls_policy_smb.sql` RLS 정책 + ware/hcm/recruit 패턴 정합 + B2B-Enterprise 본질 보존) | 1주 | G67 D=A 풀 통과 ✅ (본 슬라이스 2026-06-08, Task #105). 실 진입은 자매품 8/9 풀 안정 + PIPA 정합 분석 후. |
 | 통합 검증 | 9/9 통합 회귀 0 게이트 통과 (G36 가칭 게이트) | 0.5주 | 자매품 매트릭스 9/9 진화 마일스톤 ✅ (단계 0 풀 완성 `58bf09d` 시점 도달) |
 
@@ -82,3 +82,4 @@
 | 2026-06-08 | 단계 1 BE-CC-1 cutover ✅ — Spring Boot 3.4.5 + Gradle KDSL + easy-platform-core composite + 4 도메인 스캐폴드 + Flyway V1 + tenant_id 선두 복합 인덱스 + lib BE 17 v2 thin adapter + ADR-026 명명 + 42 파일 +2762 lines + BUILD SUCCESSFUL + UuidV7Test 통과 | `backend/` + `_workspace/PERFORMANCE_MANAGEMENT_STAGE1_CUTOVER_2026-06-08.md` + commit `b83acac` | G46 D=A 풀 통과. 단계 0 baseline `58bf09d` 후속 단계 1 진입. LIVE 영향 0. |
 | 2026-06-08 | **토폴로지 정정 (Task #98)** — 듀얼 모드 5호 박제 폐기 → **B2B-Enterprise per-tenant + SMB Shared** (ADR-031 정합, ware/hcm/recruit 패턴) + 단계 격상 5단계 → 4단계 + SMB 옵션 단계 5 + ADR-030 적용 대상 아님 | `CLAUDE.md` + `_workspace/README.md` + `_workspace/PERFORMANCE_TOPOLOGY_CORRECTION_2026-06-08.md` 신규 | 사용자 명시 정정: "easy-performance-management는 SMB는 있지만 B2C는 없음". 도메인 본질 = 기업 성과 평가 (워크플로우 + HR SoR + 매니저-팀원 1:1 + 성과 사이클). B2C 개인 자기진단은 도메인 본질에서 제외. ware/hcm/recruit 패턴 정합 (기업 본질 + SMB Shared 옵션). 듀얼 모드 4 유지 (sign + mra + jobstructure + jobeval, performance 5호 격상 폐기). 단계 0/1 cutover (`58bf09d`/`b83acac`) 보존 (코드 변경 0, 박제 분류만 정정). LIVE 영향 0. |
 | 2026-06-08 | **단계 5 SMB Shared 옵션 진입 ✅ (G67 D=A, Task #105)** — `application-smb.yml` profile 신규 + `db/smb/V20260608_001__rls_policy_smb.sql` RLS 정책 마이그 (4 도메인 ENABLE+FORCE+POLICY) + SMB 진입 박제 가이드 + ware/hcm/recruit 패턴 정합 + B2B-Enterprise per-tenant 본질 보존 | `backend/src/main/resources/application-smb.yml` 신규 + `backend/src/main/resources/db/smb/V20260608_001__rls_policy_smb.sql` 신규 + `backend/src/main/resources/application.yml` (smb profile 헤더 + b2c→smb 게이트 정정 + `performance.mode` smb-shared) + `backend/src/main/resources/application-prod.yml` (토폴로지 분기 가시화 + smb LIVE 안전 OFF 가드) + `_workspace/PERFORMANCE_SMB_ENTRY_GUIDE_2026-06-08.md` 신규 + `backend/_workspace/PERFORMANCE_STAGE5_SMB_OPTION_2026-06-08.md` 신규 | G67 D=A 풀 통과. BUILD SUCCESSFUL + 모든 테스트 통과 (UuidV7Test + NeonProvisioningIntegrationTest). LIVE 영향 0 (smb profile 명시 진입 시에만 활성, default/prod 는 B2B-Enterprise per-tenant 본질 보존). |
+| 2026-06-08 | **단계 3 BE-CC-2 JWT 5분리 진입 ✅ (G84 D=A, Task #122)** — AuthController + AuthService + AuthDtos + JwtService + JwtAuthFilter + RefreshTokenStore (security 패키지 6 클래스) + PerformanceErrorCode 5종 (E98 prefix 사전 진입) + SecurityConfig JWT filter chain + lib BE 17 v2 TenantContextResolver 자연 결합 + 26 tests / 0 failures + jobeval `4dff03a` + mra `38e566d` + jobstructure `d64944e` 3 모범 정합 + **격상 4단계 풀 완성 마일스톤 도달** | `backend/src/main/java/com/easyperformance/security/{AuthController,AuthService,AuthDtos,JwtService,JwtAuthFilter,RefreshTokenStore}.java` 신규 + `backend/src/main/java/com/easyperformance/error/PerformanceErrorCode.java` 신규 + `backend/src/main/java/com/easyperformance/config/SecurityConfig.java` (permitAll → JWT filter chain) + `backend/src/main/resources/application.yml` (access TTL 15m → 5m + dev-default-tenant-id) + `backend/src/main/resources/application-dev.yml` (easyplatform.jwt.secret HS512 64+ bytes + app.security.jwt.* dev fallback) + `backend/src/test/java/com/easyperformance/security/{JwtServiceTest,AuthServiceTest}.java` 신규 + `backend/_workspace/PERFORMANCE_STAGE3_JWT_CUTOVER_2026-06-08.md` 신규 | G84 D=A 풀 통과. BUILD SUCCESSFUL + 26 tests / 0 failures (UuidV7 2 + AuthService 7 + JwtService 5 + NeonProvisioning 12). 그린필드라 dual-claim 불필요 (mra 패턴과 다름). Clock 주입 (jobstructure 추종) — 테스트 친화. ADR-031 정합 (B2C 부재). LIVE 영향 0 (dev fallback secret 만 dev profile, prod 는 ${JWT_SECRET} fail-fast). **격상 4단계 풀 완성 = 100% 도달** (단계 0 ✅ + 1 ✅ + 2 ✅ + 3 ✅ + 4 ✅ + 5 SMB ✅, 단계 4가 단계 3보다 먼저 진입한 비순서 케이스 정합). |

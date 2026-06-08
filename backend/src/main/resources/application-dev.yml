@@ -17,7 +17,8 @@ spring:
 # lib autoconfig 게이트 — dev 진입 ON.
 #   단계 1 (BE-CC-1) = tenantctx + error + audit (b83acac 정합)
 #   단계 2 (G65 D=A, Task #100) = stage2 + tenantbootstrap + multitenancy-enabled (옵션 A 보수)
-#   단계 3~5 진입 시 후속 게이트 ON 으로 전환.
+#   단계 3 (G84 D=A, Task #122, 2026-06-08) = JWT secret dev fallback (HS512 64+ bytes 충족)
+#   단계 4~5 진입 시 후속 게이트 ON 으로 전환.
 easyplatform:
   tenantctx:
     enabled: true
@@ -32,6 +33,21 @@ easyplatform:
   # 단계 2 — lib TenantBootstrap autoconfig 활성
   tenantbootstrap:
     enabled: true
+  # 단계 3 BE-CC-2 JWT 5분리 — dev 진입 박제 시크릿 (HS512 64+ bytes 충족, JwtSecretValidator 통과).
+  # LIVE 는 환경변수 JWT_SECRET 필수 (application-prod.yml fail-fast).
+  jwt:
+    secret: ${JWT_SECRET:dev-only-performance-jwt-secret-please-rotate-in-prod-via-env-jwt-secret-min-64bytes-required-12345678}
+    algorithm: HS512
+
+# 단계 3 BE-CC-2 — dev access TTL (5분) + refresh TTL (7일) + stub login default tenant.
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:dev-only-performance-jwt-secret-please-rotate-in-prod-via-env-jwt-secret-min-64bytes-required-12345678}
+      expiration: 300000          # 5분 (자매품 표준)
+      refresh-expiration: 604800000  # 7일
+    auth:
+      dev-default-tenant-id: 00000000-0000-0000-0000-000000000001
 
 # easy-platform-core 멀티테넌시 — 단계 2 dev 활성
 # control-plane-owner=false: easy-ware 가 control plane SoT (ADR-007 + S5 hcm 정렬)

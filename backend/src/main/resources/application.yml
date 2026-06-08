@@ -143,13 +143,18 @@ neon:
     prefix: ${NEON_PROJECT_PREFIX:easyrecord-performance-}
   region: ${NEON_REGION:ap-northeast-1}
 
-# 제품 고유 설정 (단계 3 BE-CC-2 진입 시 본격 활용)
+# 제품 고유 설정 — 단계 3 BE-CC-2 JWT 5분리 진입 (G84 D=A, Task #122, 2026-06-08).
+# jobeval `4dff03a` + mra `38e566d` + jobstructure `d64944e` 3 모범 정합.
 app:
   security:
     jwt:
       secret: ${JWT_SECRET:}                                      # 부팅 fail-fast (HS512 ≥64바이트)
-      expiration: ${JWT_EXPIRATION_MS:900000}                     # access 15m
+      expiration: ${JWT_EXPIRATION_MS:300000}                     # access 5m (자매품 표준 정렬, jobeval 정합)
       refresh-expiration: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # refresh 7d
+    auth:
+      # dev-only stub login 의 default tenant — 단일 DB (단계 1~4) 진입 시 fallback.
+      # 단계 4 격상 = 사용자 엔티티 + bcrypt 검증 + 사용자 가입 흐름.
+      dev-default-tenant-id: ${AUTH_DEV_DEFAULT_TENANT_ID:00000000-0000-0000-0000-000000000001}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
     allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
