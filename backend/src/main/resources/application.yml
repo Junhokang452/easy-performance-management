@@ -94,16 +94,16 @@ springdoc:
   show-actuator: false
 
 # lib autoconfig 게이트 — 옵션 A 보수 (기본 OFF) + dev 명시 ON.
-# 단계 1 진입 = tenantctx + error 만 ON. 나머지는 단계 2~5 진입 시 ON.
+# 단계 1 진입 = tenantctx + error + audit. 단계 2 진입 = stage2 + tenantbootstrap (G65 D=A, Task #100).
 easyplatform:
   tenantctx:
     enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:false}
     header-name: ${EASYPLATFORM_TENANTCTX_HEADER:X-Tenant-Id}
-  # 단계 2 진입 시 ON (Model B + RLS 정책 SQL 박제 후)
+  # 단계 2 진입 시 ON (Model B + RLS 정책 SQL 박제 후) — ADR-031 정합 (B2B-Enterprise per-tenant 본질)
   rls:
     tenant:
       enabled: ${EASYPLATFORM_RLS_TENANT_ENABLED:false}
-  # 단계 5 진입 시 ON (B2C 공통 테넌트 + RLS user_id, ADR-029 정합)
+  # ~~단계 5 B2C~~ → ADR-031 정정 (2026-06-08, Task #98): performance 는 B2C 부재. SMB Shared 옵션은 별도.
   b2c:
     enabled: ${EASYPLATFORM_B2C_ENABLED:false}
   # 단계 1 진입 시 ON (GlobalExceptionHandler 자동 등록)
@@ -116,6 +116,24 @@ easyplatform:
   # 단계 1 진입 시 ON (AuditEventRecorder, lib BE-CC-1 W4)
   audit:
     enabled: ${EASYPLATFORM_AUDIT_ENABLED:false}
+  # 단계 2 진입 게이트 (G65 D=A, Task #100, 2026-06-08) — PerformanceTenantBootstrapConfig 빈 등록 가시화.
+  # lib BE 14 TenantBootstrap 3 SPI seam thin adapter (PlatformTenantLookup + TenantProvisioner + TenantMigrator).
+  # 옵션 A 보수: dev ON / LIVE OFF (application-prod.yml 명시 OFF 가드).
+  performance:
+    stage2:
+      enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED:false}
+  # 단계 2 진입 — lib TenantBootstrap autoconfig 게이트 (NeonProvisioningService dev 검증).
+  tenantbootstrap:
+    enabled: ${EASYPLATFORM_TENANTBOOTSTRAP_ENABLED:false}
+
+# Neon 프로비저닝 — 단계 2 진입 시 ADR-024 (1 고객사 = 1 Neon 프로젝트) 정합.
+# dev 진입 = NEON_API_KEY 정합 → 옵션 A lib 위임. NEON_API_KEY 부재 시 옵션 B 셀프 폴백 (안전 NO-OP).
+neon:
+  api:
+    key: ${NEON_API_KEY:}
+  project:
+    prefix: ${NEON_PROJECT_PREFIX:easyrecord-performance-}
+  region: ${NEON_REGION:ap-northeast-1}
 
 # 제품 고유 설정 (단계 3 BE-CC-2 진입 시 본격 활용)
 app:

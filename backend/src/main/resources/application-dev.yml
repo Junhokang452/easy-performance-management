@@ -14,14 +14,10 @@ spring:
       hibernate:
         format_sql: true
 
-logging:
-  level:
-    com.easyperformance: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
-
-# lib autoconfig 게이트 — dev 진입 ON (단계 1 = tenantctx + error + audit).
-# rls.tenant + b2c 는 단계 2/5 진입 시 ON 으로 전환.
+# lib autoconfig 게이트 — dev 진입 ON.
+#   단계 1 (BE-CC-1) = tenantctx + error + audit (b83acac 정합)
+#   단계 2 (G65 D=A, Task #100) = stage2 + tenantbootstrap + multitenancy-enabled (옵션 A 보수)
+#   단계 3~5 진입 시 후속 게이트 ON 으로 전환.
 easyplatform:
   tenantctx:
     enabled: true
@@ -29,3 +25,38 @@ easyplatform:
     enabled: true
   audit:
     enabled: true
+  # 단계 2 — PerformanceTenantBootstrapConfig 어댑터 빈 등록 (lib BE 14 thin adapter)
+  performance:
+    stage2:
+      enabled: true
+  # 단계 2 — lib TenantBootstrap autoconfig 활성
+  tenantbootstrap:
+    enabled: true
+
+# easy-platform-core 멀티테넌시 — 단계 2 dev 활성
+# control-plane-owner=false: easy-ware 가 control plane SoT (ADR-007 + S5 hcm 정렬)
+# api-key: NEON_API_KEY 부재 시 옵션 B 셀프 폴백 (안전 NO-OP)
+easyware:
+  neon:
+    multitenancy-enabled: true
+    control-plane-owner: false
+
+# Neon 프로비저닝 — dev 진입 (NEON_API_KEY 정합 시 실 호출, 부재 시 옵션 B 폴백)
+neon:
+  api:
+    key: ${NEON_API_KEY:}
+  project:
+    prefix: easyrecord-performance-
+  region: ap-northeast-1
+
+# dev 로깅 — 단계 1 (com.easyperformance DEBUG + Hibernate SQL DEBUG) +
+#   단계 2 (PerformanceTenantBootstrapConfig 3 SPI + NeonProvisioningService)
+logging:
+  level:
+    com.easyperformance: DEBUG
+    com.easyperformance.platform: INFO
+    com.easyware.platform.tenant: INFO
+    com.easyware.platform.tenantctx: INFO
+    com.easyware.platform.NeonProvisioningService: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE

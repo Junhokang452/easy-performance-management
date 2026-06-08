@@ -17,6 +17,7 @@ logging:
     org.hibernate.SQL: WARN
 
 # LIVE 안전 — 게이트는 명시 환경 변수만 ON (기본 OFF). 단계별 점진 전환.
+# 단계 2 (G65 D=A, Task #100, 2026-06-08): LIVE 안전 OFF 가시화 패턴 (ware W3 / jobeval stage2 모범 정렬).
 easyplatform:
   tenantctx:
     enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:false}
@@ -29,8 +30,29 @@ easyplatform:
     enabled: ${EASYPLATFORM_ERROR_ENABLED:false}
   audit:
     enabled: ${EASYPLATFORM_AUDIT_ENABLED:false}
+  # 단계 2 PerformanceTenantBootstrapConfig 어댑터 빈 등록 — LIVE 안전 OFF 기본
+  performance:
+    stage2:
+      enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED:false}
+  # 단계 2 lib TenantBootstrap autoconfig — LIVE 안전 OFF 기본
+  tenantbootstrap:
+    enabled: ${EASYPLATFORM_TENANTBOOTSTRAP_ENABLED:false}
   jwt:
     secret: ${JWT_SECRET}                    # fail-fast (HS512 ≥64바이트)
+
+# easy-platform-core 멀티테넌시 — LIVE 안전 가시화 패턴 (ware W3 모범 정렬)
+easyware:
+  neon:
+    multitenancy-enabled: ${APP_NEON_MULTITENANCY_ENABLED:false}   # LIVE 안전 OFF 기본
+    control-plane-owner: ${APP_NEON_CONTROL_PLANE_OWNER:false}
+
+# Neon 프로비저닝 — LIVE 진입 시점은 사용자 결정 후 환경 변수 ON 전환
+neon:
+  api:
+    key: ${NEON_API_KEY:}
+  project:
+    prefix: ${NEON_PROJECT_PREFIX:easyrecord-performance-}
+  region: ${NEON_REGION:ap-northeast-1}
 
 app:
   security:
