@@ -1,0 +1,176 @@
+/**
+ * App — performance FE 단계 4 EC-FE 진입 (G71 D=A, Task #113, 2026-06-08).
+ *
+ * STD-FE 5 정합:
+ * - LAZY: 모든 페이지 `React.lazy()`
+ * - STRICT: `<StrictMode>` (main.tsx)
+ * - RQ: React Query 만 (useState fetch 금지)
+ * - NEST: React 19 인터랙티브 요소 중첩 금지
+ * - ERROR-BOUNDARY: `<PageBoundary>` = RouteErrorBoundary + Suspense + key reset
+ *
+ * 단계 4 강화 5건:
+ * - LAZY (4 도메인 페이지 + LoginPage)
+ * - RouteErrorBoundary + key={pathname} 리셋
+ * - AuthProvider + ProtectedRoute (단계 3 JWT 미진입 — stub fallback)
+ * - i18n ko/en + 다크모드 토글
+ * - ApiError SoT (BE-CC-5 ApiException 정합)
+ *
+ * 누적 정합 — 단계 0 `58bf09d` + 단계 1 `b83acac` + 단계 2 `6895ba9` + 단계 5 SMB `27108e3`.
+ * jobeval 단계 4 cutover `cc1bc03` 패턴 정합.
+ */
+import { lazy } from 'react';
+import {
+  AppShell,
+  NavLink,
+  Title,
+  Text,
+  Group,
+  Burger,
+  Button,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Route, Routes, Link, useLocation } from 'react-router-dom';
+
+import { PageBoundary } from './shared/PageBoundary';
+import { AppHeaderActions } from './shared/AppHeaderActions';
+import { ProtectedRoute } from './auth/ProtectedRoute';
+import { useAuth } from './auth/AuthProvider';
+import { useT } from './i18n';
+
+// STD-FE-LAZY — 모든 페이지 lazy import
+const SelfEvaluationPage = lazy(() =>
+  import('./pages/SelfEvaluationPage').then((m) => ({ default: m.SelfEvaluationPage })),
+);
+const PersonalOkrPage = lazy(() =>
+  import('./pages/PersonalOkrPage').then((m) => ({ default: m.PersonalOkrPage })),
+);
+const ReflectionJournalPage = lazy(() =>
+  import('./pages/ReflectionJournalPage').then((m) => ({ default: m.ReflectionJournalPage })),
+);
+const MentorFeedbackPage = lazy(() =>
+  import('./pages/MentorFeedbackPage').then((m) => ({ default: m.MentorFeedbackPage })),
+);
+const LoginPage = lazy(() =>
+  import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
+);
+
+export default function App(): React.ReactNode {
+  const location = useLocation();
+  const [navOpened, { toggle }] = useDisclosure();
+  const { isAuthenticated, logout, session } = useAuth();
+  const t = useT();
+
+  // 로그인 페이지는 AppShell 외부에서 직접 렌더 (Auth 요구 없음)
+  if (location.pathname === '/login') {
+    return (
+      <PageBoundary>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </PageBoundary>
+    );
+  }
+
+  return (
+    <AppShell
+      header={{ height: 56 }}
+      navbar={{ width: 240, breakpoint: 'sm', collapsed: { mobile: !navOpened } }}
+      padding="md"
+    >
+      <AppShell.Header p="md">
+        <Group justify="space-between" h="100%">
+          <Group gap="md">
+            <Burger opened={navOpened} onClick={toggle} hiddenFrom="sm" size="sm" />
+            <Title order={4}>{t.domain.app.title}</Title>
+            <Text size="xs" c="dimmed" visibleFrom="sm">
+              {t.domain.app.subtitle}
+            </Text>
+          </Group>
+          <Group gap="xs">
+            <AppHeaderActions />
+            {isAuthenticated && session && (
+              <Button variant="subtle" size="xs" onClick={() => void logout()}>
+                {t.common.label.logout}
+              </Button>
+            )}
+          </Group>
+        </Group>
+      </AppShell.Header>
+      <AppShell.Navbar p="xs">
+        <Text size="xs" c="dimmed" mt="xs" mb={4}>
+          {t.domain.nav.section}
+        </Text>
+        <NavLink
+          component={Link}
+          to="/self-evaluations"
+          label={t.domain.nav.selfEvaluation}
+          active={location.pathname.startsWith('/self-evaluations')}
+        />
+        <NavLink
+          component={Link}
+          to="/personal-okrs"
+          label={t.domain.nav.personalOkr}
+          active={location.pathname.startsWith('/personal-okrs')}
+        />
+        <NavLink
+          component={Link}
+          to="/reflection-journals"
+          label={t.domain.nav.reflectionJournal}
+          active={location.pathname.startsWith('/reflection-journals')}
+        />
+        <NavLink
+          component={Link}
+          to="/mentor-feedbacks"
+          label={t.domain.nav.mentorFeedback}
+          active={location.pathname.startsWith('/mentor-feedbacks')}
+        />
+      </AppShell.Navbar>
+      <AppShell.Main>
+        <PageBoundary>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <SelfEvaluationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/self-evaluations"
+              element={
+                <ProtectedRoute>
+                  <SelfEvaluationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/personal-okrs"
+              element={
+                <ProtectedRoute>
+                  <PersonalOkrPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reflection-journals"
+              element={
+                <ProtectedRoute>
+                  <ReflectionJournalPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mentor-feedbacks"
+              element={
+                <ProtectedRoute>
+                  <MentorFeedbackPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </PageBoundary>
+      </AppShell.Main>
+    </AppShell>
+  );
+}
