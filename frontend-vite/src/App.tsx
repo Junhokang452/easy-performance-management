@@ -53,6 +53,19 @@ const MentorFeedbackPage = lazy(() =>
 const CyclesPage = lazy(() =>
   import('./pages/CyclesPage').then((m) => ({ default: m.CyclesPage })),
 );
+const MyKpiPage = lazy(() =>
+  import('./pages/MyKpiPage').then((m) => ({ default: m.MyKpiPage })),
+);
+const ManagerKpiTreePage = lazy(() =>
+  import('./pages/ManagerKpiTreePage').then((m) => ({
+    default: m.ManagerKpiTreePage,
+  })),
+);
+const DirectorKpiTreePage = lazy(() =>
+  import('./pages/DirectorKpiTreePage').then((m) => ({
+    default: m.DirectorKpiTreePage,
+  })),
+);
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -133,6 +146,24 @@ export default function App(): React.ReactNode {
           label={t.nav.hr.cycles}
           active={location.pathname.startsWith('/hr/cycles')}
         />
+        <NavLink
+          component={Link}
+          to="/my/kpi"
+          label={t.nav.kpi.my}
+          active={location.pathname.startsWith('/my/kpi')}
+        />
+        <NavLink
+          component={Link}
+          to="/manager/kpi-tree"
+          label={t.nav.kpi.managerTree}
+          active={location.pathname.startsWith('/manager/kpi-tree')}
+        />
+        <NavLink
+          component={Link}
+          to="/director/kpi-tree"
+          label={t.nav.kpi.directorTree}
+          active={location.pathname.startsWith('/director/kpi-tree')}
+        />
       </AppShell.Navbar>
       <AppShell.Main>
         <PageBoundary>
@@ -182,6 +213,30 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <CyclesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my/kpi"
+              element={
+                <ProtectedRoute>
+                  <MyKpiPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/manager/kpi-tree"
+              element={
+                <ProtectedRoute>
+                  <ManagerKpiTreePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/director/kpi-tree"
+              element={
+                <ProtectedRoute>
+                  <DirectorKpiTreePage />
                 </ProtectedRoute>
               }
             />

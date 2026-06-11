@@ -8,12 +8,12 @@
 ## P0 — Must (~12주, entity ~10, 화면 ~14)
 
 - [x] **D**: 의사결정 박제 (`decisions_2026-06-11.md`) + 경계 정정 박제 (`EVAL_SIBLING_BOUNDARY_2026-06-11.md`)
-- [ ] **P0-S1**: EvaluationCycle + EvaluationPolicy + 8단계 상태기계 + HR 사이클 생성 모달 (1주)
+- [x] **P0-S1**: EvaluationCycle + EvaluationPolicy + 8단계 상태기계 + HR 사이클 생성 모달 (1주) ✅ `9f42e50`
   - entity: `EvaluationCycle`, `EvaluationPolicy`
   - Flyway: `V20260611_001__evaluation_cycle_policy.sql`
   - 화면: `/hr/cycles` (#21), 사이클 생성 모달 (#22)
   - ErrorCode: E98 ~10건 (CYCLE_NOT_FOUND, POLICY_NOT_FOUND, CYCLE_INVALID_STATUS_TRANSITION, POLICY_INVALID_DISTRIBUTION, POLICY_INVALID_RATING_SCALE 등)
-- [ ] **P0-S2**: KpiTree + KpiNode + KpiAssignment + KpiActual + 가중치 검증 + BSC 라벨 옵션 (2주)
+- [x] **P0-S2**: KpiTree + KpiNode + KpiAssignment + KpiActual + 가중치 검증 + BSC 라벨 옵션 (2주) ✅ (계약 `00_input/p0_s2_contract.md` + BE 64/64 + FE build + 경계 16/16)
   - entity 4건 + KpiNode.bscPerspective nullable + KpiNode.source enum 박제 (MANUAL / HCM / EXTERNAL)
   - 화면: KPI Tree (#2), KPI 입력 (#13), 매니저 KPI 모니터 (#18)
 - [ ] **P0-S3**: PerformanceReview + 자기/매니저 평가 폼 + 자동 점수 계산 + Self↔Manager 비교 (2주)

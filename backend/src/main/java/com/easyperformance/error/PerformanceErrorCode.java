@@ -49,6 +49,22 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     POLICY_INVALID_RATING_SCALE(     "E9804234", 422),
     POLICY_FORCED_REQUIRES_DISTRIBUTION("E9804235", 422),
     POLICY_LOCKED(                   "E9804923", 409),
+
+    // KPI 도메인 — P0-S2 KpiTree / KpiNode / KpiAssignment / KpiActual (p0_s2_contract.md §3 SoT).
+    // 가중치 정합(형제 합 ≤ 1.0 가드) + parent 같은 tree 무결성 + append-only supersede 체인 +
+    // cycle FINALIZED/CANCELLED lock. 404 not-found 4 + 422 validation 4 + 409 conflict 4.
+    KPI_TREE_NOT_FOUND(              "E9804443", 404),
+    KPI_NODE_NOT_FOUND(             "E9804444", 404),
+    KPI_ASSIGNMENT_NOT_FOUND(       "E9804445", 404),
+    KPI_ACTUAL_NOT_FOUND(           "E9804446", 404),
+    KPI_NODE_PARENT_TREE_MISMATCH(  "E9804236", 422),
+    KPI_WEIGHT_OUT_OF_RANGE(        "E9804237", 422),
+    KPI_WEIGHT_SUM_EXCEEDED(        "E9804238", 422),
+    KPI_SOURCE_NOT_SUPPORTED(       "E9804239", 422),
+    KPI_ASSIGNMENT_DUPLICATE(       "E9804924", 409),
+    KPI_ACTUAL_ALREADY_SUPERSEDED(  "E9804925", 409),
+    KPI_NODE_HAS_CHILDREN(          "E9804926", 409),
+    KPI_CYCLE_LOCKED(               "E9804927", 409),
     ;
 
     private final String code;

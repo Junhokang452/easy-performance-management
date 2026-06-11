@@ -42,6 +42,11 @@ interface I18nShape {
     hr: {
       cycles: string;
     };
+    kpi: {
+      my: string;
+      managerTree: string;
+      directorTree: string;
+    };
   };
   cycles: {
     title: string;
@@ -104,6 +109,128 @@ interface I18nShape {
     };
     distributionSum: string;
     distributionSumMustBeOne: string;
+  };
+  kpi: {
+    selectCycle: string;
+    noCycle: string;
+    cyclePlaceholder: string;
+    level: {
+      CORPORATE: string;
+      DIVISION: string;
+      TEAM: string;
+      INDIVIDUAL: string;
+    };
+    bscPerspective: {
+      FINANCIAL: string;
+      CUSTOMER: string;
+      INTERNAL_PROCESS: string;
+      LEARNING_GROWTH: string;
+      UNASSIGNED: string;
+    };
+    source: {
+      MANUAL: string;
+      HCM: string;
+      EXTERNAL: string;
+    };
+    weightBadge: {
+      complete: string;
+      incomplete: string;
+      exceeded: string;
+    };
+    my: {
+      title: string;
+      description: string;
+      employeeId: string;
+      employeeIdPlaceholder: string;
+      load: string;
+      empty: string;
+      emptyHint: string;
+      needInput: string;
+      col: {
+        node: string;
+        tree: string;
+        weight: string;
+        target: string;
+        latestActual: string;
+        achievementRate: string;
+      };
+      reportActual: string;
+      actualHistory: string;
+    };
+    manager: {
+      title: string;
+      description: string;
+      treeList: string;
+      createTree: string;
+      empty: string;
+      emptyTree: string;
+      addRootNode: string;
+      addChild: string;
+      editNode: string;
+      deleteNode: string;
+      manageAssignments: string;
+      editTree: string;
+      deleteTree: string;
+      childWeightSum: string;
+    };
+    director: {
+      title: string;
+      description: string;
+      bscToggle: string;
+      readonly: string;
+      empty: string;
+    };
+    tree: {
+      name: string;
+      level: string;
+      ownerOrgUnitId: string;
+      bscEnabled: string;
+      create: string;
+    };
+    node: {
+      label: string;
+      weight: string;
+      target: string;
+      unit: string;
+      bscPerspective: string;
+      source: string;
+      cascadeFromId: string;
+      parent: string;
+      parentRoot: string;
+      assignments: string;
+      assignmentCount: string;
+      create: string;
+      weightHint: string;
+    };
+    assignment: {
+      title: string;
+      employeeId: string;
+      weight: string;
+      weightOverrideHint: string;
+      targetOverride: string;
+      add: string;
+      empty: string;
+      effectiveWeight: string;
+      effectiveTarget: string;
+    };
+    actual: {
+      title: string;
+      asOfDate: string;
+      actualValue: string;
+      evidenceUrl: string;
+      comment: string;
+      report: string;
+      history: string;
+      empty: string;
+      superseded: string;
+      latest: string;
+      correct: string;
+      correctTitle: string;
+      reportedAt: string;
+    };
+    confirmDeleteNode: string;
+    confirmDeleteTree: string;
+    confirmDeleteAssignment: string;
   };
   domain: {
     app: {
@@ -191,6 +318,18 @@ interface I18nShape {
     E9804234: string;
     E9804235: string;
     E9804923: string;
+    E9804443: string;
+    E9804444: string;
+    E9804445: string;
+    E9804446: string;
+    E9804236: string;
+    E9804237: string;
+    E9804238: string;
+    E9804239: string;
+    E9804924: string;
+    E9804925: string;
+    E9804926: string;
+    E9804927: string;
   };
 }
 
@@ -227,6 +366,11 @@ export const ko: I18nShape = {
   nav: {
     hr: {
       cycles: 'HR > 사이클 관리',
+    },
+    kpi: {
+      my: '내 KPI',
+      managerTree: 'KPI 트리 (매니저)',
+      directorTree: 'KPI 트리 (본부)',
     },
   },
   cycles: {
@@ -290,6 +434,128 @@ export const ko: I18nShape = {
     },
     distributionSum: '합계',
     distributionSumMustBeOne: '분포의 합은 1.0 이어야 합니다 (현재: {sum})',
+  },
+  kpi: {
+    selectCycle: '평가 사이클',
+    noCycle: '사이클이 없습니다. 먼저 HR > 사이클 관리에서 생성하세요.',
+    cyclePlaceholder: '사이클 선택',
+    level: {
+      CORPORATE: '전사',
+      DIVISION: '본부',
+      TEAM: '팀',
+      INDIVIDUAL: '개인',
+    },
+    bscPerspective: {
+      FINANCIAL: '재무',
+      CUSTOMER: '고객',
+      INTERNAL_PROCESS: '내부 프로세스',
+      LEARNING_GROWTH: '학습과 성장',
+      UNASSIGNED: '미지정',
+    },
+    source: {
+      MANUAL: '수동',
+      HCM: 'HCM 연동',
+      EXTERNAL: '외부',
+    },
+    weightBadge: {
+      complete: '가중치 합 100%',
+      incomplete: '가중치 합 {sum}%',
+      exceeded: '가중치 초과 {sum}%',
+    },
+    my: {
+      title: '내 KPI',
+      description: '배정된 KPI의 가중치·목표·최신 실적·달성률을 확인하고 실적을 입력하세요.',
+      employeeId: '사원 ID',
+      employeeIdPlaceholder: '사원 ID (UUID)',
+      load: '조회',
+      empty: '배정된 KPI가 없습니다',
+      emptyHint: '선택한 사이클·사원에 배정된 KPI가 없습니다.',
+      needInput: '사이클과 사원 ID를 입력한 뒤 조회하세요.',
+      col: {
+        node: 'KPI',
+        tree: '트리',
+        weight: '가중치',
+        target: '목표',
+        latestActual: '최신 실적',
+        achievementRate: '달성률',
+      },
+      reportActual: '실적 입력',
+      actualHistory: '실적 이력',
+    },
+    manager: {
+      title: 'KPI 트리 (매니저)',
+      description: '평가 사이클별 KPI 트리를 구성하고 노드·배정을 관리하세요.',
+      treeList: 'KPI 트리',
+      createTree: '트리 생성',
+      empty: '이 사이클에는 KPI 트리가 없습니다',
+      emptyTree: '노드가 없습니다. 최상위 노드를 추가하세요.',
+      addRootNode: '최상위 노드 추가',
+      addChild: '하위 노드 추가',
+      editNode: '노드 수정',
+      deleteNode: '노드 삭제',
+      manageAssignments: '배정 관리',
+      editTree: '트리 수정',
+      deleteTree: '트리 삭제',
+      childWeightSum: '자식 가중치 합',
+    },
+    director: {
+      title: 'KPI 트리 (본부)',
+      description: '읽기 전용 KPI 트리 — BSC 4 관점 그룹핑을 토글하세요.',
+      bscToggle: 'BSC 4 관점 보기',
+      readonly: '읽기 전용',
+      empty: '이 사이클에는 KPI 트리가 없습니다',
+    },
+    tree: {
+      name: '트리 이름',
+      level: '레벨',
+      ownerOrgUnitId: '소유 조직 ID',
+      bscEnabled: 'BSC 4 관점 활성',
+      create: '트리 생성',
+    },
+    node: {
+      label: '레이블',
+      weight: '가중치 (0~1)',
+      target: '목표값',
+      unit: '단위',
+      bscPerspective: 'BSC 관점',
+      source: '소스',
+      cascadeFromId: '상위 트리 KPI 참조 ID',
+      parent: '부모 노드',
+      parentRoot: '(최상위)',
+      assignments: '배정',
+      assignmentCount: '배정 수',
+      create: '노드 추가',
+      weightHint: '0 초과 1 이하의 비율 (예: 0.25 = 25%)',
+    },
+    assignment: {
+      title: '배정 관리',
+      employeeId: '사원 ID',
+      weight: '가중치 (개인 override)',
+      weightOverrideHint: '비우면 노드 기본 가중치를 사용합니다.',
+      targetOverride: '목표 override',
+      add: '배정 추가',
+      empty: '배정이 없습니다',
+      effectiveWeight: '적용 가중치',
+      effectiveTarget: '적용 목표',
+    },
+    actual: {
+      title: '실적 입력',
+      asOfDate: '기준일',
+      actualValue: '실적값',
+      evidenceUrl: '증빙 URL',
+      comment: '비고',
+      report: '실적 입력',
+      history: '실적 이력',
+      empty: '실적 기록이 없습니다',
+      superseded: '정정됨',
+      latest: '최신',
+      correct: '정정',
+      correctTitle: '실적 정정',
+      reportedAt: '기록일시',
+    },
+    confirmDeleteNode: '이 노드를 삭제하시겠습니까? 자식 노드가 있으면 삭제할 수 없습니다.',
+    confirmDeleteTree: '이 트리를 삭제하시겠습니까? 트리 내 모든 노드·배정·실적이 함께 삭제됩니다.',
+    confirmDeleteAssignment: '이 배정을 삭제하시겠습니까? 관련 실적도 함께 삭제됩니다.',
   },
   domain: {
     app: {
@@ -377,6 +643,18 @@ export const ko: I18nShape = {
     E9804234: '평가 척도와 일치하지 않는 분포 키입니다',
     E9804235: 'FORCED 모드는 분포 설정이 필수입니다',
     E9804923: '사이클이 활성화된 후에는 정책의 분포 모드/척도를 변경할 수 없습니다',
+    E9804443: 'KPI 트리를 찾을 수 없습니다',
+    E9804444: 'KPI 노드를 찾을 수 없습니다',
+    E9804445: 'KPI 배정을 찾을 수 없습니다',
+    E9804446: 'KPI 실적을 찾을 수 없습니다',
+    E9804236: '부모 노드가 다른 트리에 속해 있습니다',
+    E9804237: '가중치는 0 초과 1 이하여야 합니다',
+    E9804238: '형제 노드의 가중치 합이 1.0 을 초과합니다',
+    E9804239: 'P0 단계에서는 수동(MANUAL) 소스만 지원합니다',
+    E9804924: '동일한 사원이 이미 이 노드에 배정되어 있습니다',
+    E9804925: '이미 정정된 실적은 다시 정정할 수 없습니다',
+    E9804926: '자식 노드가 있는 노드는 삭제할 수 없습니다',
+    E9804927: '확정/취소된 사이클에서는 KPI를 변경할 수 없습니다',
   },
 };
 
