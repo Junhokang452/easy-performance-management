@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -23,8 +22,16 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  *
  * <p>멀티테넌시(Model B)·control plane·프로비저닝·다계층 시드는 공유 lib easy-platform-core
  * (com.easyware.platform) 에 위임한다 (ADR-007 복붙 금지). base package 가 com.easyperformance 라 lib
- * 패키지를 {@code @ComponentScan}/{@code @EntityScan}/{@code @EnableJpaRepositories} 로 명시 포함해야
- * lib 빈 + entity + repository 가 등록된다 (jobeval/hcm 정렬).
+ * 패키지를 <b>{@code @SpringBootApplication(scanBasePackages)}</b>/{@code @EntityScan}/
+ * {@code @EnableJpaRepositories} 로 명시 포함해야 lib 빈 + entity + repository 가 등록된다.
+ *
+ * <p><b>scanBasePackages 함정 (easy-job 1ddf97e 결함 ① 정합, 2026-06-11 부팅 스모크 실측)</b>:
+ * 별도 {@code @ComponentScan} 어노테이션을 쓰면 {@code @SpringBootApplication} 의 기본 제외 필터
+ * (TypeExcludeFilter + AutoConfigurationExcludeFilter)가 소실되어 lib 의 동명이 클래스 2개
+ * ({@code tenant.TenantContextAutoConfiguration} / {@code tenantctx.TenantContextAutoConfiguration})
+ * 가 simple-name 빈 이름으로 동시 component-scan 되어 {@code ConflictingBeanDefinitionException}
+ * 부팅 실패. {@code scanBasePackages} 속성은 기본 필터를 보존하므로 안전 (lib pin 407bb41 실측 —
+ * 동명이 2 클래스 존재 확인. 정본: easy-job JobManagementApplication + easy-learning e975f04).
  *
  * <p>{@code @EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")} — 자매품 정렬 (jobeval).
  * 단계 1 = 단일 DB 운영 (Model A 흉내) + tenant_id 컬럼 보유 — 단계 2 진입 시 Model B per-tenant DB
@@ -38,8 +45,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  *   <li>easyplatform.b2c.enabled = false → 단계 5 진입 시 ON (B2C 공통 테넌트 + RLS user_id)</li>
  * </ul>
  */
-@SpringBootApplication
-@ComponentScan(basePackages = {"com.easyperformance", "com.easyware.platform"})
+@SpringBootApplication(scanBasePackages = {"com.easyperformance", "com.easyware.platform"})
 @EnableJpaRepositories(basePackages = {
     "com.easyperformance",
     "com.easyware.platform.user",
