@@ -27,7 +27,7 @@
   - entity 1건 (append-only, supersedes 체인 옵션)
   - 화면: 사이클 리포트 (#7), 사원 dashboard 결과 카드 (#26)
   - 정합: E9 = 본인 + 부서 분포 % 만
-- [ ] **P0-S6**: hcm S2S 수신 (rm_employee/org/assignment, talent STAGE15 패턴 동형) (1주)
+- [x] **P0-S6**: hcm S2S 수신 (rm_employee/org/assignment, talent STAGE15 패턴 동형) (1주) ✅ (계약 `00_input/p0_s6_contract.md` + BE 164/164 + talent DTO diff 동일 + FE 0)
   - read-model 3 테이블 + endpoint `/api/internal/sync/core-master`
   - 가드: Bearer + HMAC + sourceVersion + 미설정 503
 - [ ] **P0-S7**: talent S2S 송신 (FINALIZED → performance-results) (0.5주)

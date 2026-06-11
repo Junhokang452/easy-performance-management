@@ -179,15 +179,23 @@ performance:
   smb:
     # 단계 5 진입 시 SMB Shared DB URL (application-smb.yml 에서 spring.datasource.url 로 라우팅)
     shared-db-url: ${SMB_SHARED_DB_URL:${spring.datasource.url}}
-  # S2S — performance → easy-talent-management 확정 평가 결과 송신 (G_TALENT_D3 #2, 2026-06-11).
+  # S2S 송신 — performance → easy-talent-management 확정 평가 결과 (G_TALENT_D3 #2, 2026-06-11).
   # talent 수신측: POST /api/internal/sync/performance-results (Bearer + X-Signature HMAC).
   # FINALIZED 만 발신 (sendAll 수동 트리거 — Outbox-light 자동 증분은 후속).
   # LIVE 안전: 미설정 시 송신 0 (EasyTalentResultPushService.isConfigured()=false).
+  #
+  # S2S 수신 — hcm → performance core-master read-model (P0-S6, 2026-06-11).
+  # 수신측: POST /api/internal/sync/core-master (SyncReceiveController 3중 가드).
+  # bearer/secret 미설정 시 503 (SYNC_NOT_CONFIGURED) — 호출 자체 차단 = LIVE/dev 무영향.
+  # 송신측 hcm 의 hcm.s2s.easyperformance.* 타깃 추가는 hcm repo 별도 슬라이스.
   s2s:
     easytalent:
       base-url: ${EASYTALENT_S2S_BASE_URL:}
       bearer-token: ${EASYTALENT_S2S_BEARER_TOKEN:}
       hmac-secret: ${EASYTALENT_S2S_HMAC_SECRET:}
+    hcm:
+      bearer-token: ${HCM_S2S_BEARER_TOKEN:}
+      hmac-secret: ${HCM_S2S_HMAC_SECRET:}
 
 # easy-platform-core (공유 lib) 의 easyware.neon.* 키 — 게이트 OFF (단계 1 기본) 면 lib 멀티테넌시 빈 미로드
 # → 로컬 단일 DB 부팅. 단계 2 Model B 진입 시 control-plane-owner=false (자매품 공유 control DB 소비).

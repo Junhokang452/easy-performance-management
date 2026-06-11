@@ -104,6 +104,14 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     REPORT_NOT_FOUND(                        "E9804449", 404),
     REPORT_CYCLE_NOT_FINALIZED(              "E9804252", 422),
     REPORT_NOT_ACTIVE(                       "E9804934", 409),
+
+    // S2S 수신 도메인 — P0-S6 hcm core-master read-model (p0_s6_contract.md §5 SoT).
+    // SyncReceiveController 3중 가드: bearer/secret 미설정 503 + bearer·HMAC 불일치 401 + 파싱 불가 400.
+    // talent SYNC_* 동형 (E99 → E98 영역). census 충돌 0:
+    //   401 영역은 101~104(auth login/refresh) 사용 중 → 105 빈자리 / 400 영역 0xx 미사용 → 005 / 5xx 첫 진입 → 5301.
+    SYNC_NOT_CONFIGURED(                     "E9805301", 503),
+    SYNC_AUTH_FAILED(                        "E9804105", 401),
+    SYNC_INVALID_PAYLOAD(                    "E9804005", 400),
     ;
 
     private final String code;

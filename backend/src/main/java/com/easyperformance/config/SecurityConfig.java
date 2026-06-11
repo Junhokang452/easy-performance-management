@@ -23,7 +23,8 @@ import com.easyware.platform.tenantctx.TenantContextFilter;
  * Spring Security — 단계 3 BE-CC-2 JWT 5분리 (G84 D=A, Task #122, 2026-06-08).
  *
  * <p>stateless JWT (자매품 정렬). 세션 없음, CSRF off (httpOnly+SameSite 쿠키로 방어),
- * actuator health/info/prometheus + /api/auth/** 는 permitAll, 나머지는 인증 필요. {@link JwtAuthFilter} 선행.
+ * actuator health/info/prometheus + /api/auth/** + /api/internal/** (S2S 수신, Bearer+HMAC 자체 인증)
+ * 는 permitAll, 나머지는 인증 필요. {@link JwtAuthFilter} 선행.
  *
  * <p><strong>단계 3 진입 이전</strong> (단계 1 BE-CC-1): 모든 경로 permitAll 임시 가드.
  * <p><strong>단계 3 진입 이후</strong> (본 슬라이스): JWT filter chain — jobeval SecurityConfig 패턴 정합.
@@ -61,6 +62,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                // S2S 수신 (P0-S6) — Bearer+HMAC 자체 인증 (SyncReceiveController 3중 가드). JWT 불요.
+                .requestMatchers("/api/internal/**").permitAll()
                 // OpenAPI spec endpoint (EC-FE-7) — 단계 4 EC-FE 진입 시 FE openapi-typescript fetch.
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated())
