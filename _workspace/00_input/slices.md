@@ -16,7 +16,7 @@
 - [x] **P0-S2**: KpiTree + KpiNode + KpiAssignment + KpiActual + 가중치 검증 + BSC 라벨 옵션 (2주) ✅ (계약 `00_input/p0_s2_contract.md` + BE 64/64 + FE build + 경계 16/16)
   - entity 4건 + KpiNode.bscPerspective nullable + KpiNode.source enum 박제 (MANUAL / HCM / EXTERNAL)
   - 화면: KPI Tree (#2), KPI 입력 (#13), 매니저 KPI 모니터 (#18)
-- [ ] **P0-S3**: PerformanceReview + 자기/매니저 평가 폼 + 자동 점수 계산 + Self↔Manager 비교 (2주)
+- [x] **P0-S3**: PerformanceReview + 자기/매니저 평가 폼 + 자동 점수 계산 + Self↔Manager 비교 (2주) ✅ (계약 `00_input/p0_s3_contract.md` + BE 98/98 + FE build + 경계 11/11)
   - entity 1건
   - 화면: 자기평가 폼 (#4), 매니저평가 폼 (#12), 비교 view
 - [ ] **P0-S4**: RatingDistribution + CalibrationSession + 강제 분포 시뮬레이터 (1.5주)

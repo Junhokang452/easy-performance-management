@@ -66,6 +66,16 @@ const DirectorKpiTreePage = lazy(() =>
     default: m.DirectorKpiTreePage,
   })),
 );
+const MySelfReviewPage = lazy(() =>
+  import('./pages/MySelfReviewPage').then((m) => ({
+    default: m.MySelfReviewPage,
+  })),
+);
+const ManagerReviewPage = lazy(() =>
+  import('./pages/ManagerReviewPage').then((m) => ({
+    default: m.ManagerReviewPage,
+  })),
+);
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -164,6 +174,18 @@ export default function App(): React.ReactNode {
           label={t.nav.kpi.directorTree}
           active={location.pathname.startsWith('/director/kpi-tree')}
         />
+        <NavLink
+          component={Link}
+          to="/my/self-review"
+          label={t.nav.review.self}
+          active={location.pathname.startsWith('/my/self-review')}
+        />
+        <NavLink
+          component={Link}
+          to="/manager/review"
+          label={t.nav.review.manager}
+          active={location.pathname.startsWith('/manager/review')}
+        />
       </AppShell.Navbar>
       <AppShell.Main>
         <PageBoundary>
@@ -237,6 +259,22 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <DirectorKpiTreePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my/self-review"
+              element={
+                <ProtectedRoute>
+                  <MySelfReviewPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/manager/review"
+              element={
+                <ProtectedRoute>
+                  <ManagerReviewPage />
                 </ProtectedRoute>
               }
             />

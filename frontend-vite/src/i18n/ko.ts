@@ -47,6 +47,10 @@ interface I18nShape {
       managerTree: string;
       directorTree: string;
     };
+    review: {
+      self: string;
+      manager: string;
+    };
   };
   cycles: {
     title: string;
@@ -232,6 +236,106 @@ interface I18nShape {
     confirmDeleteTree: string;
     confirmDeleteAssignment: string;
   };
+  review: {
+    status: {
+      DRAFT: string;
+      SELF_PENDING: string;
+      SELF_SUBMITTED: string;
+      MANAGER_PENDING: string;
+      MANAGER_SUBMITTED: string;
+      CALIBRATION: string;
+      FINALIZED: string;
+      APPEAL_REQUESTED: string;
+      APPEAL_RESOLVED: string;
+      ARCHIVED: string;
+    };
+    field: {
+      kpiScore: string;
+      finalScore: string;
+      finalGrade: string;
+    };
+    action: {
+      transition: string;
+    };
+    kpi: {
+      empty: string;
+      col: {
+        node: string;
+        weight: string;
+        target: string;
+        actual: string;
+        achievementRate: string;
+        autoScore: string;
+        managerScore: string;
+        itemScore: string;
+      };
+    };
+    self: {
+      title: string;
+      description: string;
+      employeeId: string;
+      employeeIdPlaceholder: string;
+      load: string;
+      needInput: string;
+      empty: string;
+      emptyHint: string;
+      reviewTitle: string;
+      kpiSection: string;
+      selfComment: string;
+      selfCommentPlaceholder: string;
+      saveDraft: string;
+      submit: string;
+      submitted: string;
+      confirmSubmit: string;
+      lockedHint: string;
+    };
+    manager: {
+      title: string;
+      description: string;
+      create: string;
+      needCycle: string;
+      empty: string;
+      col: {
+        employeeId: string;
+        status: string;
+        kpiScore: string;
+        finalScore: string;
+      };
+      tabScore: string;
+      tabCompare: string;
+      managerComment: string;
+      managerCommentPlaceholder: string;
+      saveDraft: string;
+      submit: string;
+      submitted: string;
+      previewKpiScore: string;
+      previewHint: string;
+      notEditableHint: string;
+    };
+    create: {
+      title: string;
+      modeSingle: string;
+      modeBulk: string;
+      employeeId: string;
+      employeeIdPlaceholder: string;
+      employeeIds: string;
+      employeeIdsHint: string;
+      employeeIdsPlaceholder: string;
+      needEmployeeId: string;
+      needEmployeeIds: string;
+      bulkResult: string;
+      note: string;
+    };
+    compare: {
+      self: string;
+      manager: string;
+      noComment: string;
+      scoreCompare: string;
+      autoScore: string;
+      managerScore: string;
+      delta: string;
+    };
+  };
   domain: {
     app: {
       title: string;
@@ -330,6 +434,16 @@ interface I18nShape {
     E9804925: string;
     E9804926: string;
     E9804927: string;
+    E9804447: string;
+    E9804240: string;
+    E9804241: string;
+    E9804242: string;
+    E9804243: string;
+    E9804244: string;
+    E9804245: string;
+    E9804928: string;
+    E9804929: string;
+    E9804930: string;
   };
 }
 
@@ -371,6 +485,10 @@ export const ko: I18nShape = {
       my: '내 KPI',
       managerTree: 'KPI 트리 (매니저)',
       directorTree: 'KPI 트리 (본부)',
+    },
+    review: {
+      self: '자기평가',
+      manager: '매니저 평가',
     },
   },
   cycles: {
@@ -557,6 +675,106 @@ export const ko: I18nShape = {
     confirmDeleteTree: '이 트리를 삭제하시겠습니까? 트리 내 모든 노드·배정·실적이 함께 삭제됩니다.',
     confirmDeleteAssignment: '이 배정을 삭제하시겠습니까? 관련 실적도 함께 삭제됩니다.',
   },
+  review: {
+    status: {
+      DRAFT: '작성 전',
+      SELF_PENDING: '자기평가 대기',
+      SELF_SUBMITTED: '자기평가 제출',
+      MANAGER_PENDING: '매니저 평가 대기',
+      MANAGER_SUBMITTED: '매니저 평가 제출',
+      CALIBRATION: 'Calibration',
+      FINALIZED: '확정',
+      APPEAL_REQUESTED: '이의신청',
+      APPEAL_RESOLVED: '이의신청 처리',
+      ARCHIVED: '보관됨',
+    },
+    field: {
+      kpiScore: 'KPI 점수',
+      finalScore: '최종 점수',
+      finalGrade: '최종 등급',
+    },
+    action: {
+      transition: '상태 전이',
+    },
+    kpi: {
+      empty: 'KPI 항목이 없습니다.',
+      col: {
+        node: 'KPI',
+        weight: '가중치',
+        target: '목표',
+        actual: '실적',
+        achievementRate: '달성률',
+        autoScore: '자동 점수',
+        managerScore: '매니저 점수',
+        itemScore: '항목 점수',
+      },
+    },
+    self: {
+      title: '자기평가',
+      description: '배정된 KPI의 자체 점검 결과를 확인하고 자기평가 의견을 작성·제출하세요.',
+      employeeId: '사원 ID',
+      employeeIdPlaceholder: '사원 ID (UUID)',
+      load: '조회',
+      needInput: '사이클과 사원 ID를 입력한 뒤 조회하세요.',
+      empty: '자기평가가 아직 생성되지 않았습니다',
+      emptyHint: 'HR 또는 매니저가 평가를 생성하면 자기평가를 시작할 수 있습니다.',
+      reviewTitle: '자기평가',
+      kpiSection: 'KPI 자체 점검',
+      selfComment: '자기평가 의견',
+      selfCommentPlaceholder: '이번 평가 기간의 성과와 자기평가 의견을 작성하세요.',
+      saveDraft: '임시 저장',
+      submit: '제출',
+      submitted: '자기평가를 제출했습니다.',
+      confirmSubmit: '자기평가를 제출하시겠습니까? 제출 후에는 수정할 수 없습니다.',
+      lockedHint: '이미 제출되었거나 자기평가 단계가 아니어서 읽기 전용입니다.',
+    },
+    manager: {
+      title: '매니저 평가',
+      description: '평가 사이클별 대상자 목록에서 KPI 채점과 자기·매니저 비교를 진행하세요.',
+      create: '평가 생성',
+      needCycle: '평가 사이클을 선택하세요.',
+      empty: '이 사이클에는 평가가 없습니다',
+      col: {
+        employeeId: '사원 ID',
+        status: '상태',
+        kpiScore: 'KPI 점수',
+        finalScore: '최종 점수',
+      },
+      tabScore: 'KPI 채점',
+      tabCompare: '자기 ↔ 매니저 비교',
+      managerComment: '매니저 의견',
+      managerCommentPlaceholder: '대상자의 성과에 대한 매니저 의견을 작성하세요.',
+      saveDraft: '임시 저장',
+      submit: '제출',
+      submitted: '매니저 평가를 제출했습니다.',
+      previewKpiScore: 'KPI 점수 프리뷰',
+      previewHint: '입력값 기준 가중 합산 미리보기입니다. 최종 점수는 제출 후 서버 계산값을 사용합니다.',
+      notEditableHint: '매니저 평가 대기 상태가 아니어서 점수 입력이 비활성화되었습니다.',
+    },
+    create: {
+      title: '평가 생성',
+      modeSingle: '개별',
+      modeBulk: '일괄',
+      employeeId: '사원 ID',
+      employeeIdPlaceholder: '사원 ID (UUID)',
+      employeeIds: '사원 ID 목록',
+      employeeIdsHint: '줄바꿈 또는 쉼표로 여러 사원 ID를 구분하세요. 이미 생성된 대상자는 자동으로 건너뜁니다.',
+      employeeIdsPlaceholder: 'uuid-1\nuuid-2\nuuid-3',
+      needEmployeeId: '사원 ID를 입력하세요.',
+      needEmployeeIds: '사원 ID를 하나 이상 입력하세요.',
+      bulkResult: '생성 {created}건 / 건너뜀 {skipped}건',
+      note: '평가는 작성 전(DRAFT) 상태로 생성됩니다.',
+    },
+    compare: {
+      self: '자기평가',
+      manager: '매니저 평가',
+      noComment: '작성된 의견이 없습니다.',
+      scoreCompare: '항목별 점수 비교',
+      autoScore: '자동 점수',
+      managerScore: '매니저 점수',
+      delta: '차이',
+    },
+  },
   domain: {
     app: {
       title: 'easy-performance-management',
@@ -655,6 +873,16 @@ export const ko: I18nShape = {
     E9804925: '이미 정정된 실적은 다시 정정할 수 없습니다',
     E9804926: '자식 노드가 있는 노드는 삭제할 수 없습니다',
     E9804927: '확정/취소된 사이클에서는 KPI를 변경할 수 없습니다',
+    E9804447: '평가를 찾을 수 없습니다',
+    E9804240: '허용되지 않은 상태 전이입니다',
+    E9804241: '현재 사이클 단계에서는 이 전이를 진행할 수 없습니다',
+    E9804242: '매니저 점수는 0 이상 100 이하여야 합니다',
+    E9804243: '해당 평가 대상이 아닌 KPI 배정이 포함되어 있습니다',
+    E9804244: 'KPI 점수가 없어 확정할 수 없습니다',
+    E9804245: '현재 상태에서는 이 항목을 수정할 수 없습니다',
+    E9804928: '동일한 대상자의 평가가 이미 존재합니다',
+    E9804929: '제출되었거나 종결된 평가는 수정할 수 없습니다',
+    E9804930: '작성 전(DRAFT) 상태의 평가만 삭제할 수 있습니다',
   },
 };
 

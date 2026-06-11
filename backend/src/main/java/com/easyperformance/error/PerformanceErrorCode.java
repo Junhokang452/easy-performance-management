@@ -65,6 +65,20 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     KPI_ACTUAL_ALREADY_SUPERSEDED(  "E9804925", 409),
     KPI_NODE_HAS_CHILDREN(          "E9804926", 409),
     KPI_CYCLE_LOCKED(               "E9804927", 409),
+
+    // 성과 평가 도메인 — P0-S3 PerformanceReview (p0_s3_contract.md §4 SoT).
+    // 10단계 상태기계 (P0-S3 전이 4 + submit 전용 2) + cycle 단계 게이트 + KPI 자동 점수 산출/동결 +
+    // 섹션 PATCH 가드 + 제출 후 불변 lock. 404 not-found 1 + 422 validation 6 + 409 conflict 3.
+    REVIEW_NOT_FOUND(                "E9804447", 404),
+    REVIEW_INVALID_STATUS_TRANSITION("E9804240", 422),
+    REVIEW_CYCLE_STAGE_MISMATCH(     "E9804241", 422),
+    REVIEW_SCORE_OUT_OF_RANGE(       "E9804242", 422),
+    REVIEW_ITEM_ASSIGNMENT_MISMATCH( "E9804243", 422),
+    REVIEW_SCORE_INCOMPLETE(         "E9804244", 422),
+    REVIEW_SECTION_NOT_EDITABLE(     "E9804245", 422),
+    REVIEW_DUPLICATE(                "E9804928", 409),
+    REVIEW_LOCKED(                   "E9804929", 409),
+    REVIEW_CANNOT_DELETE(            "E9804930", 409),
     ;
 
     private final String code;
