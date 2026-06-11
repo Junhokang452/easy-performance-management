@@ -14,6 +14,9 @@ dist/
 .env.*
 !.env.example
 
+# 실 자격증명 reconnect 스크립트 (talent 패턴 — 커밋 금지)
+_workspace/reconnect/
+
 # logs
 *.log
 logs/

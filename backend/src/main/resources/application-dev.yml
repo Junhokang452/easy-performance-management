@@ -49,6 +49,12 @@ app:
     auth:
       dev-default-tenant-id: 00000000-0000-0000-0000-000000000001
 
+# 인증 격상 (2026-06-12) — dev 5 페르소나 시더 ON (옵션 A 보수: dev 만 ON, 기본 OFF).
+# dev-super-admin/dev-hr-admin/dev-director/dev-manager/dev-employee @performance.dev, pw 'dev'.
+performance:
+  auth:
+    seed-dev-accounts: ${PERFORMANCE_AUTH_SEED_DEV_ACCOUNTS:true}
+
 # easy-platform-core 멀티테넌시 — 단계 2 dev 활성
 # control-plane-owner=false: easy-ware 가 control plane SoT (ADR-007 + S5 hcm 정렬)
 # api-key: NEON_API_KEY 부재 시 옵션 B 셀프 폴백 (안전 NO-OP)

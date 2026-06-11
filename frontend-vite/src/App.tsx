@@ -101,6 +101,11 @@ const MyReportPage = lazy(() =>
     default: m.MyReportPage,
   })),
 );
+const AdminTenantsPage = lazy(() =>
+  import('./pages/AdminTenantsPage').then((m) => ({
+    default: m.AdminTenantsPage,
+  })),
+);
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -110,6 +115,8 @@ export default function App(): React.ReactNode {
   const [navOpened, { toggle }] = useDisclosure();
   const { isAuthenticated, logout, session } = useAuth();
   const t = useT();
+  // SUPER_ADMIN 전용 내비 노출 — JwtAuthFilter 가 roles claim 을 prefix 없이 발급 (BE 정합).
+  const isSuperAdmin = session?.roles.includes('SUPER_ADMIN') ?? false;
 
   // 로그인 페이지는 AppShell 외부에서 직접 렌더 (Auth 요구 없음)
   if (location.pathname === '/login') {
@@ -241,6 +248,14 @@ export default function App(): React.ReactNode {
           label={t.nav.report.my}
           active={location.pathname.startsWith('/my/report')}
         />
+        {isSuperAdmin && (
+          <NavLink
+            component={Link}
+            to="/admin/tenants"
+            label={t.nav.admin.tenants}
+            active={location.pathname.startsWith('/admin/tenants')}
+          />
+        )}
       </AppShell.Navbar>
       <AppShell.Main>
         <PageBoundary>
@@ -370,6 +385,14 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <MyReportPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/tenants"
+              element={
+                <ProtectedRoute>
+                  <AdminTenantsPage />
                 </ProtectedRoute>
               }
             />

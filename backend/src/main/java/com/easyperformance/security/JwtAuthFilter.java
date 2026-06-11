@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.easyware.platform.TenantRoutingContext;
 import com.easyware.platform.auth.JwtClaims;
 import com.easyware.platform.auth.ParsedToken;
 import com.easyware.platform.tenantctx.TenantContext;
@@ -32,22 +33,50 @@ import jakarta.servlet.http.HttpServletResponse;
  *   <li>JwtService 가 lib JwtTokenParser 위임 — parse 결과는 {@link ParsedToken} record.</li>
  *   <li>lib {@link TenantContext} 만 채움 (자체 TenantContext 부재 — performance 는 그린필드).</li>
  *   <li>토큰 부재/무효면 인증 미설정 상태로 통과 (permitAll 경로용 — 보호 경로는 시큐리티가 401).</li>
+ *   <li>roles → {@code SimpleGrantedAuthority} <b>prefix 없음</b> — SUPER_ADMIN 가드는
+ *       {@code hasAuthority("SUPER_ADMIN")} (SecurityConfig 정합).</li>
  * </ul>
+ *
+ * <p><strong>default-tenant 라우팅 게이트 (talent `8e29426` / recruit G149 패턴)</strong> —
+ * {@code app.tenancy.default-tenant-id/-code} 설정 시 모든 요청을 해당 테넌트 DB 로 라우팅
+ * ({@link TenantRoutingContext}). 미설정 시 no-op (단일 DB 모드 무영향). id 설정 + code 누락이면
+ * 부팅 fail-fast (lib requireActive 가 code=null throw — 런타임 전면 장애 차단).
  *
  * <p><strong>ADR-031 정합</strong> — performance B2C 부재. B2B 단일 흐름만 지원.
  */
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final TenantRoutingContext routingContext;
+    private final UUID defaultTenantId;
+    private final String defaultTenantCode;
 
-    public JwtAuthFilter(JwtService jwtService) {
+    public JwtAuthFilter(JwtService jwtService, TenantRoutingContext routingContext,
+                         String defaultTenantIdStr, String defaultTenantCode) {
         this.jwtService = jwtService;
+        this.routingContext = routingContext;
+        if (defaultTenantIdStr == null || defaultTenantIdStr.isBlank()) {
+            this.defaultTenantId = null;
+            this.defaultTenantCode = null;
+        } else {
+            if (defaultTenantCode == null || defaultTenantCode.isBlank()) {
+                throw new IllegalStateException(
+                    "app.tenancy.default-tenant-id 설정 시 default-tenant-code 필수");
+            }
+            this.defaultTenantId = UUID.fromString(defaultTenantIdStr.trim());
+            this.defaultTenantCode = defaultTenantCode;
+        }
     }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws ServletException, IOException {
+        boolean routingSet = false;
+        if (defaultTenantId != null && routingContext != null) {
+            routingContext.set(defaultTenantId, defaultTenantCode);
+            routingSet = true;
+        }
         try {
             String token = resolveToken(request);
             if (token != null) {
@@ -72,6 +101,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             chain.doFilter(request, response);
         } finally {
+            // default-tenant 라우팅 해제 (ThreadLocal 누수 방지).
+            if (routingSet) {
+                routingContext.clear();
+            }
             // lib TenantContext ThreadLocal 해제 (누수 방지).
             TenantContext.clear();
             SecurityContextHolder.clearContext();

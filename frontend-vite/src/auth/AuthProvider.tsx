@@ -1,22 +1,17 @@
 /**
- * AuthProvider — 단계 3 BE-CC-2 JWT 5분리 미진입 stub (단계 4 EC-FE 진입 정합).
+ * AuthProvider — 인증 격상 (실 사용자 + bcrypt, 2026-06-12. dev stub fallback 폐기).
  *
  * 책임:
- * 1. dev stub login → AuthSession 메모리 저장 (BE security minimal, 단계 3 진입 시 silent refresh + bcrypt 정합)
+ * 1. login = apiClient.post('/api/auth/login') 실 호출 → AuthSession 메모리 저장
  * 2. apiClient 헤더에 Bearer + X-Tenant-Id 자동 적용
  * 3. 401/403 이벤트 수신 시 logout
- * 4. logout → 세션 클리어
- *
- * BE 단계 3 진입 시:
- * - login = apiClient.post('/auth/login') → silent refresh 정합
- * - logout = apiClient.post('/auth/logout') 호출
- * - silent refresh on /auth/refresh
+ * 4. logout = apiClient.post('/api/auth/logout') + 세션 클리어
  *
  * 보안:
  * - access token은 **메모리만** (XSS 방어). refresh token은 localStorage (BE는 추후 httpOnly cookie 격상).
  * - lib `@easy/http-client` 가 401 시 `/auth/refresh` silent 호출 + `easyperformance:unauthorized` 이벤트 dispatch.
- *
- * jobeval 단계 4 cutover `cc1bc03` 패턴 정합 (BE 단계 3 미진입 stub).
+ * - dev stub fallback 폐기 사유: 실 비밀번호 검증 도입 후 stub fallback 은 자격증명 오류를
+ *   조용한 가짜 세션으로 은폐 (easy-time mock fallback "조용한 가짜" 교훈 동형).
  */
 import {
   createContext,
@@ -63,21 +58,6 @@ function applyAuthHeader(session: AuthSession | null): void {
   }
 }
 
-/**
- * dev stub session — BE 단계 3 미진입 상태에서 UI 탐색 가능하도록 사전 채움.
- * 단계 3 진입 시 본 stub 제거 + login() 실 endpoint 호출.
- */
-function buildDevStubSession(): AuthSession {
-  return {
-    userId: '00000000-0000-0000-0000-000000000000',
-    tenantId: '00000000-0000-0000-0000-000000000001',
-    roles: ['MANAGER'],
-    accessToken: 'dev-stub-token',
-    refreshToken: 'dev-stub-refresh',
-    accessExpiresAt: Date.now() + 60 * 60 * 1000,
-  };
-}
-
 export function AuthProvider({ children }: { children: ReactNode }): React.ReactNode {
   const [session, setSession] = useState<AuthSession | null>(null);
 
@@ -119,30 +99,22 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
   }, []);
 
   const login = useCallback(async (req: LoginRequest): Promise<AuthSession> => {
-    // 단계 3 진입 전 dev stub login — BE security minimal 환경에서 UI 탐색 허용.
-    // 단계 3 진입 시 본 분기를 `apiClient.post('/auth/login', req)` 실 호출로 교체.
-    try {
-      const res = await apiClient.post<TokenResponse>('/auth/login', req);
-      const next = toSession(res.data);
-      applyAuthHeader(next);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(REFRESH_STORAGE_KEY, next.refreshToken);
-      }
-      setSession(next);
-      return next;
-    } catch {
-      // BE 단계 3 미진입 — dev stub fallback
-      const stub = buildDevStubSession();
-      applyAuthHeader(stub);
-      setSession(stub);
-      return stub;
+    // 인증 격상 (2026-06-12) — dev stub fallback 폐기. BE `/api/auth/login` 실 호출만 —
+    // 자격증명 오류(E9804101)는 그대로 throw 되어 LoginPage 가 에러 표시 (조용한 가짜 세션 차단).
+    const res = await apiClient.post<TokenResponse>('/auth/login', req);
+    const next = toSession(res.data);
+    applyAuthHeader(next);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(REFRESH_STORAGE_KEY, next.refreshToken);
     }
+    setSession(next);
+    return next;
   }, []);
 
   const logout = useCallback(async (): Promise<void> => {
     const refresh = session?.refreshToken;
     try {
-      if (refresh && refresh !== 'dev-stub-refresh') {
+      if (refresh) {
         await apiClient.post('/auth/logout', { refreshToken: refresh });
       }
     } catch {

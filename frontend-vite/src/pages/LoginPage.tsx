@@ -1,9 +1,9 @@
 /**
- * LoginPage — 단계 3 BE-CC-2 JWT 5분리 미진입 stub (단계 4 EC-FE 진입).
+ * LoginPage — 인증 격상 (실 사용자 + bcrypt, 2026-06-12).
  *
- * dev stub login (BE 단계 3 미진입 — AuthProvider 가 BE 호출 실패 시 dev stub fallback).
- * 단계 3+ 격상 시 사용자 + bcrypt 정합 + silent refresh 정합.
- * jobeval `cc1bc03` 패턴 정합.
+ * BE `/api/auth/login` 실 호출 (AuthProvider — dev stub fallback 폐기).
+ * 페르소나 SegmentedControl 5종 (store-hr/time "데모 계정 체험" 패턴) — 선택 시
+ * DevAccountSeeder 시드 계정(email + pw 'dev') 자동 입력 (시더 게이트 ON 환경 전용 편의).
  */
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -12,6 +12,7 @@ import {
   Card,
   Center,
   PasswordInput,
+  SegmentedControl,
   Stack,
   TextInput,
   Title,
@@ -28,6 +29,15 @@ interface FromState {
   from?: { pathname?: string };
 }
 
+/** DevAccountSeeder 5 페르소나 (pw 'dev') — BE com.easyperformance.security.DevAccountSeeder 정합. */
+const PERSONA_EMAIL: Record<string, string> = {
+  SUPER_ADMIN: 'dev-super-admin@performance.dev',
+  HR_ADMIN: 'dev-hr-admin@performance.dev',
+  DIRECTOR: 'dev-director@performance.dev',
+  MANAGER: 'dev-manager@performance.dev',
+  EMPLOYEE: 'dev-employee@performance.dev',
+};
+
 export function LoginPage(): React.ReactNode {
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,6 +45,7 @@ export function LoginPage(): React.ReactNode {
   const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [persona, setPersona] = useState<string | null>(null);
 
   const form = useForm({
     initialValues: { email: '', password: '' },
@@ -43,6 +54,14 @@ export function LoginPage(): React.ReactNode {
       password: (v) => (!v ? '비밀번호는 필수입니다' : null),
     },
   });
+
+  const applyPersona = (value: string): void => {
+    setPersona(value);
+    const email = PERSONA_EMAIL[value];
+    if (email) {
+      form.setValues({ email, password: 'dev' });
+    }
+  };
 
   const onSubmit = form.onSubmit(async (values) => {
     setSubmitting(true);
@@ -69,6 +88,27 @@ export function LoginPage(): React.ReactNode {
               {t.domain.app.subtitle}
             </Text>
           </div>
+          <div>
+            <Text size="xs" c="dimmed" mb={4}>
+              {t.login.personaLabel}
+            </Text>
+            <SegmentedControl
+              fullWidth
+              size="xs"
+              value={persona ?? ''}
+              onChange={applyPersona}
+              data={[
+                { label: t.login.persona.superAdmin, value: 'SUPER_ADMIN' },
+                { label: t.login.persona.hrAdmin, value: 'HR_ADMIN' },
+                { label: t.login.persona.director, value: 'DIRECTOR' },
+                { label: t.login.persona.manager, value: 'MANAGER' },
+                { label: t.login.persona.employee, value: 'EMPLOYEE' },
+              ]}
+            />
+            <Text size="xs" c="dimmed" mt={4}>
+              {t.login.personaHint}
+            </Text>
+          </div>
           {error && (
             <Alert color="red" title={t.error.boundary}>
               {error}
@@ -77,18 +117,18 @@ export function LoginPage(): React.ReactNode {
           <form onSubmit={onSubmit}>
             <Stack>
               <TextInput
-                label="Email"
+                label={t.login.emailLabel}
                 placeholder="user@example.com"
                 required
                 {...form.getInputProps('email')}
               />
               <PasswordInput
-                label="Password"
+                label={t.login.passwordLabel}
                 required
                 {...form.getInputProps('password')}
               />
               <Button type="submit" loading={submitting}>
-                {t.common.action.submit}
+                {t.login.submit}
               </Button>
             </Stack>
           </form>

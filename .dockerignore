@@ -35,6 +35,9 @@ lib/easy-platform/.env.example
 .env
 .env.local
 .env.*.local
+# hcm `73d7eb3` 실측 함정 — 루트 `.env` 패턴은 루트만 매칭. untracked frontend-vite/.env 가
+# 로컬 docker 빌드에서만 번들에 구워져 Render fresh clone 과 비동형 → 전 깊이 봉인.
+**/.env
 
 # Node / npm
 **/node_modules

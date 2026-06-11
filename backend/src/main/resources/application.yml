@@ -164,9 +164,17 @@ app:
       expiration: ${JWT_EXPIRATION_MS:300000}                     # access 5m (자매품 표준 정렬, jobeval 정합)
       refresh-expiration: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # refresh 7d
     auth:
-      # dev-only stub login 의 default tenant — 단일 DB (단계 1~4) 진입 시 fallback.
-      # 단계 4 격상 = 사용자 엔티티 + bcrypt 검증 + 사용자 가입 흐름.
+      # default tenant 폴백 (구 stub 키 보존) — app.tenancy.default-tenant-id 미설정 시 사용.
+      # 인증 격상 (2026-06-12): 사용자 엔티티 + bcrypt 검증 — 이 테넌트의 user_account 를 조회.
       dev-default-tenant-id: ${AUTH_DEV_DEFAULT_TENANT_ID:00000000-0000-0000-0000-000000000001}
+  # default-tenant 라우팅 게이트 (단계 2 실 활성, talent `8e29426` / recruit G149 패턴) —
+  # 설정 시 JwtAuthFilter 가 전 요청 + DevAccountSeeder 부팅 시드를 해당 테넌트 DB 로 라우팅
+  # (TenantRoutingContext.within — control DB 오염 차단). 미설정 시 no-op (단일 DB 모드 무영향).
+  # 우선순위: default-tenant-id > app.security.auth.dev-default-tenant-id (폴백 보존).
+  # id 설정 + code 누락 = 부팅 fail-fast (lib requireActive code=null throw 사전 차단).
+  tenancy:
+    default-tenant-id: ${APP_TENANCY_DEFAULT_TENANT_ID:}
+    default-tenant-code: ${APP_TENANCY_DEFAULT_TENANT_CODE:}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
     allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
@@ -176,6 +184,10 @@ app:
 # B2C 부재 (도메인 본질 = 기업 성과 평가 워크플로우 + HR SoR + 매니저-팀원 1:1).
 performance:
   mode: ${PERFORMANCE_MODE:b2b-only}    # b2b-only (단계 1~4, 기본) / smb-shared (단계 5 옵션, application-smb.yml)
+  auth:
+    # dev 계정 시더 (dev-super-admin/dev-hr-admin/dev-director/dev-manager/dev-employee
+    # @performance.dev, pw 'dev') — 기본 OFF. prod ON 금지 (고정 비밀번호, talent/store-hr 패턴).
+    seed-dev-accounts: ${PERFORMANCE_AUTH_SEED_DEV_ACCOUNTS:false}
   smb:
     # 단계 5 진입 시 SMB Shared DB URL (application-smb.yml 에서 spring.datasource.url 로 라우팅)
     shared-db-url: ${SMB_SHARED_DB_URL:${spring.datasource.url}}

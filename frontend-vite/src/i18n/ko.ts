@@ -60,6 +60,58 @@ interface I18nShape {
       hr: string;
       my: string;
     };
+    admin: {
+      tenants: string;
+    };
+  };
+  login: {
+    personaLabel: string;
+    personaHint: string;
+    emailLabel: string;
+    passwordLabel: string;
+    submit: string;
+    persona: {
+      superAdmin: string;
+      hrAdmin: string;
+      director: string;
+      manager: string;
+      employee: string;
+    };
+  };
+  adminTenants: {
+    title: string;
+    description: string;
+    gateOffTitle: string;
+    gateOffBody: string;
+    create: string;
+    empty: string;
+    emptyHint: string;
+    createTitle: string;
+    createHint: string;
+    createFailed: string;
+    field: {
+      code: string;
+      name: string;
+      region: string;
+      adminUsername: string;
+      adminEmail: string;
+    };
+    column: {
+      code: string;
+      name: string;
+      status: string;
+      region: string;
+      neonProject: string;
+      admin: string;
+      createdAt: string;
+    };
+    action: {
+      retry: string;
+      suspend: string;
+      resume: string;
+      cancel: string;
+      create: string;
+    };
   };
   cycles: {
     title: string;
@@ -717,6 +769,60 @@ export const ko: I18nShape = {
     report: {
       hr: 'HR > 리포트 발행',
       my: '내 평가 결과',
+    },
+    admin: {
+      tenants: '시스템 > 테넌트 관리',
+    },
+  },
+  login: {
+    personaLabel: '데모 계정 체험',
+    personaHint: '페르소나 선택 시 dev 시드 계정이 자동 입력됩니다 (시더 게이트 ON 환경)',
+    emailLabel: '이메일',
+    passwordLabel: '비밀번호',
+    submit: '로그인',
+    persona: {
+      superAdmin: '시스템',
+      hrAdmin: 'HR',
+      director: '본부장',
+      manager: '매니저',
+      employee: '구성원',
+    },
+  },
+  adminTenants: {
+    title: '테넌트 관리',
+    description: '시스템 관리자 — control plane 테넌트 생성·프로비저닝·일시중지·재개',
+    gateOffTitle: '멀티테넌시 게이트 OFF (단일 DB 모드)',
+    gateOffBody:
+      'control plane 미연결 상태라 테넌트 lifecycle API 가 503 을 반환합니다. APP_NEON_MULTITENANCY_ENABLED=true + control plane env 활성 시 본 화면이 자동으로 활성 데이터를 표시합니다.',
+    create: '테넌트 생성',
+    empty: '테넌트가 없습니다',
+    emptyHint: '테넌트 생성 버튼으로 첫 고객사를 등록하세요 — 등록 즉시 Neon 프로비저닝이 시작됩니다.',
+    createTitle: '테넌트 생성',
+    createHint:
+      '생성 시 control plane 등록 + PERFORMANCE 구독 시드 후 Neon 프로비저닝이 백그라운드로 진행됩니다 (수십 초). 목록에서 PROVISIONING → ACTIVE 전이를 자동 추적합니다.',
+    createFailed: '생성 실패 — 코드 중복 여부와 입력값을 확인하세요.',
+    field: {
+      code: '코드',
+      name: '이름',
+      region: '리전',
+      adminUsername: '관리자 계정명',
+      adminEmail: '관리자 이메일',
+    },
+    column: {
+      code: '코드',
+      name: '이름',
+      status: '상태',
+      region: '리전',
+      neonProject: 'Neon 프로젝트',
+      admin: '관리자',
+      createdAt: '생성일',
+    },
+    action: {
+      retry: '재시도',
+      suspend: '일시중지',
+      resume: '재개',
+      cancel: '취소',
+      create: '생성',
     },
   },
   cycles: {

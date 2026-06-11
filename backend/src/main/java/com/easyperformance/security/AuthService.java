@@ -8,103 +8,117 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.easyperformance.common.UuidV7;
+import com.easyperformance.domain.account.PerformanceUser;
+import com.easyperformance.domain.account.PerformanceUserRepository;
 import com.easyperformance.error.PerformanceErrorCode;
 import com.easyware.platform.auth.JwtClaims;
 import com.easyware.platform.auth.refresh.JwtRefreshService;
 import com.easyware.platform.error.ApiException;
 
 /**
- * B2B Auth 서비스 — 단계 3 BE-CC-2 JWT 5분리 (G84 D=A, Task #122, 2026-06-08).
+ * B2B Auth 서비스 — 인증 격상 (in-memory stub → 실 사용자 엔티티 + bcrypt + 역할, 2026-06-12).
  *
- * <p><strong>lib BE 22 JwtRefreshAspect cutover (G127.6 D=A, Task #159, 2026-06-08)</strong> —
- * 자체 RefreshTokenStore + 자체 refresh rotation 흐름을 lib {@link JwtRefreshService} 로 위임
- * (thin adapter). lib commit {@code 346306c} — 자매품 7 동일 패턴 (RefreshTokenStore SPI +
- * InMemoryRefreshTokenStore + JwtRefreshService) 일반화. <b>그린필드 모범 2호</b> (jobeval
- * {@code 2f24a9b} 옵션 A 모범 추종, ~100+ LOC 감축 실증, breaking change 0).
+ * <p><strong>격상 내용</strong> (talent {@code AuthService} `8e29426` 패턴 / store-hr `abb0418` 정합):
+ * <ul>
+ *   <li>login — {@link PerformanceUser} 조회 + bcrypt 검증. 부재/비활성/불일치 모두 동일
+ *       E9804101 (계정 존재 여부 노출 차단).</li>
+ *   <li>roles — 계정 role 단일 발급 ({@code List.of(role)}) — JwtAuthFilter 가 그대로
+ *       {@code SimpleGrantedAuthority} 매핑 (ROLE_ prefix 없음 — SUPER_ADMIN 가드는
+ *       {@code hasAuthority("SUPER_ADMIN")}).</li>
+ *   <li>endpoint 경로·{@link AuthDtos.TokenResponse} shape 불변 (FE wire 호환).</li>
+ * </ul>
  *
- * <p>그린필드 dev 진입 — 사용자 엔티티 미존재. 본 서비스는 이메일 → (userId, tenantId) 매핑을 in-memory
- * 로 유지하는 dev-only stub. 단계 4 (EC-FE) 후속에서 사용자 엔티티 + bcrypt 검증으로 격상.
+ * <p><strong>default-tenant 해석 (게이트 라우팅 정합)</strong> — 우선순위:
+ * {@code app.tenancy.default-tenant-id} (단계 2 게이트 ON, talent/recruit G149 패턴) &gt;
+ * {@code app.security.auth.dev-default-tenant-id} (기존 stub 폴백 보존). 로그인 시점은 미인증이라
+ * 테넌트 컨텍스트 부재 — 해석된 default tenant 의 계정을 조회한다 (멀티테넌트 로그인 해석은
+ * 본 운영 단계 후속 — hcm tenantCode 페이로드 패턴).
+ *
+ * <p><strong>lib BE 22 JwtRefreshService 위임 보존</strong> (G127.6 cutover 6호) —
+ * {@link JwtRefreshService#issueRefresh}/{@code rotate}/{@code logout} 흐름 불변.
  *
  * <p><strong>JWT 5분리 정합</strong>
  * <ol>
  *   <li>Access Token — {@link JwtService#issueAccessToken} (HS512, 5분, lib JwtTokenIssuer 위임).</li>
  *   <li>Refresh Token — lib {@link JwtRefreshService#issueRefresh} + 자동 store 등록 + jti claim 정합.</li>
- *   <li>ID Token — 본 단계 생략 (단계 3+ 격상 후보).</li>
- *   <li>Tenant Claim — TID (lib {@link JwtClaims#TID}) — JwtAuthFilter + lib TenantContextFilter 가 추출.</li>
- *   <li>User Claim — subject = userId.toString() (mra c632c5f 정합).</li>
+ *   <li>ID Token — 생략 (격상 후보).</li>
+ *   <li>Tenant Claim — TID (lib {@link JwtClaims#TID}).</li>
+ *   <li>User Claim — subject = userId.toString().</li>
  * </ol>
  *
- * <p><strong>Refresh rotation</strong> — lib {@link JwtRefreshService#rotate} 가 재플레이 공격 방어 +
- * 신규 access + refresh 쌍 발행 + 기존 폐기 처리. typ=refresh + 서명 검증 + store validate 통합.
- *
  * <p><strong>ADR-031 정합</strong> — performance 는 B2B-Enterprise per-tenant + SMB Shared 본질.
- * B2C 부재 (도메인 본질 = 기업 성과 평가 워크플로우). dual-claim 비파괴 (mra 패턴) 불필요 — 그린필드.
- *
- * <p><strong>모범 정합 (4 자매품 누적)</strong>
- * <ul>
- *   <li>jobeval `4dff03a` — Java 그린필드 모범 1호 (in-memory stub user + UUIDv7).</li>
- *   <li>jobeval `2f24a9b` — lib BE 22 cutover 1호 (옵션 A 그린필드 모범 — ~14 LOC 감축).</li>
- *   <li>mra `38e566d` — Java dual-claim 비파괴 모범 2호 (기존 LoginService 보존 + AuthService 신규).</li>
- *   <li>jobstructure `d64944e` — Kotlin idiomatic 모범 3호 (jti claim, Clock 주입).</li>
- *   <li>performance 본 슬라이스 = lib BE 22 cutover <b>6호</b> + 그린필드 모범 <b>2호</b>
- *       (jobeval 옵션 A 추종 + 자체 RefreshTokenStore 삭제 + lib JwtRefreshService 위임).</li>
- * </ul>
+ * B2C 부재 — dual-claim 불필요.
  */
 @Service
 public class AuthService {
 
     private final JwtService jwtService;
     private final JwtRefreshService libRefreshService;
+    private final PerformanceUserRepository users;
+    private final PasswordEncoder passwordEncoder;
 
-    // dev-only stub user 저장소 — 이메일 → (userId, tenantId, roles).
-    // 단계 4 격상 시 사용자 엔티티 + Repository 로 격상.
-    private final Map<String, StubUser> stubUsersByEmail = new ConcurrentHashMap<>();
-    private final Map<UUID, StubUser> stubUsersById = new ConcurrentHashMap<>();
-
+    /** 해석된 default tenant — app.tenancy.default-tenant-id > dev-default-tenant-id. */
     private final UUID defaultTenantId;
 
     public AuthService(JwtService jwtService,
                        JwtRefreshService libRefreshService,
+                       PerformanceUserRepository users,
+                       PasswordEncoder passwordEncoder,
+                       @Value("${app.tenancy.default-tenant-id:}")
+                       String defaultTenantIdStr,
                        @Value("${app.security.auth.dev-default-tenant-id:00000000-0000-0000-0000-000000000001}")
-                       String defaultTenantIdStr) {
+                       String devDefaultTenantIdStr) {
         this.jwtService = jwtService;
         this.libRefreshService = libRefreshService;
-        this.defaultTenantId = UUID.fromString(defaultTenantIdStr);
+        this.users = users;
+        this.passwordEncoder = passwordEncoder;
+        this.defaultTenantId = resolveDefaultTenantId(defaultTenantIdStr, devDefaultTenantIdStr);
     }
 
     /**
-     * dev-only stub login — 이메일로 사용자 조회/신규 생성 후 access + refresh 발행.
-     *
-     * <p>단계 4 격상 시: bcrypt 검증 + 사용자 엔티티 조회 + 권한 분기 + 로그인 실패 카운트.
+     * default tenant 해석 — {@code app.tenancy.default-tenant-id} (게이트) 우선,
+     * 미설정 시 {@code app.security.auth.dev-default-tenant-id} 폴백 (기존 키 보존).
      */
-    public AuthDtos.TokenResponse login(AuthDtos.LoginRequest req) {
-        if (req == null || req.email() == null || req.email().isBlank()) {
-            throw new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED,
-                Map.of("reason", "email-required"));
+    static UUID resolveDefaultTenantId(String defaultTenantIdStr, String devDefaultTenantIdStr) {
+        if (defaultTenantIdStr != null && !defaultTenantIdStr.isBlank()) {
+            return UUID.fromString(defaultTenantIdStr.trim());
         }
-        // dev stub — 이메일 first-seen 시 자동 생성 + UUIDv7 userId 발행 + default tenant 할당.
-        // 단계 4 격상 시: 신규 가입은 별도 /signup 흐름, login 은 검증만.
-        StubUser user = stubUsersByEmail.computeIfAbsent(req.email(),
-            email -> {
-                StubUser u = new StubUser(UuidV7.generate(), defaultTenantId, List.of("USER"));
-                stubUsersById.put(u.userId(), u);
-                return u;
-            });
+        return UUID.fromString(devDefaultTenantIdStr.trim());
+    }
 
-        return issueTokenPair(user.userId(), user.tenantId(), user.roles());
+    /**
+     * Login — 사용자 조회 + bcrypt 검증 후 access + refresh 발행.
+     *
+     * <p>부재/비활성/비밀번호 불일치 전부 동일 E9804101 — 계정 존재 여부 노출 차단 (talent 정합).
+     */
+    @Transactional(readOnly = true)
+    public AuthDtos.TokenResponse login(AuthDtos.LoginRequest req) {
+        if (req == null || req.email() == null || req.email().isBlank()
+                || req.password() == null || req.password().isBlank()) {
+            throw new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED,
+                Map.of("reason", "credentials-required"));
+        }
+        PerformanceUser account = users.findByTenantIdAndEmail(defaultTenantId, req.email().trim())
+            .orElseThrow(() -> new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED));
+        if (!account.isActive() || !passwordEncoder.matches(req.password(), account.getPasswordHash())) {
+            throw new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED);
+        }
+        return issueTokenPair(account.getId(), account.getTenantId(), List.of(account.getRole()));
     }
 
     /**
      * Refresh — refresh 토큰 검증 + rotation (신규 access + refresh 발행 + 이전 refresh 폐기).
      *
      * <p>lib {@link JwtRefreshService#rotate} 위임 — typ=refresh 서명 검증 + store validate + 신규 쌍 발행.
+     * rotation 후 사용자 재조회 (roles 최신화 + 비활성/삭제 계정 차단) — 부재/비활성 시 E9804104.
      */
+    @Transactional(readOnly = true)
     public AuthDtos.TokenResponse refresh(AuthDtos.RefreshRequest req) {
         if (req == null || req.refreshToken() == null || req.refreshToken().isBlank()) {
             throw new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_NOT_FOUND,
@@ -129,10 +143,17 @@ public class AuthService {
         UUID userId = jwtService.parse(pair.refreshToken()).subjectAsUuid().orElseThrow(() ->
             new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_INVALID,
                 Map.of("reason", "subject-missing")));
-        UUID tenantId = jwtService.parse(pair.refreshToken()).tenantId().orElse(null);
+        UUID tenantId = jwtService.parse(pair.refreshToken()).tenantId().orElse(defaultTenantId);
 
-        StubUser stub = stubUsersById.get(userId);
-        List<String> roles = stub != null ? stub.roles() : List.of("USER");
+        // 인증 격상 — stub 메모리 폴백("USER") 폐기. 실 계정 재조회 (비활성/삭제 즉시 차단).
+        PerformanceUser account = users.findByIdAndTenantId(userId, tenantId)
+            .orElseThrow(() -> new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_INVALID,
+                Map.of("reason", "user-not-found")));
+        if (!account.isActive()) {
+            throw new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_INVALID,
+                Map.of("reason", "user-inactive"));
+        }
+        List<String> roles = List.of(account.getRole());
 
         String access = jwtService.issueAccessToken(userId, tenantId, roles);
         long refreshTtlSec = jwtService.refreshTtlMs() / 1000;
@@ -164,7 +185,4 @@ public class AuthService {
             refresh, refreshTtl.toSeconds(),
             userId, tenantId, roles);
     }
-
-    /** dev-only stub user 메타. 단계 4 격상 시 사용자 엔티티로 대체. */
-    private record StubUser(UUID userId, UUID tenantId, List<String> roles) {}
 }

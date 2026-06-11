@@ -5,6 +5,7 @@
 package com.easyperformance.config;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,30 +18,36 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.easyperformance.security.JwtAuthFilter;
 import com.easyperformance.security.JwtService;
+import com.easyware.platform.TenantRoutingContext;
 import com.easyware.platform.tenantctx.TenantContextFilter;
 
 /**
- * Spring Security — 단계 3 BE-CC-2 JWT 5분리 (G84 D=A, Task #122, 2026-06-08).
+ * Spring Security — 단계 3 BE-CC-2 JWT 5분리 + mono 표면 매처 (2026-06-12 격상).
  *
- * <p>stateless JWT (자매품 정렬). 세션 없음, CSRF off (httpOnly+SameSite 쿠키로 방어),
- * actuator health/info/prometheus + /api/auth/** + /api/internal/** (S2S 수신, Bearer+HMAC 자체 인증)
- * 는 permitAll, 나머지는 인증 필요. {@link JwtAuthFilter} 선행.
+ * <p>stateless JWT (자매품 정렬). 세션 없음, CSRF off (httpOnly+SameSite 쿠키로 방어).
  *
- * <p><strong>단계 3 진입 이전</strong> (단계 1 BE-CC-1): 모든 경로 permitAll 임시 가드.
- * <p><strong>단계 3 진입 이후</strong> (본 슬라이스): JWT filter chain — jobeval SecurityConfig 패턴 정합.
- *
- * <p><strong>BE 17 v2 cutover 자연 결합</strong> (lib `TenantContextFilter`, jobeval `18bc01f` 모범):
+ * <p><strong>mono 매처 정합 (store-hr `0c4a262` 패턴)</strong> — Render Docker 단일 컨테이너에서
+ * Spring Boot 가 FE 정적 자원 + SPA 진입점을 함께 서빙:
  * <ul>
- *   <li>autoconfig {@code easyplatform.tenantctx.enabled=true} (dev 진입) 활성 시 lib 가
- *       {@code TenantContextFilter} 빈 등록. 본 체인에 {@code JwtAuthFilter} 다음 순서로 체인.</li>
- *   <li>{@link ObjectProvider} 패턴 — autoconfig OFF 시 lib 빈 null. {@code getIfAvailable()} null 가드.</li>
- *   <li>JwtAuthFilter 가 이미 lib TenantContext 를 set/clear 하므로 v2 필터는 사실상 중복 — 그러나
- *       lib autoconfig 진입점·미래의 v3 (JwtAuthFilter 제거 후 lib 단독 위임) 표준 패턴 박제용으로 명시 체인.
- *       충돌 없음 ({@code OncePerRequestFilter} dedupe).</li>
+ *   <li>{@code /actuator/health,info,prometheus} — permitAll (모니터링).</li>
+ *   <li>{@code /api/auth/**} — permitAll (로그인/refresh/logout).</li>
+ *   <li>{@code /api/internal/**} — permitAll <b>보존</b> (P0-S6 S2S 수신 — Bearer+HMAC 자체 3중 가드,
+ *       SyncReceiveController. JWT 불요).</li>
+ *   <li>{@code /v3/api-docs/**} + swagger — permitAll (EC-FE openapi-typescript fetch).</li>
+ *   <li>{@code /api/admin/**} — <b>SUPER_ADMIN 가드</b>. performance {@link JwtAuthFilter} 는 roles
+ *       claim 을 prefix 없는 {@code SimpleGrantedAuthority} 로 매핑 (실측) →
+ *       {@code hasAuthority("SUPER_ADMIN")} (store-hr 의 hasRole 과 의도적 차이).</li>
+ *   <li>{@code /api/**} + {@code /actuator/**} — authenticated (인증 영역은 이 둘 뿐).</li>
+ *   <li>{@code anyRequest().permitAll()} — 나머지는 정적 자원(/, /assets/** 등) + SPA 라우트
+ *       (/login, /hr/**, /admin/** 등) → {@link SpaForwardingConfig} 가 index.html 폴백.</li>
  * </ul>
  *
- * <p><strong>ADR-031 정합</strong> — performance 는 B2B-Enterprise per-tenant + SMB Shared 본질.
- * B2C 부재 (도메인 본질 = 기업 성과 평가 워크플로우). {@code /api/b2c/**} 매처 불필요.
+ * <p><strong>BE 17 v2 cutover 자연 결합</strong> (lib {@code TenantContextFilter}, jobeval `18bc01f`):
+ * {@link ObjectProvider} 패턴 — autoconfig OFF 시 lib 빈 null → 미등록 (no-op).
+ *
+ * <p><strong>default-tenant 라우팅 게이트</strong> (talent/recruit G149 패턴) —
+ * {@code app.tenancy.default-tenant-id/-code} 설정 시 {@link JwtAuthFilter} 가 전 요청을 해당
+ * 테넌트 DB 로 라우팅 ({@link TenantRoutingContext}). 미설정 시 no-op (단일 DB 모드 무영향).
  */
 @Configuration
 public class SecurityConfig {
@@ -53,20 +60,30 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                            ObjectProvider<TenantContextFilter> tenantContextFilterProvider)
+                                            ObjectProvider<TenantContextFilter> tenantContextFilterProvider,
+                                            TenantRoutingContext tenantRoutingContext,
+                                            @Value("${app.tenancy.default-tenant-id:}") String defaultTenantId,
+                                            @Value("${app.tenancy.default-tenant-code:}") String defaultTenantCode)
             throws Exception {
-        JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(jwtService);
+        JwtAuthFilter jwtAuthFilter =
+            new JwtAuthFilter(jwtService, tenantRoutingContext, defaultTenantId, defaultTenantCode);
         http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                // S2S 수신 (P0-S6) — Bearer+HMAC 자체 인증 (SyncReceiveController 3중 가드). JWT 불요.
+                // S2S 수신 (P0-S6) — Bearer+HMAC 자체 인증 (SyncReceiveController 3중 가드). JWT 불요. 보존.
                 .requestMatchers("/api/internal/**").permitAll()
-                // OpenAPI spec endpoint (EC-FE-7) — 단계 4 EC-FE 진입 시 FE openapi-typescript fetch.
+                // OpenAPI spec endpoint (EC-FE-7) — FE openapi-typescript fetch.
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .anyRequest().authenticated())
+                // SystemAdmin (control plane tenants 콘솔) — SUPER_ADMIN 가드 (prefix 없는 authority 실측).
+                .requestMatchers("/api/admin/**").hasAuthority("SUPER_ADMIN")
+                // mono 표면 — 인증 영역 = /api/** + /actuator**(위 health 등 외) 만 (store-hr 0c4a262 정합).
+                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/actuator/**").authenticated()
+                // 나머지 = 정적 자원(/, /index.html, /assets/**) + SPA 라우트 → SpaForwardingConfig 폴백.
+                .anyRequest().permitAll())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         // BE 17 v2 cutover (jobeval `18bc01f` 정합) — lib TenantContextFilter 를 JwtAuthFilter 다음에 체인.
