@@ -91,6 +91,16 @@ const HrDistributionPage = lazy(() =>
     default: m.HrDistributionPage,
   })),
 );
+const HrReportsPage = lazy(() =>
+  import('./pages/HrReportsPage').then((m) => ({
+    default: m.HrReportsPage,
+  })),
+);
+const MyReportPage = lazy(() =>
+  import('./pages/MyReportPage').then((m) => ({
+    default: m.MyReportPage,
+  })),
+);
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -219,6 +229,18 @@ export default function App(): React.ReactNode {
           label={t.nav.calibration.distribution}
           active={location.pathname.startsWith('/hr/distribution')}
         />
+        <NavLink
+          component={Link}
+          to="/hr/reports"
+          label={t.nav.report.hr}
+          active={location.pathname.startsWith('/hr/reports')}
+        />
+        <NavLink
+          component={Link}
+          to="/my/report"
+          label={t.nav.report.my}
+          active={location.pathname.startsWith('/my/report')}
+        />
       </AppShell.Navbar>
       <AppShell.Main>
         <PageBoundary>
@@ -332,6 +354,22 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <HrDistributionPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/reports"
+              element={
+                <ProtectedRoute>
+                  <HrReportsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my/report"
+              element={
+                <ProtectedRoute>
+                  <MyReportPage />
                 </ProtectedRoute>
               }
             />

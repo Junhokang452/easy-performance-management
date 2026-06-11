@@ -1,58 +1,60 @@
-> 작성: 2026-06-11 / 작성자: easy-suite-orchestrator / 목적: P0-S4 완료 시점 체크포인트 — 다음 세션 재개 진입점
+> 작성: 2026-06-11 / 작성자: easy-suite-orchestrator / 목적: P0-S5 완료 시점 체크포인트 — 다음 세션 재개 진입점
 
 # 작업 체크포인트 — easy-performance-management 평가 도메인 P0
 
-**현재 작업**: easy-performance-management 평가 도메인 확장 (KPI / OKR / MBO / Competency / Cycle 등 P0~P2 26주 로드맵). 사용자 의사결정 G_PERF_E1~E10 일괄 채택 + 경계 = SoR 분담 + 데이터 양방향 자연 흐름.
+**현재 작업**: easy-performance-management 평가 도메인 확장 (P0~P2 26주 로드맵). 사용자 의사결정 G_PERF_E1~E10 일괄 채택 + 경계 = SoR 분담 + 데이터 양방향 자연 흐름.
 
 ## 완료
 
-- [x] **D**: 리서치·설계 5 파일 + 의사결정 박제 + 경계 정정 박제
-- [x] **P0-S1**: EvaluationCycle + EvaluationPolicy (commit `9f42e50`) — BE 44/44
-- [x] **P0-S2**: KPI 도메인 (commit `7926f99`) — BE 64/64 (신규 20) + 경계 16/16. 계약 선작성 패턴 1호
-- [x] **P0-S3**: PerformanceReview (commit `1763146`) — BE 98/98 (신규 34) + 경계 11/11 + ReviewResponse 17필드 일치
-- [x] **P0-S4**: CalibrationSession + RatingDistribution + 강제 분포 시뮬레이터
-  - 계약: `_workspace/00_input/p0_s4_contract.md` (설계 결정 3 고정: simulate 무저장·apply 잠금·partial unique 2) — BE·FE 병렬, **계약 이탈 0 실측**
-  - BE 신규 13 + 수정 2: `domain/calibration/` (CalibrationStatus 5 + entity 2 + repo 2 + CalibrationDtos + CalibrationService/**DistributionMath**/CalibrationJson + CalibrationController 11 endpoint) + Flyway `V20260611_004` + ErrorCode 10건(E9804448/246~251/931~933) + **ReviewService 보강**(bandGrade public 신설 + FINALIZED 전이 기존 finalGrade 보존 ?? 밴드 — 기존 34 테스트 무수정 통과) + CalibrationServiceTest 27 + DistributionMathTest 10
-  - FE 신규 12 + 수정 3: `api/calibration.ts` + `/hr/calibration-sessions` (#28 confirm 모달 finalizeReviews) + `/director/calibration` (#19 분포 막대 + 행별 등급 이동 Select + 조정 이력) + `/hr/distribution` (#24 시뮬레이션 proposed 강조 + 강제 적용) + `pages/calibration/` 8 (DistributionBars 수동 Progress 막대·GradeBadge·SessionFormModal 등)
-  - 게이트 실측: BE `gradlew test` **135/135** (회귀 98 + 신규 37, XML failures 0) / FE typecheck 0 + build ✅ (lazy 3: HrCalibrationSessions 51.46 — DateTimePicker 포함 / DirectorCalibration 6.50 / HrDistribution 6.53 kB)
-  - 경계 QA: BE 11 매핑 ↔ FE 전수 일치 + DistributionResponse 11필드 일치
-  - 핵심 결정: largest remainder 강제 배분(Σquota==N 수학 보장, 동률 S→A→B→C→D — DistributionMath 분리 + 경계 N=0/1 테스트) / apply = finalGrade 일괄 UPDATE(status 불변·재적용 허용·simulation_log append) / effectiveGrade = finalGrade ?? ReviewService.bandGrade 재사용(중복 0) / FE 등급·분포 BE 표시만(DistributionBars % 환산 렌더 한정)
-  - 박제: `_workspace/P0_S4_BACKEND_2026-06-11.md` + `_workspace/P0_S4_FRONTEND_2026-06-11.md`
+- [x] **D**: 리서치·설계 5 파일 + 의사결정 + 경계 정정 박제
+- [x] **P0-S1**: Cycle + Policy (commit `9f42e50`) — BE 44/44
+- [x] **P0-S2**: KPI 도메인 (commit `7926f99`) — BE 64/64 + 경계 16/16. 계약 선작성 패턴 1호
+- [x] **P0-S3**: PerformanceReview (commit `1763146`) — BE 98/98 + 경계 11/11
+- [x] **P0-S4**: Calibration + Distribution (commit `e8eeebe`) — BE 135/135 + 경계 11/11. largest remainder + bandGrade public
+- [x] **scanBasePackages 잠복 결함 fix** (별도 커밋) — 별도 `@ComponentScan` → `@SpringBootApplication(scanBasePackages)` (easy-job `1ddf97e` 결함 ① 정합 — 기본 제외 필터 소실로 lib 동명이 TenantContextAutoConfiguration 2 클래스 부팅 충돌 잠복. harness 점검 후보 등재분 해소. ⚠️ talent/jobeval 동일 잠복 잔존)
+- [x] **P0-S5**: PerformanceReport append-only + HR 일괄 발행 + 사원 결과 조회
+  - 계약: `_workspace/00_input/p0_s5_contract.md` (설계 결정 3 고정: 일괄 발행+supersede 체인 / content 동결 shape / mutable 예외 2 필드 한정)
+  - BE 신규 8 + 수정 1: `domain/report/` (entity append-only + repo + ReportDtos + ReportService + ReportController 7 endpoint) + Flyway `V20260611_005` + ErrorCode 3건(E9804449/252/934) + ReportServiceTest 15
+  - FE 신규 5 + 수정 3: `api/reports.ts` + `/hr/reports` (#26 일괄 발행 confirm + 현황 + 재발행) + `/my/report` (#7 리포트 카드 + 자동 view 1회 + acknowledge 멱등) + `pages/report/` (ReportDistributionBars 비율 전용 변형 + errorMapping 5키)
+  - 게이트 실측: BE `gradlew test` **150/150** (회귀 135 + 신규 15, XML failures/errors 0) / FE typecheck 0 + build ✅ (lazy 2: MyReport 6.68 / HrReports 7.29 kB)
+  - 경계 QA: BE 7 매핑 ↔ FE 전수 일치 + ReportResponse 13필드 일치
+  - 핵심 결정: 분포 = FINALIZED·finalGrade 비율 round 4 (분모 = FINALIZED 전수, null grade 행 분모 포함·버킷 제외 — CalibrationService 의 effectiveGrade 건수 분포와 의도적 상이, 중복 아님) / active = supersede 체인 말단 (`existsByTenantIdAndSupersedesId`) / content = ReviewService.getReview 재사용 동결 (재계산 0) / 자동 view = useRef + viewedAt null 이중 가드
+  - 세션 특이: 직전 중단 실행의 산출물이 디스크에 잔존 — 에이전트가 전수 cross-check 후 컴파일 버그 1건 fix (publish created 리스트 타입) + 테스트 15 신설로 정합 완결 (허위 보고 아님 실측)
+  - 박제: `_workspace/P0_S5_BACKEND_2026-06-11.md` + `_workspace/P0_S5_FRONTEND_2026-06-11.md`
 
 ## 다음 슬라이스
 
-- **P0-S5**: PerformanceReport append-only + HR 일괄 발행 + 사원 결과 조회 (1주, **다음 세션 권장**)
-  - entity 1건: PerformanceReport (ERD Entity 18, line 114~117 — `{id, reviewId, employeeId, publishedAt, content jsonb, viewedAt, acknowledged}` append-only, supersedes 체인 옵션은 계약서에서 결정)
-  - 화면 2건: HR 사이클 리포트 일괄 발행 (#26 `/hr/reports`) + 사원 본인 리포트 (#7 `/my/report` — acknowledged 버튼 + E9 노출 정책) — slices.md 의 "#7/#26" 번호는 카탈로그 기준 (#7 = my, #26 = hr 발행)
-  - 결정 정합: **E9 = 본인 결과 + 부서 분포 % 만** (개인 서열·타인 점수 비노출 — P0-S6 전이라 부서 분포는 전사 분포로 대체 박제 검토)
-  - 의존: P0-S3/S4 — 발행 대상 = review.status == FINALIZED (finalGrade·finalScore 확정분). content jsonb 에 동결 스냅샷 (finalGrade + kpiScore 분해 + 매니저 comment — P0 범위, Competency/360 은 P1 채움)
-  - 핵심 설계 질문 (계약서에서 고정): ① 발행 = cycle 단위 일괄 (FINALIZED review 전수) + 개별 재발행(supersedes) 여부 ② content 스냅샷 shape (P0 최소: finalGrade/finalScore/kpiScore/kpiScoreDetail 요약/managerComment/distribution %) ③ acknowledged/viewedAt 갱신 경로 (append-only 와의 공존 — 이 2 필드만 mutable 허용 명시)
-  - SoT: `03_domain_model_and_screens.md` Entity 18 + 화면 #7(line 230)/#26(line 264) + E9 (decisions §1)
-  - **권장 절차**: 계약서 `00_input/p0_s5_contract.md` 선작성 → BE·FE 병렬 → 실검증 → 커밋
-  - 예상 변경: BE 신규 ~8 / FE 신규 ~8 / 변경 ~5
+- **P0-S6**: hcm S2S 수신 — core-master read-model (1주, **다음 세션 권장**)
+  - read-model 3 테이블: `rm_employee` / `rm_org_unit` / `rm_assignment` + endpoint `/api/internal/sync/core-master`
+  - 가드: Bearer(constant-time) + X-Signature HMAC(lib BE 15) + sourceVersion 단조 idempotency + 미설정 503
+  - **모범 사본**: talent 단계 1.5 `6022d5e` 수신 패턴 (TALENT_PLAN flat shape + ReadModelSyncService 단일 쓰기 + @JsonAlias(homeStoreId→orgUnitId 등 hcm 페이로드 호환)) + store-hr `d95bf62` 원형. 송신측 hcm 은 storehr/talent 멀티타깃 기존재 (`9317886`/`c342838`) — **performance 타깃 추가는 hcm repo 별도 슬라이스** (본 슬라이스 = 수신측만, 게이트 OFF 기본 미설정 503)
+  - 계약서 고정 사항: ① payload shape = hcm `SyncBatchPayload` 동일 shape (talent @JsonAlias 패턴 재사용) ② rm_* 3 테이블 스키마 = talent `V20260610_002` 사본 (tenant_id 선두 인덱스 + source_version) ③ ErrorCode 신규 (S2S 영역 — talent E9905301 동형 미설정 503 + census: 404 다음 449→450, 422 다음 253, 409 다음 935, **5xx/S2S 계열 첫 진입 — 번호 영역 결정 필요**) ④ 기존 화면 employeeId 입력 → rm_employee 선택기 개선은 **별도 후속 슬라이스** (talent S18 패턴 — 본 슬라이스 범위 외)
+  - principal 주입 전환 (employeeId 쿼리 파라미터 → JWT) 도 후속 별도 (P0-S6 수신만으로는 identity 매핑 미완)
+  - 예상 변경: BE 신규 ~10 / FE 0 (수신 전용) / 변경 ~3
 
 ## 컨텍스트 요약 (재개 시 읽기)
 
-- **작업 도메인**: easy-performance-management 평가 도메인 P0 — 진행 5/10 슬라이스 (D + S1~S4)
-- **적용 표준**: easy-standards v0.5.0 + ADR-013/024/031 + ADR-026(명명) + ADR-027(i18n)
-- **영향 저장소**: `easy-performance-management/` 단일 (P0-S6 hcm 수신 / P0-S7 talent 송신부터 S2S)
+- **작업 도메인**: easy-performance-management 평가 도메인 P0 — 진행 6/10 슬라이스 (D + S1~S5). **단일 repo 범위 종료 — S6 부터 S2S 진입**
+- **적용 표준**: easy-standards v0.5.0 + ADR-013/024/031 + ADR-026/027 + (S6) BE-CC-4 Outbox-light + S2S Bearer+HMAC
 - **핵심 결정 SoT**: `_workspace/evaluation_research_2026-06-11/decisions_2026-06-11.md`
-- **ERD/화면 SoT**: `_workspace/evaluation_research_2026-06-11/03_domain_model_and_screens.md`
+- **경계 SoT**: `_workspace/evaluation_research_2026-06-11/EVAL_SIBLING_BOUNDARY_2026-06-11.md` (채널 #1 = hcm→performance core-master)
 - **슬라이스 체크리스트 SoT**: `_workspace/00_input/slices.md`
-- **슬라이스 실행 컨벤션 (S2~S4 확립)**: 계약서 선작성(설계 질문 고정 + REST/shape/ErrorCode/화면/산식) → BE·FE general-purpose 병렬 위임 → 실검증(git status + 게이트 + XML + 경계 grep) → 단일 커밋 → push
-- **ErrorCode 사용 현황 (E9804)**: 404 = 441~448 (다음 449) / 422 = 231~251 (다음 252) / 409 = 921~933 (다음 934) / AUTH = 101~104·415
-- **밴드/등급 로직 SoT**: `ReviewService.bandGrade` public (S≥90/A≥80/B≥70/C≥60/D — S_A_B_C_D 한정) — 후속 슬라이스 재사용, 중복 구현 금지
+- **슬라이스 실행 컨벤션 (S2~S5 확립)**: 계약서 선작성 → BE·FE 병렬 위임 → 실검증(git status + 게이트 + XML + 경계 grep) → 커밋 → push
+- **ErrorCode 사용 현황 (E9804)**: 404 = 441~449 (다음 450) / 422 = 231~252 (다음 253) / 409 = 921~934 (다음 935) / AUTH = 101~104·415
+- **밴드/등급 SoT**: `ReviewService.bandGrade` public — 재사용, 중복 구현 금지
+- **잠복 결함 박제**: talent/jobeval 의 별도 @ComponentScan 동일 잠복 잔존 (performance 는 본 세션 해소) — 각 repo 차기 세션 점검 후보
 
 ## 재개 명령어
 
-새 세션에서: **"이어서 진행"** 또는 **"P0-S5 진입"** 또는 **"performance 작업 재개"**
+새 세션에서: **"이어서 진행"** 또는 **"P0-S6 진입"** 또는 **"performance 작업 재개"**
 
 ## 변경 이력
 
 | 날짜 | 슬라이스 | 결과 |
 |------|---------|------|
-| 2026-06-11 | 리서치·설계 5 + 의사결정 + 경계 정정 박제 | 5 파일 + 결정 10건 채택 + S2S 5 채널 |
-| 2026-06-11 | P0-S1 Cycle + Policy | BE 44/44 (commit `9f42e50`) |
-| 2026-06-11 | P0-S2 KPI 도메인 | BE 64/64 + 경계 16/16 (commit `7926f99`) |
-| 2026-06-11 | P0-S3 PerformanceReview | BE 98/98 + 경계 11/11 (commit `1763146`) |
-| 2026-06-11 | P0-S4 Calibration + Distribution | BE 135/135 (신규 37) + FE lazy 3 + 경계 11/11 + 계약 이탈 0 |
+| 2026-06-11 | 리서치·설계 + 의사결정 + 경계 박제 | 5 파일 + 결정 10 + S2S 5 채널 |
+| 2026-06-11 | P0-S1 Cycle + Policy | BE 44/44 (`9f42e50`) |
+| 2026-06-11 | P0-S2 KPI | BE 64/64 + 경계 16/16 (`7926f99`) |
+| 2026-06-11 | P0-S3 Review | BE 98/98 + 경계 11/11 (`1763146`) |
+| 2026-06-11 | P0-S4 Calibration | BE 135/135 + 경계 11/11 (`e8eeebe`) |
+| 2026-06-11 | scanBasePackages fix + P0-S5 Report | BE 150/150 (신규 15) + FE lazy 2 + 경계 7/7 + 계약 이탈 0 |

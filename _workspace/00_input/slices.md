@@ -23,7 +23,7 @@
   - entity 2건
   - 화면: HR 분포 시뮬레이터 (#19), Calibration 시뮬레이터 (#28)
   - 정합: E1 = HYBRID 옵션, E6 = performance Calibration / talent 9-Box
-- [ ] **P0-S5**: PerformanceReport append-only + HR 일괄 발행 + 사원 결과 조회 (1주)
+- [x] **P0-S5**: PerformanceReport append-only + HR 일괄 발행 + 사원 결과 조회 (1주) ✅ (계약 `00_input/p0_s5_contract.md` + BE 150/150 + FE build + 경계 7/7 — 화면 실제 = #7 `/my/report` + #26 `/hr/reports`)
   - entity 1건 (append-only, supersedes 체인 옵션)
   - 화면: 사이클 리포트 (#7), 사원 dashboard 결과 카드 (#26)
   - 정합: E9 = 본인 + 부서 분포 % 만

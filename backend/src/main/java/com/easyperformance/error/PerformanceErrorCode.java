@@ -95,6 +95,15 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     CALIBRATION_SESSION_LOCKED(              "E9804931", 409),
     CALIBRATION_SESSION_CANNOT_DELETE(       "E9804932", 409),
     CALIBRATION_REVIEW_NOT_READY(            "E9804933", 409),
+
+    // 성과 리포트 도메인 — P0-S5 PerformanceReport (p0_s5_contract.md §4 SoT).
+    // append-only 발행 (publish 일괄 + supersede 체인) + content 동결 + view/acknowledge 멱등.
+    // publish/supersede 는 cycle.status==FINALIZED 한정 + view/acknowledge/supersede 는 active 행 한정.
+    // 404 not-found 1 + 422 validation 1 + 409 conflict 1.
+    // 기존 도메인 교차 재사용: REVIEW_NOT_FOUND(E9804447 404) + CYCLE_NOT_FOUND(E9804441 404).
+    REPORT_NOT_FOUND(                        "E9804449", 404),
+    REPORT_CYCLE_NOT_FINALIZED(              "E9804252", 422),
+    REPORT_NOT_ACTIVE(                       "E9804934", 409),
     ;
 
     private final String code;

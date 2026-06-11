@@ -56,6 +56,10 @@ interface I18nShape {
       director: string;
       distribution: string;
     };
+    report: {
+      hr: string;
+      my: string;
+    };
   };
   cycles: {
     title: string;
@@ -475,6 +479,69 @@ interface I18nShape {
       skipped: string;
     };
   };
+  report: {
+    hr: {
+      title: string;
+      description: string;
+      needCycle: string;
+      needFinalized: string;
+      summaryFinalized: string;
+      summaryPublished: string;
+      publish: string;
+      publishTitle: string;
+      publishConfirm: string;
+      publishResult: string;
+      empty: string;
+      emptyHint: string;
+      viewed: string;
+      notViewed: string;
+      acknowledged: string;
+      notAcknowledged: string;
+      superseded: string;
+      supersede: string;
+      supersedeTitle: string;
+      supersedeWarning: string;
+      supersedeDone: string;
+      col: {
+        employeeId: string;
+        finalGrade: string;
+        publishedAt: string;
+        status: string;
+      };
+    };
+    my: {
+      title: string;
+      description: string;
+      employeeId: string;
+      employeeIdPlaceholder: string;
+      load: string;
+      needInput: string;
+      empty: string;
+      emptyHint: string;
+      acknowledgeDone: string;
+    };
+    card: {
+      finalGrade: string;
+      finalScore: string;
+      kpiScore: string;
+      mboScore: string;
+      competencyScore: string;
+      mraScore: string;
+      scoreP1: string;
+      kpiSection: string;
+      managerComment: string;
+      noComment: string;
+      distributionHeading: string;
+      distributionHint: string;
+      distributionEmpty: string;
+      distributionMine: string;
+      acknowledgeHeading: string;
+      acknowledgeHint: string;
+      acknowledge: string;
+      acknowledgedButton: string;
+      acknowledged: string;
+    };
+  };
   domain: {
     app: {
       title: string;
@@ -593,6 +660,9 @@ interface I18nShape {
     E9804931: string;
     E9804932: string;
     E9804933: string;
+    E9804449: string;
+    E9804252: string;
+    E9804934: string;
   };
 }
 
@@ -643,6 +713,10 @@ export const ko: I18nShape = {
       sessions: 'Calibration 세션',
       director: 'Calibration (본부)',
       distribution: '분포 시뮬레이터',
+    },
+    report: {
+      hr: 'HR > 리포트 발행',
+      my: '내 평가 결과',
     },
   },
   cycles: {
@@ -1063,6 +1137,69 @@ export const ko: I18nShape = {
       skipped: '건너뜀 {count}건',
     },
   },
+  report: {
+    hr: {
+      title: '리포트 발행',
+      description: '확정(FINALIZED)된 평가에 대해 결과 리포트를 일괄 발행하고 열람·확인 현황을 관리하세요.',
+      needCycle: '평가 사이클을 선택하세요.',
+      needFinalized: '리포트 발행은 사이클이 확정(FINALIZED) 상태일 때만 가능합니다.',
+      summaryFinalized: '확정 평가',
+      summaryPublished: '발행 완료',
+      publish: '일괄 발행',
+      publishTitle: '리포트 일괄 발행',
+      publishConfirm: '확정된 평가 {count}건 중 아직 발행되지 않은 대상에게 리포트를 발행합니다. 계속하시겠습니까?',
+      publishResult: '발행 {published}건 / 건너뜀 {skipped}건',
+      empty: '발행된 리포트가 없습니다',
+      emptyHint: '사이클이 확정되면 일괄 발행으로 리포트를 생성할 수 있습니다.',
+      viewed: '열람함',
+      notViewed: '미열람',
+      acknowledged: '확인함',
+      notAcknowledged: '미확인',
+      superseded: '재발행됨',
+      supersede: '재발행',
+      supersedeTitle: '리포트 재발행',
+      supersedeWarning: '재발행하면 현재 평가 확정값과 최신 분포로 내용이 다시 동결된 새 리포트가 생성됩니다. 기존 리포트는 이력으로 보존됩니다.',
+      supersedeDone: '리포트를 재발행했습니다.',
+      col: {
+        employeeId: '사원 ID',
+        finalGrade: '최종 등급',
+        publishedAt: '발행 일시',
+        status: '상태',
+      },
+    },
+    my: {
+      title: '내 평가 결과',
+      description: '확정된 평가 결과 리포트를 확인하고 확인(acknowledge) 처리하세요.',
+      employeeId: '사원 ID',
+      employeeIdPlaceholder: '사원 ID (UUID)',
+      load: '조회',
+      needInput: '사이클과 사원 ID를 입력한 뒤 조회하세요.',
+      empty: '리포트가 아직 발행되지 않았습니다',
+      emptyHint: 'HR이 평가 결과 리포트를 발행하면 여기에서 확인할 수 있습니다.',
+      acknowledgeDone: '결과를 확인했습니다.',
+    },
+    card: {
+      finalGrade: '최종 등급',
+      finalScore: '최종 점수',
+      kpiScore: 'KPI 점수',
+      mboScore: 'MBO 점수',
+      competencyScore: '역량 점수',
+      mraScore: '다면평가 점수',
+      scoreP1: '추후 제공',
+      kpiSection: 'KPI 항목 요약',
+      managerComment: '매니저 의견',
+      noComment: '작성된 의견이 없습니다.',
+      distributionHeading: '전사 등급 분포',
+      distributionHint: '발행 시점 전사 확정 평가의 등급 분포(비율)입니다. 본인 등급이 강조됩니다.',
+      distributionEmpty: '분포 정보가 없습니다.',
+      distributionMine: '내 등급',
+      acknowledgeHeading: '결과 확인',
+      acknowledgeHint: '평가 결과를 확인했음을 기록합니다. 확인 후에는 변경할 수 없습니다.',
+      acknowledge: '결과 확인',
+      acknowledgedButton: '확인 완료',
+      acknowledged: '확인 완료',
+    },
+  },
   domain: {
     app: {
       title: 'easy-performance-management',
@@ -1181,6 +1318,9 @@ export const ko: I18nShape = {
     E9804931: '확정/종결된 세션은 수정·조정·확정할 수 없습니다',
     E9804932: '계획(PLANNED) 상태의 세션만 삭제할 수 있습니다',
     E9804933: '캘리브레이션 단계의 평가만 조정할 수 있습니다',
+    E9804449: '리포트를 찾을 수 없습니다',
+    E9804252: '리포트 발행은 사이클이 확정(FINALIZED) 상태일 때만 가능합니다',
+    E9804934: '이미 재발행된(이전) 리포트는 열람·확인·재발행할 수 없습니다',
   },
 };
 
