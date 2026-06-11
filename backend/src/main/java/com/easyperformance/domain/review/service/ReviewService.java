@@ -355,6 +355,10 @@ public class ReviewService {
     /**
      * 확정 — finalScore = kpiScore (P0 단순, MBO 등 P1 가중 확장 박제) + finalGrade = §5 밴드 +
      * finalizedAt = now + finalizedBy = actorEmployeeId. kpiScore NULL 이면 REVIEW_SCORE_INCOMPLETE 거부.
+     *
+     * <p><strong>P0-S4 보강 (p0_s4_contract.md §5)</strong>: 캘리브레이션 조정/강제 배분 결과 보존 —
+     * 기존 {@code finalGrade} 가 이미 설정돼 있으면 그대로 유지, null 일 때만 policy 기반 밴드 산출
+     * ({@link #computeFinalGrade}). 기존 P0-S3 테스트 (null → 밴드) 는 그대로 통과.
      */
     private void finalizeReview(UUID tenantId, PerformanceReview review, UUID actorEmployeeId) {
         if (review.getKpiScore() == null) {
@@ -363,7 +367,10 @@ public class ReviewService {
         }
         BigDecimal finalScore = review.getKpiScore();
         review.setFinalScore(finalScore);
-        review.setFinalGrade(computeFinalGrade(tenantId, review.getCycleId(), finalScore));
+        String existingGrade = review.getFinalGrade();
+        review.setFinalGrade(existingGrade != null
+            ? existingGrade
+            : computeFinalGrade(tenantId, review.getCycleId(), finalScore));
         review.setFinalizedAt(Instant.now(clock));
         review.setFinalizedBy(actorEmployeeId);
         review.setStatus(ReviewStatus.FINALIZED);
@@ -464,17 +471,31 @@ public class ReviewService {
 
     /**
      * finalGrade 밴드 — policy.ratingScale == S_A_B_C_D 일 때만 (S≥90/A≥80/B≥70/C≥60/D&lt;60).
-     * 다른 scale 은 null (P0-S4 Calibration 보강).
+     * 다른 scale 또는 policy 부재 또는 score null 은 null.
      */
     private String computeFinalGrade(UUID tenantId, UUID cycleId, BigDecimal finalScore) {
         EvaluationPolicy policy = policyRepository.findByTenantIdAndCycleId(tenantId, cycleId).orElse(null);
-        if (policy == null || policy.getRatingScale() != RatingScale.S_A_B_C_D || finalScore == null) {
+        if (policy == null || policy.getRatingScale() != RatingScale.S_A_B_C_D) {
             return null;
         }
-        if (finalScore.compareTo(new BigDecimal("90")) >= 0) return "S";
-        if (finalScore.compareTo(new BigDecimal("80")) >= 0) return "A";
-        if (finalScore.compareTo(new BigDecimal("70")) >= 0) return "B";
-        if (finalScore.compareTo(new BigDecimal("60")) >= 0) return "C";
+        return bandGrade(finalScore);
+    }
+
+    /**
+     * 점수 → 등급 밴드 (S≥90/A≥80/B≥70/C≥60/D&lt;60) — policy 무관 순수 산식. {@code score} null → null.
+     *
+     * <p><strong>BE 유일 밴드 계산자 (p0_s4_contract.md §5)</strong>: 캘리브레이션 effectiveGrade
+     * ({@code finalGrade ?? bandGrade(kpiScore)}) 가 이 메서드를 cross-package public 재사용
+     * (중복 구현 금지 — P0-S1 D1 함정 회피). {@link #computeFinalGrade} 도 policy 게이트 후 이 메서드 위임.
+     */
+    public String bandGrade(BigDecimal score) {
+        if (score == null) {
+            return null;
+        }
+        if (score.compareTo(new BigDecimal("90")) >= 0) return "S";
+        if (score.compareTo(new BigDecimal("80")) >= 0) return "A";
+        if (score.compareTo(new BigDecimal("70")) >= 0) return "B";
+        if (score.compareTo(new BigDecimal("60")) >= 0) return "C";
         return "D";
     }
 

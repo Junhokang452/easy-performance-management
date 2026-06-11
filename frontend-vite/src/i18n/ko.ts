@@ -51,6 +51,11 @@ interface I18nShape {
       self: string;
       manager: string;
     };
+    calibration: {
+      sessions: string;
+      director: string;
+      distribution: string;
+    };
   };
   cycles: {
     title: string;
@@ -336,6 +341,140 @@ interface I18nShape {
       delta: string;
     };
   };
+  calibration: {
+    status: {
+      PLANNED: string;
+      IN_SESSION: string;
+      ADJUSTED: string;
+      CONFIRMED: string;
+      CLOSED: string;
+    };
+    grade: {
+      UNRATED: string;
+    };
+    action: {
+      transition: string;
+      confirm: string;
+      edit: string;
+      delete: string;
+    };
+    page: {
+      title: string;
+      description: string;
+      create: string;
+      needCycle: string;
+      empty: string;
+      companyWide: string;
+      confirmDelete: string;
+      col: {
+        status: string;
+        scheduledAt: string;
+        ownerOrgUnit: string;
+        participants: string;
+        adjustments: string;
+      };
+    };
+    form: {
+      createTitle: string;
+      editTitle: string;
+      ownerOrgUnitId: string;
+      ownerOrgUnitIdHint: string;
+      ownerOrgUnitIdPlaceholder: string;
+      scheduledAt: string;
+      scheduledAtPlaceholder: string;
+      participantIds: string;
+      participantIdsHint: string;
+      participantIdsPlaceholder: string;
+      createNote: string;
+      editNote: string;
+    };
+    confirm: {
+      title: string;
+      description: string;
+      finalizeReviews: string;
+      finalizeReviewsHint: string;
+      finalizeWarning: string;
+      resultConfirmed: string;
+      resultFinalized: string;
+      submit: string;
+    };
+    adjust: {
+      move: string;
+      selectGrade: string;
+      title: string;
+      reason: string;
+      reasonPlaceholder: string;
+      apply: string;
+      done: string;
+    };
+    director: {
+      title: string;
+      description: string;
+      needCycle: string;
+      selectSession: string;
+      sessionPlaceholder: string;
+      noSession: string;
+      notAdjustableHint: string;
+      reviewsHeading: string;
+      emptyReviews: string;
+      logHeading: string;
+      logEmpty: string;
+      col: {
+        employeeId: string;
+        status: string;
+        kpiScore: string;
+        grade: string;
+      };
+    };
+  };
+  distribution: {
+    bars: {
+      heading: string;
+      current: string;
+      target: string;
+      totalCount: string;
+      targetMarker: string;
+    };
+    policy: {
+      mode: string;
+      scale: string;
+      applied: string;
+      notApplied: string;
+      ready: string;
+    };
+    page: {
+      title: string;
+      description: string;
+      needCycle: string;
+      notSupported: string;
+    };
+    action: {
+      simulate: string;
+      apply: string;
+    };
+    apply: {
+      title: string;
+      warning: string;
+      confirmText: string;
+      result: string;
+    };
+    proposed: {
+      heading: string;
+      empty: string;
+      changed: string;
+      col: {
+        employeeId: string;
+        kpiScore: string;
+        currentGrade: string;
+        proposedGrade: string;
+      };
+    };
+    log: {
+      heading: string;
+      applied: string;
+      skipped: string;
+    };
+  };
   domain: {
     app: {
       title: string;
@@ -444,6 +583,16 @@ interface I18nShape {
     E9804928: string;
     E9804929: string;
     E9804930: string;
+    E9804448: string;
+    E9804246: string;
+    E9804247: string;
+    E9804248: string;
+    E9804249: string;
+    E9804250: string;
+    E9804251: string;
+    E9804931: string;
+    E9804932: string;
+    E9804933: string;
   };
 }
 
@@ -489,6 +638,11 @@ export const ko: I18nShape = {
     review: {
       self: '자기평가',
       manager: '매니저 평가',
+    },
+    calibration: {
+      sessions: 'Calibration 세션',
+      director: 'Calibration (본부)',
+      distribution: '분포 시뮬레이터',
     },
   },
   cycles: {
@@ -775,6 +929,140 @@ export const ko: I18nShape = {
       delta: '차이',
     },
   },
+  calibration: {
+    status: {
+      PLANNED: '계획',
+      IN_SESSION: '진행 중',
+      ADJUSTED: '조정됨',
+      CONFIRMED: '확정',
+      CLOSED: '종결',
+    },
+    grade: {
+      UNRATED: '미평가',
+    },
+    action: {
+      transition: '상태 전이',
+      confirm: '확정',
+      edit: '수정',
+      delete: '삭제',
+    },
+    page: {
+      title: 'Calibration 세션 관리',
+      description: '평가 사이클별 캘리브레이션 세션을 생성·진행하고 등급 조정 결과를 확정하세요.',
+      create: '세션 생성',
+      needCycle: '평가 사이클을 선택하세요.',
+      empty: '이 사이클에는 캘리브레이션 세션이 없습니다',
+      companyWide: '전사',
+      confirmDelete: '이 세션을 삭제하시겠습니까? 계획(PLANNED) 상태의 세션만 삭제할 수 있습니다.',
+      col: {
+        status: '상태',
+        scheduledAt: '일정',
+        ownerOrgUnit: '소유 조직',
+        participants: '참가자 수',
+        adjustments: '조정 건수',
+      },
+    },
+    form: {
+      createTitle: '세션 생성',
+      editTitle: '세션 수정',
+      ownerOrgUnitId: '소유 조직 ID',
+      ownerOrgUnitIdHint: '비우면 전사 단위 세션으로 생성됩니다.',
+      ownerOrgUnitIdPlaceholder: '조직 ID (UUID, 선택)',
+      scheduledAt: '예정 일시',
+      scheduledAtPlaceholder: '캘리브레이션 회의 예정 일시',
+      participantIds: '참가자 ID 목록',
+      participantIdsHint: '참가자 사원 ID(UUID)를 입력하고 Enter 로 추가하세요.',
+      participantIdsPlaceholder: '사원 ID 입력 후 Enter',
+      createNote: '세션은 계획(PLANNED) 상태로 생성됩니다.',
+      editNote: '계획(PLANNED) 상태의 세션만 수정할 수 있습니다.',
+    },
+    confirm: {
+      title: '세션 확정',
+      description: '캘리브레이션 세션을 확정하시겠습니까? 확정 후에는 등급 조정을 변경할 수 없습니다.',
+      finalizeReviews: '평가 일괄 확정',
+      finalizeReviewsHint: '캘리브레이션 단계의 모든 평가를 확정(FINALIZED) 상태로 전이합니다. KPI 점수가 없는 평가는 건너뜁니다.',
+      finalizeWarning: '평가 일괄 확정은 되돌릴 수 없습니다. 확정 후에는 평가 점수·등급이 잠깁니다.',
+      resultConfirmed: '세션을 확정했습니다.',
+      resultFinalized: '세션을 확정했습니다. 평가 확정 {finalized}건 / 건너뜀 {skipped}건',
+      submit: '확정',
+    },
+    adjust: {
+      move: '등급 이동',
+      selectGrade: '이동할 등급',
+      title: '등급 조정',
+      reason: '조정 사유',
+      reasonPlaceholder: '등급 조정 사유를 입력하세요.',
+      apply: '조정',
+      done: '등급을 조정했습니다.',
+    },
+    director: {
+      title: '본부 Calibration',
+      description: '분포 현황을 확인하고 세션을 선택해 대상자 등급을 조정하세요.',
+      needCycle: '평가 사이클을 선택하세요.',
+      selectSession: 'Calibration 세션',
+      sessionPlaceholder: '세션 선택',
+      noSession: '이 사이클에는 캘리브레이션 세션이 없습니다. HR에서 먼저 생성하세요.',
+      notAdjustableHint: '진행 중(IN_SESSION) 또는 조정됨(ADJUSTED) 세션에서만 등급을 조정할 수 있습니다.',
+      reviewsHeading: '대상자 등급',
+      emptyReviews: '이 사이클에는 평가가 없습니다',
+      logHeading: '조정 이력',
+      logEmpty: '조정 이력이 없습니다.',
+      col: {
+        employeeId: '사원 ID',
+        status: '상태',
+        kpiScore: 'KPI 점수',
+        grade: '유효 등급',
+      },
+    },
+  },
+  distribution: {
+    bars: {
+      heading: '등급 분포',
+      current: '현재',
+      target: '목표',
+      totalCount: '총 {count}명',
+      targetMarker: '목표 {ratio}',
+    },
+    policy: {
+      mode: '분포 정책',
+      scale: '평가 척도',
+      applied: '강제 적용됨',
+      notApplied: '미적용',
+      ready: '대상',
+    },
+    page: {
+      title: '분포 시뮬레이터',
+      description: '강제 분포를 시뮬레이션하고 대상자 등급에 일괄 적용하세요.',
+      needCycle: '평가 사이클을 선택하세요.',
+      notSupported: '현재 정책(절대 평가 모드 또는 비 S/A/B/C/D 척도)에서는 강제 분포를 적용할 수 없습니다.',
+    },
+    action: {
+      simulate: '시뮬레이션',
+      apply: '강제 적용',
+    },
+    apply: {
+      title: '강제 분포 적용',
+      warning: '강제 적용은 대상자 평가 등급을 일괄 변경합니다. 신중하게 진행하세요.',
+      confirmText: '대상자 {count}명의 등급을 목표 분포에 맞춰 일괄 변경합니다. 계속하시겠습니까?',
+      result: '적용 {applied}건 / 건너뜀 {skipped}건',
+    },
+    proposed: {
+      heading: '시뮬레이션 결과',
+      empty: '강제 배분 대상이 없습니다 (KPI 점수가 있는 캘리브레이션 대상이 없습니다).',
+      changed: '변경',
+      col: {
+        employeeId: '사원 ID',
+        kpiScore: 'KPI 점수',
+        currentGrade: '현재 등급',
+        proposedGrade: '제안 등급',
+      },
+    },
+    log: {
+      heading: '적용 이력',
+      applied: '적용 {count}건',
+      skipped: '건너뜀 {count}건',
+    },
+  },
   domain: {
     app: {
       title: 'easy-performance-management',
@@ -883,6 +1171,16 @@ export const ko: I18nShape = {
     E9804928: '동일한 대상자의 평가가 이미 존재합니다',
     E9804929: '제출되었거나 종결된 평가는 수정할 수 없습니다',
     E9804930: '작성 전(DRAFT) 상태의 평가만 삭제할 수 있습니다',
+    E9804448: '캘리브레이션 세션을 찾을 수 없습니다',
+    E9804246: '허용되지 않은 세션 상태 전이입니다 (확정은 확정 동작으로만 가능)',
+    E9804247: '목표 분포가 올바르지 않습니다 (S/A/B/C/D 키, 합 1.0, 음수 불가)',
+    E9804248: '강제 분포는 강제/혼합 모드에서만 적용할 수 있습니다',
+    E9804249: '강제 분포는 S/A/B/C/D 척도에서만 지원합니다',
+    E9804250: '현재 사이클 단계에서는 이 동작을 진행할 수 없습니다 (Calibration 단계 필요)',
+    E9804251: '등급 조정이 올바르지 않습니다 (등급 또는 대상 평가 확인)',
+    E9804931: '확정/종결된 세션은 수정·조정·확정할 수 없습니다',
+    E9804932: '계획(PLANNED) 상태의 세션만 삭제할 수 있습니다',
+    E9804933: '캘리브레이션 단계의 평가만 조정할 수 있습니다',
   },
 };
 

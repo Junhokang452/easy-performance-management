@@ -19,7 +19,7 @@
 - [x] **P0-S3**: PerformanceReview + 자기/매니저 평가 폼 + 자동 점수 계산 + Self↔Manager 비교 (2주) ✅ (계약 `00_input/p0_s3_contract.md` + BE 98/98 + FE build + 경계 11/11)
   - entity 1건
   - 화면: 자기평가 폼 (#4), 매니저평가 폼 (#12), 비교 view
-- [ ] **P0-S4**: RatingDistribution + CalibrationSession + 강제 분포 시뮬레이터 (1.5주)
+- [x] **P0-S4**: RatingDistribution + CalibrationSession + 강제 분포 시뮬레이터 (1.5주) ✅ (계약 `00_input/p0_s4_contract.md` + BE 135/135 + FE build + 경계 11/11 — 화면 실제 = #19+#24+#28 3 라우트)
   - entity 2건
   - 화면: HR 분포 시뮬레이터 (#19), Calibration 시뮬레이터 (#28)
   - 정합: E1 = HYBRID 옵션, E6 = performance Calibration / talent 9-Box

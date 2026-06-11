@@ -76,6 +76,21 @@ const ManagerReviewPage = lazy(() =>
     default: m.ManagerReviewPage,
   })),
 );
+const HrCalibrationSessionsPage = lazy(() =>
+  import('./pages/HrCalibrationSessionsPage').then((m) => ({
+    default: m.HrCalibrationSessionsPage,
+  })),
+);
+const DirectorCalibrationPage = lazy(() =>
+  import('./pages/DirectorCalibrationPage').then((m) => ({
+    default: m.DirectorCalibrationPage,
+  })),
+);
+const HrDistributionPage = lazy(() =>
+  import('./pages/HrDistributionPage').then((m) => ({
+    default: m.HrDistributionPage,
+  })),
+);
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -186,6 +201,24 @@ export default function App(): React.ReactNode {
           label={t.nav.review.manager}
           active={location.pathname.startsWith('/manager/review')}
         />
+        <NavLink
+          component={Link}
+          to="/hr/calibration-sessions"
+          label={t.nav.calibration.sessions}
+          active={location.pathname.startsWith('/hr/calibration-sessions')}
+        />
+        <NavLink
+          component={Link}
+          to="/director/calibration"
+          label={t.nav.calibration.director}
+          active={location.pathname.startsWith('/director/calibration')}
+        />
+        <NavLink
+          component={Link}
+          to="/hr/distribution"
+          label={t.nav.calibration.distribution}
+          active={location.pathname.startsWith('/hr/distribution')}
+        />
       </AppShell.Navbar>
       <AppShell.Main>
         <PageBoundary>
@@ -275,6 +308,30 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <ManagerReviewPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/calibration-sessions"
+              element={
+                <ProtectedRoute>
+                  <HrCalibrationSessionsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/director/calibration"
+              element={
+                <ProtectedRoute>
+                  <DirectorCalibrationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/distribution"
+              element={
+                <ProtectedRoute>
+                  <HrDistributionPage />
                 </ProtectedRoute>
               }
             />

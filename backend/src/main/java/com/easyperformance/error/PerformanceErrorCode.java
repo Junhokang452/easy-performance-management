@@ -79,6 +79,22 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     REVIEW_DUPLICATE(                "E9804928", 409),
     REVIEW_LOCKED(                   "E9804929", 409),
     REVIEW_CANNOT_DELETE(            "E9804930", 409),
+
+    // 캘리브레이션 + 분포 도메인 — P0-S4 CalibrationSession / RatingDistribution (p0_s4_contract.md §4 SoT).
+    // 5단계 세션 상태기계 (transition 2 + 자동 승격 1 + confirm 전용 2) + cycle 단계 게이트 (CALIBRATION 한정) +
+    // 강제 분포 simulate/apply (HYBRID/FORCED 만, ABSOLUTE 거부 + S_A_B_C_D 한정 + largest remainder) +
+    // 개별 등급 조정. 404 not-found 1 + 422 validation 6 + 409 conflict 3.
+    // 기존 도메인 교차 재사용: REVIEW_NOT_FOUND(E9804447 404) + POLICY_NOT_FOUND(E9804442 404).
+    CALIBRATION_SESSION_NOT_FOUND(           "E9804448", 404),
+    CALIBRATION_INVALID_STATUS_TRANSITION(   "E9804246", 422),
+    DISTRIBUTION_INVALID_TARGET(             "E9804247", 422),
+    DISTRIBUTION_MODE_NOT_FORCED(            "E9804248", 422),
+    DISTRIBUTION_SCALE_NOT_SUPPORTED(        "E9804249", 422),
+    CALIBRATION_CYCLE_STAGE_MISMATCH(        "E9804250", 422),
+    CALIBRATION_ADJUSTMENT_INVALID(          "E9804251", 422),
+    CALIBRATION_SESSION_LOCKED(              "E9804931", 409),
+    CALIBRATION_SESSION_CANNOT_DELETE(       "E9804932", 409),
+    CALIBRATION_REVIEW_NOT_READY(            "E9804933", 409),
     ;
 
     private final String code;
