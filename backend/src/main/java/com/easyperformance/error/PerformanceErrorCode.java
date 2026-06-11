@@ -36,6 +36,19 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     AUTH_REFRESH_TOKEN_EXPIRED(      "E9804103", 401),
     AUTH_REFRESH_TOKEN_INVALID(      "E9804104", 401),
     AUTH_USER_NOT_FOUND(             "E9804415", 404),
+
+    // Cycle / Policy — P0-S1 EvaluationCycle + EvaluationPolicy (decisions_2026-06-11.md SoT).
+    // EvaluationCycle 8단계 상태기계 + Policy 1:1 결합 + 분포/등급 검증 + 단계별 lock.
+    CYCLE_NOT_FOUND(                 "E9804441", 404),
+    CYCLE_INVALID_STATUS_TRANSITION( "E9804231", 422),
+    CYCLE_DUPLICATE_NAME(            "E9804921", 409),
+    CYCLE_INVALID_PERIOD(            "E9804232", 422),
+    CYCLE_CANNOT_DELETE(             "E9804922", 409),
+    POLICY_NOT_FOUND(                "E9804442", 404),
+    POLICY_INVALID_DISTRIBUTION_SUM( "E9804233", 422),
+    POLICY_INVALID_RATING_SCALE(     "E9804234", 422),
+    POLICY_FORCED_REQUIRES_DISTRIBUTION("E9804235", 422),
+    POLICY_LOCKED(                   "E9804923", 409),
     ;
 
     private final String code;

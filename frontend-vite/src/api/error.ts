@@ -4,7 +4,7 @@
  * BE 응답 shape (ApiException):
  * ```
  * {
- *   "errorCode": "E9704401",
+ *   "errorCode": "E9804401",
  *   "message": "Self evaluation not found",
  *   "traceId": "...",
  *   "timestamp": "2026-06-08T..."
@@ -12,7 +12,10 @@
  * ```
  *
  * lib `@easy/http-client` `ApiError` 와 호환되도록 helper + PerformanceErrorCode prefix
- * 매핑 (E97*) 만 자체 보유.
+ * 매핑 (E98*) 만 자체 보유.
+ *
+ * prefix 정정 이력: E97 → E98 (2026-06-11, P0-S1 슬라이스 — BE
+ * `PerformanceErrorCode` SoT 가 E98 사전 점유, 본 파일 historical E97 오기 정정).
  *
  * 자매품 일관 정합 — easy-recruit / easy-ware / easy-hcm / easy-job-evaluation 동일 패턴.
  * jobeval `cc1bc03` 패턴 정합.
@@ -21,14 +24,14 @@ import type { ApiError as EasyApiError } from '@easy/http-client';
 
 export type ApiError = EasyApiError;
 
-/** Performance 영역 prefix (E97) 식별 */
+/** Performance 영역 prefix (E98) 식별 */
 export function isPerformanceError(err: unknown): err is ApiError {
   return (
     typeof err === 'object' &&
     err !== null &&
     'errorCode' in err &&
     typeof (err as { errorCode?: unknown }).errorCode === 'string' &&
-    (err as { errorCode: string }).errorCode.startsWith('E97')
+    (err as { errorCode: string }).errorCode.startsWith('E98')
   );
 }
 

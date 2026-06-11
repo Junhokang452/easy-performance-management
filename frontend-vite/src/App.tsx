@@ -50,6 +50,9 @@ const ReflectionJournalPage = lazy(() =>
 const MentorFeedbackPage = lazy(() =>
   import('./pages/MentorFeedbackPage').then((m) => ({ default: m.MentorFeedbackPage })),
 );
+const CyclesPage = lazy(() =>
+  import('./pages/CyclesPage').then((m) => ({ default: m.CyclesPage })),
+);
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -124,6 +127,12 @@ export default function App(): React.ReactNode {
           label={t.domain.nav.mentorFeedback}
           active={location.pathname.startsWith('/mentor-feedbacks')}
         />
+        <NavLink
+          component={Link}
+          to="/hr/cycles"
+          label={t.nav.hr.cycles}
+          active={location.pathname.startsWith('/hr/cycles')}
+        />
       </AppShell.Navbar>
       <AppShell.Main>
         <PageBoundary>
@@ -165,6 +174,14 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <MentorFeedbackPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/cycles"
+              element={
+                <ProtectedRoute>
+                  <CyclesPage />
                 </ProtectedRoute>
               }
             />

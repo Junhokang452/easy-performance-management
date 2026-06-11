@@ -38,6 +38,73 @@ interface I18nShape {
       logout: string;
     };
   };
+  nav: {
+    hr: {
+      cycles: string;
+    };
+  };
+  cycles: {
+    title: string;
+    create: string;
+    empty: string;
+    policy: {
+      notSet: string;
+    };
+    action: {
+      edit: string;
+      transition: string;
+      policy: string;
+      delete: string;
+    };
+    field: {
+      name: string;
+      periodStart: string;
+      periodEnd: string;
+      cycleType: string;
+      status: string;
+    };
+    type: {
+      HALF_ANNUAL: string;
+      ANNUAL: string;
+      QUARTERLY: string;
+      MONTHLY: string;
+      CUSTOM: string;
+    };
+    status: {
+      PLANNED: string;
+      ACTIVE: string;
+      GOAL_SETTING: string;
+      MID_REVIEW: string;
+      SELF_REVIEW: string;
+      MANAGER_REVIEW: string;
+      CALIBRATION: string;
+      FINALIZED: string;
+      CANCELLED: string;
+    };
+  };
+  policy: {
+    title: string;
+    field: {
+      distributionMode: string;
+      ratingScale: string;
+      appealEnabled: string;
+      bscEnabled: string;
+      achievementLogCutoffDays: string;
+      forcedDistribution: string;
+    };
+    distributionMode: {
+      HYBRID: string;
+      FORCED: string;
+      ABSOLUTE: string;
+    };
+    ratingScale: {
+      S_A_B_C_D: string;
+      ONE_TO_FIVE: string;
+      ONE_TO_HUNDRED: string;
+    };
+    distributionSum: string;
+    distributionSumMustBeOne: string;
+  };
   domain: {
     app: {
       title: string;
@@ -114,6 +181,16 @@ interface I18nShape {
     network: string;
     unauthorized: string;
     forbidden: string;
+    E9804441: string;
+    E9804231: string;
+    E9804921: string;
+    E9804232: string;
+    E9804922: string;
+    E9804442: string;
+    E9804233: string;
+    E9804234: string;
+    E9804235: string;
+    E9804923: string;
   };
 }
 
@@ -146,6 +223,73 @@ export const ko: I18nShape = {
       language: '언어',
       logout: '로그아웃',
     },
+  },
+  nav: {
+    hr: {
+      cycles: 'HR > 사이클 관리',
+    },
+  },
+  cycles: {
+    title: '평가 사이클',
+    create: '사이클 생성',
+    empty: '사이클이 없습니다',
+    policy: {
+      notSet: '정책 미설정',
+    },
+    action: {
+      edit: '편집',
+      transition: '상태 전이',
+      policy: '정책 편집',
+      delete: '삭제',
+    },
+    field: {
+      name: '이름',
+      periodStart: '시작일',
+      periodEnd: '종료일',
+      cycleType: '사이클 유형',
+      status: '상태',
+    },
+    type: {
+      HALF_ANNUAL: '반기',
+      ANNUAL: '연간',
+      QUARTERLY: '분기',
+      MONTHLY: '월간',
+      CUSTOM: '사용자 정의',
+    },
+    status: {
+      PLANNED: '계획',
+      ACTIVE: '활성',
+      GOAL_SETTING: '목표 설정',
+      MID_REVIEW: '중간 평가',
+      SELF_REVIEW: '자기평가',
+      MANAGER_REVIEW: '매니저 평가',
+      CALIBRATION: 'Calibration',
+      FINALIZED: '확정',
+      CANCELLED: '취소',
+    },
+  },
+  policy: {
+    title: '평가 정책',
+    field: {
+      distributionMode: '분포 정책',
+      ratingScale: '평가 척도',
+      appealEnabled: '이의신청 활성',
+      bscEnabled: 'BSC 4 관점 활성',
+      achievementLogCutoffDays: '사후 신고 cutoff (일)',
+      forcedDistribution: '강제 분포',
+    },
+    distributionMode: {
+      HYBRID: '혼합',
+      FORCED: '강제',
+      ABSOLUTE: '절대',
+    },
+    ratingScale: {
+      S_A_B_C_D: 'S/A/B/C/D',
+      ONE_TO_FIVE: '1~5점',
+      ONE_TO_HUNDRED: '1~100점',
+    },
+    distributionSum: '합계',
+    distributionSumMustBeOne: '분포의 합은 1.0 이어야 합니다 (현재: {sum})',
   },
   domain: {
     app: {
@@ -223,6 +367,16 @@ export const ko: I18nShape = {
     network: '네트워크 오류가 발생했습니다.',
     unauthorized: '로그인이 필요합니다.',
     forbidden: '권한이 없습니다.',
+    E9804441: '사이클을 찾을 수 없습니다',
+    E9804231: '허용되지 않은 상태 전이입니다',
+    E9804921: '동일한 이름의 사이클이 이미 존재합니다',
+    E9804232: '기간이 올바르지 않습니다 (종료일이 시작일 이후여야 함)',
+    E9804922: '활성 이상 상태의 사이클은 삭제할 수 없습니다',
+    E9804442: '정책을 찾을 수 없습니다',
+    E9804233: '분포 정책의 합계가 1.0 이 아닙니다',
+    E9804234: '평가 척도와 일치하지 않는 분포 키입니다',
+    E9804235: 'FORCED 모드는 분포 설정이 필수입니다',
+    E9804923: '사이클이 활성화된 후에는 정책의 분포 모드/척도를 변경할 수 없습니다',
   },
 };
 
