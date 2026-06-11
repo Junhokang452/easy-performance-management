@@ -22,6 +22,7 @@ import com.easyperformance.domain.review.service.ReviewService;
 import com.easyperformance.error.PerformanceErrorCode;
 import com.easyware.platform.error.ApiException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +78,8 @@ public class ReportService {
     private final ReportJson json;
     private final Clock clock;
 
+    /** Spring 주입용 기본 생성자 — 이중 생성자(@Autowired 미지정)는 부팅 실패 (2026-06-12 PERFDEV 첫 실부팅 실측). Clock 생성자는 테스트 전용. */
+    @Autowired
     public ReportService(PerformanceReportRepository reportRepository,
                          PerformanceReviewRepository reviewRepository,
                          EvaluationCycleRepository cycleRepository,

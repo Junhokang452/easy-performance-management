@@ -32,6 +32,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,6 +105,8 @@ public class ReviewService {
     private final ObjectMapper objectMapper;
     private final Clock clock;
 
+    /** Spring 주입용 기본 생성자 — 이중 생성자(@Autowired 미지정)는 부팅 실패 (2026-06-12 PERFDEV 첫 실부팅 실측). Clock 생성자는 테스트 전용. */
+    @Autowired
     public ReviewService(PerformanceReviewRepository reviewRepository,
                          EvaluationCycleRepository cycleRepository,
                          EvaluationPolicyRepository policyRepository,
