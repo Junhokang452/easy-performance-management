@@ -16,6 +16,7 @@ import {
   Button,
   Group,
   Modal,
+  ScrollArea,
   Stack,
   Table,
   Text,
@@ -176,7 +177,7 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
     <>
       <SectionCard>
         <Stack>
-          <Group gap="xs">
+          <Group gap="xs" wrap="wrap">
             <Badge variant="light" color="blue">
               {t.report.hr.summaryFinalized}: {finalizedReviewCount}
             </Badge>
@@ -199,7 +200,7 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
             </Alert>
           )}
 
-          <Group justify="flex-end">
+          <Group justify="flex-end" wrap="wrap">
             <Button
               leftSection={<IconSend size={16} />}
               onClick={() => setPublishOpen(true)}
@@ -336,92 +337,109 @@ function ReportsTable({
 }: TableProps): React.ReactNode {
   const t = useT();
   return (
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t.report.hr.col.employeeId}</Table.Th>
-          <Table.Th>{t.report.hr.col.finalGrade}</Table.Th>
-          <Table.Th>{t.report.hr.col.publishedAt}</Table.Th>
-          <Table.Th>{t.report.hr.col.status}</Table.Th>
-          <Table.Th />
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {reports.map((report) => (
-          <Table.Tr key={report.id}>
-            <Table.Td>
-              <Text size="sm" ff="monospace">
-                {report.employeeId}
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              <GradeBadge grade={report.content.finalGrade} />
-            </Table.Td>
-            <Table.Td>
-              <Text size="sm">{formatReportDateTime(report.publishedAt)}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Group gap={6} wrap="nowrap">
-                <Tooltip
-                  label={
-                    report.viewedAt
-                      ? t.report.hr.viewed
-                      : t.report.hr.notViewed
-                  }
-                >
-                  <ThemeIcon
-                    size="sm"
-                    variant="light"
-                    color={report.viewedAt ? 'blue' : 'gray'}
-                  >
-                    {report.viewedAt ? (
-                      <IconEye size={14} />
-                    ) : (
-                      <IconEyeOff size={14} />
-                    )}
-                  </ThemeIcon>
-                </Tooltip>
-                <Tooltip
-                  label={
-                    report.acknowledged
-                      ? t.report.hr.acknowledged
-                      : t.report.hr.notAcknowledged
-                  }
-                >
-                  <ThemeIcon
-                    size="sm"
-                    variant="light"
-                    color={report.acknowledged ? 'green' : 'gray'}
-                  >
-                    <IconCircleCheck size={14} />
-                  </ThemeIcon>
-                </Tooltip>
-                {report.superseded && (
-                  <Badge size="xs" variant="outline" color="gray">
-                    {t.report.hr.superseded}
-                  </Badge>
-                )}
-              </Group>
-            </Table.Td>
-            <Table.Td>
-              <Group justify="flex-end">
-                {!report.superseded && (
-                  <Button
-                    size="xs"
-                    variant="light"
-                    color="orange"
-                    leftSection={<IconRefresh size={14} />}
-                    onClick={() => onSupersede(report)}
-                    disabled={!cycleFinalized || supersedePending}
-                  >
-                    {t.report.hr.supersede}
-                  </Button>
-                )}
-              </Group>
-            </Table.Td>
+    <ScrollArea type="auto" offsetScrollbars>
+      <Table
+        striped
+        highlightOnHover
+        miw={760}
+        styles={{
+          th: {
+            backgroundColor: 'var(--easy-color-surface-muted)',
+            color: 'var(--easy-color-text-muted)',
+            fontSize: 12,
+            fontWeight: 700,
+          },
+          td: {
+            borderColor: 'var(--easy-color-border)',
+          },
+        }}
+      >
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>{t.report.hr.col.employeeId}</Table.Th>
+            <Table.Th>{t.report.hr.col.finalGrade}</Table.Th>
+            <Table.Th>{t.report.hr.col.publishedAt}</Table.Th>
+            <Table.Th>{t.report.hr.col.status}</Table.Th>
+            <Table.Th />
           </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
+        </Table.Thead>
+        <Table.Tbody>
+          {reports.map((report) => (
+            <Table.Tr key={report.id}>
+              <Table.Td>
+                <Text size="sm" ff="monospace" fw={700} c="var(--easy-color-text)">
+                  {report.employeeId}
+                </Text>
+              </Table.Td>
+              <Table.Td>
+                <GradeBadge grade={report.content.finalGrade} />
+              </Table.Td>
+              <Table.Td>
+                <Text size="sm">{formatReportDateTime(report.publishedAt)}</Text>
+              </Table.Td>
+              <Table.Td>
+                <Group gap={6} wrap="nowrap">
+                  <Tooltip
+                    label={
+                      report.viewedAt
+                        ? t.report.hr.viewed
+                        : t.report.hr.notViewed
+                    }
+                  >
+                    <ThemeIcon
+                      size="sm"
+                      variant="light"
+                      color={report.viewedAt ? 'blue' : 'gray'}
+                    >
+                      {report.viewedAt ? (
+                        <IconEye size={14} />
+                      ) : (
+                        <IconEyeOff size={14} />
+                      )}
+                    </ThemeIcon>
+                  </Tooltip>
+                  <Tooltip
+                    label={
+                      report.acknowledged
+                        ? t.report.hr.acknowledged
+                        : t.report.hr.notAcknowledged
+                    }
+                  >
+                    <ThemeIcon
+                      size="sm"
+                      variant="light"
+                      color={report.acknowledged ? 'green' : 'gray'}
+                    >
+                      <IconCircleCheck size={14} />
+                    </ThemeIcon>
+                  </Tooltip>
+                  {report.superseded && (
+                    <Badge size="xs" variant="outline" color="gray">
+                      {t.report.hr.superseded}
+                    </Badge>
+                  )}
+                </Group>
+              </Table.Td>
+              <Table.Td>
+                <Group justify="flex-end" wrap="nowrap">
+                  {!report.superseded && (
+                    <Button
+                      size="xs"
+                      variant="light"
+                      color="orange"
+                      leftSection={<IconRefresh size={14} />}
+                      onClick={() => onSupersede(report)}
+                      disabled={!cycleFinalized || supersedePending}
+                    >
+                      {t.report.hr.supersede}
+                    </Button>
+                  )}
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </ScrollArea>
   );
 }
