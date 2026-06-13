@@ -38,10 +38,3 @@
 .muted {
   color: var(--easy-color-text-muted);
 }
-
-@media (min-width: 64em) {
-  .shell {
-    justify-content: flex-end;
-    padding-right: clamp(3rem, 8vw, 9rem);
-  }
-}
