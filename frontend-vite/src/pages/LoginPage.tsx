@@ -10,7 +10,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Button,
   Card,
-  Center,
   Group,
   PasswordInput,
   SegmentedControl,
@@ -22,6 +21,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
+import { LoginVisualShell } from '@easy/ui-components';
 
 import { useAuth } from '../auth/AuthProvider';
 import { useT } from '../i18n';
@@ -83,10 +83,9 @@ export function LoginPage(): React.ReactNode {
   });
 
   return (
-    <Center
-      p="md"
+    <LoginVisualShell
+      image={loginVisual.image}
       className={styles.shell}
-      style={{ '--login-visual-image': `url(${loginVisual.image})` } as React.CSSProperties}
     >
       <Card className={styles.card} shadow="md" padding="xl">
         <Stack gap="lg">
@@ -151,6 +150,6 @@ export function LoginPage(): React.ReactNode {
           </form>
         </Stack>
       </Card>
-    </Center>
+    </LoginVisualShell>
   );
 }
