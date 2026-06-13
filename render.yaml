@@ -1,0 +1,96 @@
+# easy-performance-management — Render Blueprint (mono Docker web service, free tier)
+#
+# 자매품 Render mono 패턴:
+# - Root Directory: repo root (비움)
+# - Dockerfile Path: ./Dockerfile
+# - Docker Context: .
+# - Runtime: Docker
+# - Health check: /actuator/health
+# - Control plane: shared easy-ware-control-dev consumer, PERFDEV default tenant
+
+services:
+  - type: web
+    name: easy-performance-mono
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SERVER_PORT
+        value: "10000"
+      - key: JAVA_OPTS
+        value: "-XX:+UseContainerSupport -Xmx384m -Djava.security.egd=file:/dev/./urandom"
+
+      # Spring datasource fallback. With Model B ON this is the control-plane datasource.
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: SPRING_FLYWAY_ENABLED
+        value: "false"
+
+      # JWT bearer auth and dev personas.
+      - key: JWT_SECRET
+        sync: false
+      - key: PERFORMANCE_AUTH_SEED_DEV_ACCOUNTS
+        value: "true"
+
+      # Model B / control plane gate.
+      - key: APP_NEON_MULTITENANCY_ENABLED
+        value: "true"
+      - key: APP_NEON_CONTROL_PLANE_OWNER
+        value: "false"
+      - key: APP_TENANCY_DEFAULT_TENANT_ID
+        value: "019eb783-199d-79a4-9a70-90ebacfa920c"
+      - key: APP_TENANCY_DEFAULT_TENANT_CODE
+        value: PERFDEV
+      - key: EASYPLATFORM_TENANTBOOTSTRAP_ENABLED
+        value: "true"
+      - key: EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED
+        value: "true"
+      - key: EASYPLATFORM_ERROR_ENABLED
+        value: "true"
+      - key: EASYPLATFORM_TENANTCTX_ENABLED
+        value: "true"
+
+      # Shared control-plane and Neon credentials.
+      - key: CONTROL_DB_URL
+        sync: false
+      - key: CONTROL_DB_USERNAME
+        sync: false
+      - key: CONTROL_DB_PASSWORD
+        sync: false
+      - key: TENANT_DB_CREDENTIAL_ENCRYPTION_KEY
+        sync: false
+      - key: NEON_API_KEY
+        sync: false
+      - key: NEON_ORGANIZATION_ID
+        sync: false
+      - key: NEON_REGION
+        value: aws-ap-southeast-1
+      - key: NEON_PROJECT_PREFIX
+        value: easy-performance-
+      - key: PLATFORM_ADMIN_USERNAME
+        sync: false
+      - key: PLATFORM_ADMIN_PASSWORD
+        sync: false
+
+      # Optional S2S. Leave unset to keep endpoints fail-closed / disabled.
+      - key: EASYTALENT_S2S_BASE_URL
+        value: https://easy-talent-mono.onrender.com
+      - key: EASYTALENT_S2S_BEARER_TOKEN
+        sync: false
+      - key: EASYTALENT_S2S_HMAC_SECRET
+        sync: false
+      - key: HCM_S2S_BEARER_TOKEN
+        sync: false
+      - key: HCM_S2S_HMAC_SECRET
+        sync: false
