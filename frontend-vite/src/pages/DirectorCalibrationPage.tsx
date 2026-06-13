@@ -14,6 +14,7 @@ import {
   Badge,
   Card,
   Group,
+  ScrollArea,
   Select,
   Stack,
   Table,
@@ -85,7 +86,7 @@ export function DirectorCalibrationPage(): React.ReactNode {
 
       <SectionCard>
         <Stack>
-          <Group align="end" gap="md">
+          <Group align="end" gap="md" wrap="wrap">
             <CycleSelect value={cycleId} onChange={setCycleId} />
             {cycleId && (
               <Select
@@ -101,7 +102,9 @@ export function DirectorCalibrationPage(): React.ReactNode {
                 onChange={setSessionId}
                 disabled={sessionsQuery.isLoading || sessions.length === 0}
                 clearable
+                miw={240}
                 maw={360}
+                style={{ flex: '1 1 240px' }}
               />
             )}
           </Group>
@@ -205,58 +208,60 @@ function ReviewsTable({
 }: ReviewsTableProps): React.ReactNode {
   const t = useT();
   return (
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t.calibration.director.col.employeeId}</Table.Th>
-          <Table.Th>{t.calibration.director.col.status}</Table.Th>
-          <Table.Th>{t.calibration.director.col.kpiScore}</Table.Th>
-          <Table.Th>{t.calibration.director.col.grade}</Table.Th>
-          <Table.Th />
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {reviews.map((review) => {
-          const grade = effectiveGradeLabel(review.finalGrade, review.kpiScore);
-          // 조정 가능 = 세션 선택됨 + 조정 가능 상태 + review 가 CALIBRATION 상태.
-          const canAdjustRow =
-            adjustable && sessionId != null && review.status === 'CALIBRATION';
-          return (
-            <Table.Tr key={review.id}>
-              <Table.Td>
-                <Text size="sm" ff="monospace">
-                  {review.employeeId}
-                </Text>
-              </Table.Td>
-              <Table.Td>
-                <Badge size="sm" variant="light" color="gray">
-                  {t.review.status[review.status]}
-                </Badge>
-              </Table.Td>
-              <Table.Td>
-                <Text size="sm">{formatScore(review.kpiScore)}</Text>
-              </Table.Td>
-              <Table.Td>
-                <GradeBadge grade={grade} />
-              </Table.Td>
-              <Table.Td>
-                <Group justify="flex-end">
-                  {sessionId != null && (
-                    <AdjustGradeMenu
-                      cycleId={cycleId}
-                      sessionId={sessionId}
-                      reviewId={review.id}
-                      currentGrade={grade}
-                      enabled={canAdjustRow}
-                    />
-                  )}
-                </Group>
-              </Table.Td>
-            </Table.Tr>
-          );
-        })}
-      </Table.Tbody>
-    </Table>
+    <ScrollArea type="auto" offsetScrollbars>
+      <Table striped highlightOnHover verticalSpacing="sm" miw={760}>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>{t.calibration.director.col.employeeId}</Table.Th>
+            <Table.Th>{t.calibration.director.col.status}</Table.Th>
+            <Table.Th>{t.calibration.director.col.kpiScore}</Table.Th>
+            <Table.Th>{t.calibration.director.col.grade}</Table.Th>
+            <Table.Th />
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {reviews.map((review) => {
+            const grade = effectiveGradeLabel(review.finalGrade, review.kpiScore);
+            // 조정 가능 = 세션 선택됨 + 조정 가능 상태 + review 가 CALIBRATION 상태.
+            const canAdjustRow =
+              adjustable && sessionId != null && review.status === 'CALIBRATION';
+            return (
+              <Table.Tr key={review.id}>
+                <Table.Td>
+                  <Text size="sm" ff="monospace">
+                    {review.employeeId}
+                  </Text>
+                </Table.Td>
+                <Table.Td>
+                  <Badge size="sm" variant="light" color="gray">
+                    {t.review.status[review.status]}
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Text size="sm">{formatScore(review.kpiScore)}</Text>
+                </Table.Td>
+                <Table.Td>
+                  <GradeBadge grade={grade} />
+                </Table.Td>
+                <Table.Td>
+                  <Group justify="flex-end" wrap="nowrap">
+                    {sessionId != null && (
+                      <AdjustGradeMenu
+                        cycleId={cycleId}
+                        sessionId={sessionId}
+                        reviewId={review.id}
+                        currentGrade={grade}
+                        enabled={canAdjustRow}
+                      />
+                    )}
+                  </Group>
+                </Table.Td>
+              </Table.Tr>
+            );
+          })}
+        </Table.Tbody>
+      </Table>
+    </ScrollArea>
   );
 }
 
@@ -280,9 +285,9 @@ function AdjustmentLogPanel({ log }: LogPanelProps): React.ReactNode {
         </Text>
       ) : (
         entries.map((entry, idx) => (
-          <Card key={`${entry.reviewId}-${entry.at}-${idx}`} withBorder padding="sm">
-            <Group justify="space-between" wrap="nowrap">
-              <Group gap="xs" wrap="nowrap">
+          <Card key={`${entry.reviewId}-${entry.at}-${idx}`} withBorder padding="sm" radius="md">
+            <Group justify="space-between" align="flex-start" gap="xs" wrap="wrap">
+              <Group gap="xs" wrap="wrap">
                 <GradeBadge grade={entry.fromGrade} />
                 <Text size="sm" c="dimmed">
                   →
