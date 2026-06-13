@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   Center,
+  Group,
   PasswordInput,
   SegmentedControl,
   Stack,
@@ -20,10 +21,12 @@ import {
   Alert,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
 
 import { useAuth } from '../auth/AuthProvider';
 import { useT } from '../i18n';
 import { getErrorMessage } from '../api/error';
+import styles from './LoginPage.module.css';
 
 interface FromState {
   from?: { pathname?: string };
@@ -79,17 +82,22 @@ export function LoginPage(): React.ReactNode {
   });
 
   return (
-    <Center mih="100vh" p="md">
-      <Card shadow="md" padding="xl" radius="md" withBorder w={420}>
-        <Stack>
-          <div>
-            <Title order={3}>{t.domain.app.title}</Title>
-            <Text size="sm" c="dimmed">
-              {t.domain.app.subtitle}
-            </Text>
-          </div>
-          <div>
-            <Text size="xs" c="dimmed" mb={4}>
+    <Center p="md" className={styles.shell}>
+      <Card className={styles.card} shadow="md" padding="xl">
+        <Stack gap="lg">
+          <Group gap="sm" align="flex-start">
+            <div className={styles.brandMark} aria-hidden="true">
+              <IconChartBar size={18} />
+            </div>
+            <Stack gap={0}>
+              <Title order={3}>{t.domain.app.title}</Title>
+              <Text size="xs" className={styles.muted}>
+                {t.domain.app.subtitle}
+              </Text>
+            </Stack>
+          </Group>
+          <Stack gap={4}>
+            <Text size="xs" className={styles.muted}>
               {t.login.personaLabel}
             </Text>
             <SegmentedControl
@@ -105,10 +113,10 @@ export function LoginPage(): React.ReactNode {
                 { label: t.login.persona.employee, value: 'EMPLOYEE' },
               ]}
             />
-            <Text size="xs" c="dimmed" mt={4}>
+            <Text size="xs" className={styles.muted}>
               {t.login.personaHint}
             </Text>
-          </div>
+          </Stack>
           {error && (
             <Alert color="red" title={t.error.boundary}>
               {error}
@@ -120,14 +128,18 @@ export function LoginPage(): React.ReactNode {
                 label={t.login.emailLabel}
                 placeholder="user@example.com"
                 required
+                leftSection={<IconMail size={16} />}
+                autoComplete="username"
                 {...form.getInputProps('email')}
               />
               <PasswordInput
                 label={t.login.passwordLabel}
                 required
+                leftSection={<IconLock size={16} />}
+                autoComplete="current-password"
                 {...form.getInputProps('password')}
               />
-              <Button type="submit" loading={submitting}>
+              <Button type="submit" color="brand" loading={submitting} leftSection={<IconLogin2 size={16} />}>
                 {t.login.submit}
               </Button>
             </Stack>

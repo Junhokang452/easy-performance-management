@@ -6,6 +6,10 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "Bundler",
+    "paths": {
+      "@easy/tokens": ["../lib/easy-platform/easy-platform-core/packages/tokens/src/index.ts"],
+      "@mantine/core": ["./node_modules/@mantine/core"]
+    },
     "allowImportingTsExtensions": false,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -22,5 +26,5 @@
     "noFallthroughCasesInSwitch": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src"]
+  "include": ["src", "../lib/easy-platform/easy-platform-core/packages/tokens/src"]
 }

@@ -20,6 +20,7 @@ import { Notifications } from '@mantine/notifications';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createEasyQueryClient } from '@easy/query-client';
+import { easyCssVariablesResolver } from '@easy/tokens';
 
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
@@ -39,7 +40,11 @@ if (!rootElement) throw new Error('#root not found');
 
 createRoot(rootElement).render(
   <StrictMode>
-    <MantineProvider theme={theme} defaultColorScheme="auto">
+    <MantineProvider
+      theme={theme}
+      cssVariablesResolver={easyCssVariablesResolver}
+      defaultColorScheme="light"
+    >
       <Notifications position="top-right" />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>

@@ -1,5 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /**
  * easy-performance-management Vite 설정 (단계 4 EC-FE 진입, G71 D=A, Task #113, 2026-06-08).
@@ -20,6 +24,16 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   resolve: {
+    alias: {
+      '@easy/tokens': resolve(
+        __dirname,
+        '../lib/easy-platform/easy-platform-core/packages/tokens/src/index.ts',
+      ),
+      '@mantine/core': resolve(__dirname, 'node_modules/@mantine/core'),
+      '@mantine/hooks': resolve(__dirname, 'node_modules/@mantine/hooks'),
+      react: resolve(__dirname, 'node_modules/react'),
+      'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+    },
     dedupe: [
       'react',
       'react-dom',
