@@ -26,6 +26,7 @@ import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-reac
 import { useAuth } from '../auth/AuthProvider';
 import { useT } from '../i18n';
 import { getErrorMessage } from '../api/error';
+import { loginVisual } from './loginVisual';
 import styles from './LoginPage.module.css';
 
 interface FromState {
@@ -82,7 +83,11 @@ export function LoginPage(): React.ReactNode {
   });
 
   return (
-    <Center p="md" className={styles.shell}>
+    <Center
+      p="md"
+      className={styles.shell}
+      style={{ '--login-visual-image': `url(${loginVisual.image})` } as React.CSSProperties}
+    >
       <Card className={styles.card} shadow="md" padding="xl">
         <Stack gap="lg">
           <Group gap="sm" align="flex-start">
