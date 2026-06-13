@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm --prefix ../lib/easy-platform/easy-platform-core install --ignore-scripts --legacy-peer-deps && npm --prefix ../lib/easy-platform/easy-platform-core run build",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",

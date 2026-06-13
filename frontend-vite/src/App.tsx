@@ -21,6 +21,7 @@
 import { lazy } from 'react';
 import {
   AppShell,
+  Box,
   NavLink,
   Title,
   Text,
@@ -36,6 +37,7 @@ import { AppHeaderActions } from './shared/AppHeaderActions';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { useAuth } from './auth/AuthProvider';
 import { useT } from './i18n';
+import classes from './App.module.css';
 
 // STD-FE-LAZY — 모든 페이지 lazy import
 const SelfEvaluationPage = lazy(() =>
@@ -134,28 +136,30 @@ export default function App(): React.ReactNode {
       header={{ height: 56 }}
       navbar={{ width: 240, breakpoint: 'sm', collapsed: { mobile: !navOpened } }}
       padding="md"
+      className={classes.shell}
     >
-      <AppShell.Header p="md">
-        <Group justify="space-between" h="100%">
-          <Group gap="md">
+      <AppShell.Header p="md" className={classes.header}>
+        <Group justify="space-between" h="100%" wrap="nowrap">
+          <Group gap="md" wrap="nowrap" className={classes.brandGroup}>
             <Burger opened={navOpened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Title order={4}>{t.domain.app.title}</Title>
-            <Text size="xs" c="dimmed" visibleFrom="sm">
+            <Box className={classes.logoMark}>P</Box>
+            <Title order={4} className={classes.brandTitle}>{t.domain.app.title}</Title>
+            <Text size="xs" c="dimmed" visibleFrom="sm" className={classes.subtitle}>
               {t.domain.app.subtitle}
             </Text>
           </Group>
-          <Group gap="xs">
+          <Group gap="xs" wrap="nowrap">
             <AppHeaderActions />
             {isAuthenticated && session && (
-              <Button variant="subtle" size="xs" onClick={() => void logout()}>
+              <Button variant="subtle" size="xs" radius="md" onClick={() => void logout()}>
                 {t.common.label.logout}
               </Button>
             )}
           </Group>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="xs">
-        <Text size="xs" c="dimmed" mt="xs" mb={4}>
+      <AppShell.Navbar p="xs" className={classes.navbar}>
+        <Text size="xs" c="dimmed" mt="xs" mb={4} className={classes.sectionTitle}>
           {t.domain.nav.section}
         </Text>
         <NavLink
@@ -257,7 +261,7 @@ export default function App(): React.ReactNode {
           />
         )}
       </AppShell.Navbar>
-      <AppShell.Main>
+      <AppShell.Main className={classes.main}>
         <PageBoundary>
           <Routes>
             <Route
