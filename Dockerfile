@@ -1,4 +1,6 @@
-# syntax=docker/dockerfile:1.7
+# syntax=docker/dockerfile:1
+# Render BuildKit 호환 정정 (2026-06-14): 1.7 frontend image grpc timeout 회피 (store-hr/talent 실측).
+# syntax=1 = BuildKit 안정 latest 1.x 자동 선택. 박제: 90-conformance/render-buildkit-dockerfile-syntax-2026-06-14.md
 #
 # Copyright 2026 The easy-performance-management Authors.
 # Licensed under the Apache License, Version 2.0 (the "License").
