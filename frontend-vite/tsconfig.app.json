@@ -8,7 +8,21 @@
     "moduleResolution": "Bundler",
     "paths": {
       "@easy/tokens": ["../lib/easy-platform/easy-platform-core/packages/tokens/src/index.ts"],
-      "@mantine/core": ["./node_modules/@mantine/core"]
+      "@easy/ui-components": ["../lib/easy-platform/easy-platform-core/packages/ui-components/src/index.ts"],
+      "@easy/ui-components/performance": ["../lib/easy-platform/easy-platform-core/packages/ui-components/src/performance/index.ts"],
+      "@easy/auth-hooks": ["../lib/easy-platform/easy-platform-core/packages/auth-hooks/src/index.ts"],
+      "@easy/query-client": ["../lib/easy-platform/easy-platform-core/packages/query-client/src/index.ts"],
+      "@mantine/core": ["./node_modules/@mantine/core"],
+      "@mantine/hooks": ["./node_modules/@mantine/hooks"],
+      "@mantine/modals": ["./node_modules/@mantine/modals"],
+      "@mantine/notifications": ["./node_modules/@mantine/notifications"],
+      "@mantine/charts": ["./node_modules/@mantine/charts"],
+      "@mantine/form": ["./node_modules/@mantine/form"],
+      "@tabler/icons-react": ["./node_modules/@tabler/icons-react"],
+      "react": ["./node_modules/@types/react"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime"],
+      "react-dom": ["./node_modules/@types/react-dom"],
+      "react-i18next": ["./node_modules/react-i18next"]
     },
     "allowImportingTsExtensions": false,
     "isolatedModules": true,
