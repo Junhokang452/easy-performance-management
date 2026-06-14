@@ -7,6 +7,7 @@ package com.easyperformance.platform;
 import com.easyware.platform.tenant.TenantBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import java.util.UUID;
 @RestController("performanceTenantBootstrapController")
 @RequestMapping("/api/internal/admin")
 @ConditionalOnProperty(name = "easyplatform.performance.stage2.enabled", havingValue = "true")
+@ConditionalOnBean(TenantBootstrap.class)
 public class PerformanceTenantBootstrapController {
 
     private static final Logger log = LoggerFactory.getLogger(PerformanceTenantBootstrapController.class);
