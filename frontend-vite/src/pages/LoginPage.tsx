@@ -21,13 +21,12 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
-import { LoginVisualShell } from '@easy/ui-components';
+import { LoginBrandMark, LoginVisualShell } from '@easy/ui-components';
 
 import { useAuth } from '../auth/AuthProvider';
 import { useT } from '../i18n';
 import { getErrorMessage } from '../api/error';
 import { loginVisual } from './loginVisual';
-import styles from './LoginPage.module.css';
 
 interface FromState {
   from?: { pathname?: string };
@@ -83,25 +82,22 @@ export function LoginPage(): React.ReactNode {
   });
 
   return (
-    <LoginVisualShell
-      image={loginVisual.image}
-      className={styles.shell}
-    >
-      <Card className={styles.card} shadow="md" padding="xl">
+    <LoginVisualShell image={loginVisual.image}>
+      <Card shadow="md" padding="xl" bg="color-mix(in srgb, var(--easy-color-surface) 90%, transparent)">
         <Stack gap="lg">
           <Group gap="sm" align="flex-start">
-            <div className={styles.brandMark} aria-hidden="true">
+            <LoginBrandMark size={32} radius={8}>
               <IconChartBar size={18} />
-            </div>
+            </LoginBrandMark>
             <Stack gap={0}>
               <Title order={3}>{t.domain.app.title}</Title>
-              <Text size="xs" className={styles.muted}>
+              <Text size="xs" c="dimmed">
                 {t.domain.app.subtitle}
               </Text>
             </Stack>
           </Group>
           <Stack gap={4}>
-            <Text size="xs" className={styles.muted}>
+            <Text size="xs" c="dimmed">
               {t.login.personaLabel}
             </Text>
             <SegmentedControl
@@ -117,7 +113,7 @@ export function LoginPage(): React.ReactNode {
                 { label: t.login.persona.employee, value: 'EMPLOYEE' },
               ]}
             />
-            <Text size="xs" className={styles.muted}>
+            <Text size="xs" c="dimmed">
               {t.login.personaHint}
             </Text>
           </Stack>

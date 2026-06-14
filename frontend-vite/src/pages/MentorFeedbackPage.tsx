@@ -4,7 +4,7 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/mentor-feedbacks` (Page envelope).
  * Category: GROWTH / RECOGNITION / COACHING / CONVERSATION.
  */
-import { Badge, Card, Group, Stack, Text } from '@mantine/core';
+import { Badge, Stack, Text } from '@mantine/core';
 import {
   PageHeader,
   SectionCard,
@@ -12,6 +12,10 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformancePreWrapText,
+  PerformanceRecordCard,
+} from '@easy/ui-components/performance';
 
 import { useMentorFeedbackList, type FeedbackCategory } from '../api/mentorFeedback';
 import { useT } from '../i18n';
@@ -73,26 +77,29 @@ export function MentorFeedbackPage(): React.ReactNode {
         ) : (
           <Stack>
             {rows.map((fb) => (
-              <Card key={fb.id} shadow="sm" padding="lg" radius="md" withBorder>
-                <Group justify="space-between" mb="xs">
-                  <Group gap="xs">
+              <PerformanceRecordCard
+                key={fb.id}
+                mobileSize="comfortable"
+                meta={
+                  <>
                     <Text size="sm" fw={600}>
                       {fb.feedbackDate}
                     </Text>
                     <Badge color={categoryColor(fb.category)} variant="light">
                       {categoryLabel(fb.category)}
                     </Badge>
-                  </Group>
-                  {fb.acknowledged && (
+                  </>
+                }
+                badges={
+                  fb.acknowledged ? (
                     <Badge color="green" variant="outline">
                       {t.domain.mentorFeedback.acknowledged}
                     </Badge>
-                  )}
-                </Group>
-                <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>
-                  {fb.content}
-                </Text>
-              </Card>
+                  ) : null
+                }
+              >
+                <PerformancePreWrapText>{fb.content}</PerformancePreWrapText>
+              </PerformanceRecordCard>
             ))}
           </Stack>
         )}

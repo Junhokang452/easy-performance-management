@@ -29,6 +29,7 @@ import {
   IconCircleCheck,
   IconEye,
   IconEyeOff,
+  IconFileAnalytics,
   IconRefresh,
   IconSend,
 } from '@tabler/icons-react';
@@ -39,6 +40,12 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformanceMetricGrid,
+  PerformanceProgressSummary,
+  formatPerformanceRatioPercent,
+  formatPerformanceRatioText,
+} from '@easy/ui-components/performance';
 
 import {
   formatReportDateTime,
@@ -106,7 +113,17 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
     (r) => r.status === 'FINALIZED',
   ).length;
   // active(비-superseded) 리포트가 발행 완료된 review 수.
-  const publishedActiveCount = reports.filter((r) => !r.superseded).length;
+  const activeReports = reports.filter((r) => !r.superseded);
+  const supersededReports = reports.filter((r) => r.superseded);
+  const publishedActiveCount = activeReports.length;
+  const readyToPublishCount = Math.max(
+    finalizedReviewCount - publishedActiveCount,
+    0,
+  );
+  const viewedActiveCount = activeReports.filter((r) => r.viewedAt).length;
+  const acknowledgedActiveCount = activeReports.filter(
+    (r) => r.acknowledged,
+  ).length;
 
   const publishMut = usePublishReportsMutation(cycleId);
   const supersedeMut = useSupersedeReportMutation(cycleId);
@@ -175,15 +192,89 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
 
   return (
     <>
-      <SectionCard>
+      <SectionCard
+        title={t.report.hr.governance.title}
+        description={t.report.hr.governance.description}
+      >
         <Stack>
+          <PerformanceMetricGrid
+            items={[
+              {
+                label: t.report.hr.governance.readiness,
+                value: String(readyToPublishCount),
+                description: t.report.hr.governance.readinessHint.replace(
+                  '{count}',
+                  String(finalizedReviewCount),
+                ),
+                icon: <IconSend size={20} />,
+                tone: readyToPublishCount > 0 ? 'yellow' : 'green',
+              },
+              {
+                label: t.report.hr.governance.published,
+                value: String(publishedActiveCount),
+                description: formatPerformanceRatioText(
+                  publishedActiveCount,
+                  finalizedReviewCount,
+                ),
+                icon: <IconFileAnalytics size={20} />,
+                tone: 'brand',
+              },
+              {
+                label: t.report.hr.governance.viewed,
+                value: formatPerformanceRatioPercent(
+                  viewedActiveCount,
+                  publishedActiveCount,
+                ),
+                description: formatPerformanceRatioText(
+                  viewedActiveCount,
+                  publishedActiveCount,
+                ),
+                icon: <IconEye size={20} />,
+                tone:
+                  publishedActiveCount > 0 &&
+                  viewedActiveCount === publishedActiveCount
+                    ? 'green'
+                    : 'blue',
+              },
+              {
+                label: t.report.hr.governance.acknowledged,
+                value: formatPerformanceRatioPercent(
+                  acknowledgedActiveCount,
+                  publishedActiveCount,
+                ),
+                description: formatPerformanceRatioText(
+                  acknowledgedActiveCount,
+                  publishedActiveCount,
+                ),
+                icon: <IconCircleCheck size={20} />,
+                tone:
+                  publishedActiveCount > 0 &&
+                  acknowledgedActiveCount === publishedActiveCount
+                    ? 'green'
+                    : 'yellow',
+              },
+            ]}
+          />
+
+          <Stack gap="xs">
+            <PerformanceProgressSummary
+              label={t.report.hr.governance.progressPublished}
+              value={publishedActiveCount}
+              total={finalizedReviewCount}
+            />
+            <PerformanceProgressSummary
+              label={t.report.hr.governance.progressViewed}
+              value={viewedActiveCount}
+              total={publishedActiveCount}
+            />
+            <PerformanceProgressSummary
+              label={t.report.hr.governance.progressAcknowledged}
+              value={acknowledgedActiveCount}
+              total={publishedActiveCount}
+            />
+          </Stack>
+
           <Group gap="xs" wrap="wrap">
-            <Badge variant="light" color="blue">
-              {t.report.hr.summaryFinalized}: {finalizedReviewCount}
-            </Badge>
-            <Badge variant="light" color="teal">
-              {t.report.hr.summaryPublished}: {publishedActiveCount}
-            </Badge>
             {cycleStatus && (
               <Badge
                 variant={cycleFinalized ? 'filled' : 'outline'}
@@ -192,6 +283,9 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
                 {t.cycles.status[cycleStatus]}
               </Badge>
             )}
+            <Badge variant="light" color="gray">
+              {t.report.hr.governance.superseded}: {supersededReports.length}
+            </Badge>
           </Group>
 
           {!cycleFinalized && (
@@ -213,21 +307,40 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
         </Stack>
       </SectionCard>
 
-      <SectionCard>
+      <SectionCard
+        title={t.report.hr.governance.listTitle}
+        description={t.report.hr.governance.listDescription}
+      >
         {reportsQuery.isLoading ? (
           <LoadingState message={t.common.status.loading} />
-        ) : reports.length === 0 ? (
+        ) : activeReports.length === 0 ? (
           <EmptyState
             title={t.report.hr.empty}
             description={t.report.hr.emptyHint}
           />
         ) : (
           <ReportsTable
-            reports={reports}
+            reports={activeReports}
             cycleFinalized={cycleFinalized}
             onSupersede={setSupersedeTarget}
             supersedePending={supersedeMut.isPending}
           />
+        )}
+      </SectionCard>
+
+      <SectionCard
+        title={t.report.hr.governance.historyTitle}
+        description={t.report.hr.governance.historyDescription}
+      >
+        {reportsQuery.isLoading ? (
+          <LoadingState message={t.common.status.loading} />
+        ) : supersededReports.length === 0 ? (
+          <EmptyState
+            title={t.report.hr.governance.historyEmpty}
+            description={t.report.hr.supersedeWarning}
+          />
+        ) : (
+          <SupersedeHistoryTable reports={supersededReports} />
         )}
       </SectionCard>
 
@@ -338,22 +451,7 @@ function ReportsTable({
   const t = useT();
   return (
     <ScrollArea type="auto" offsetScrollbars>
-      <Table
-        striped
-        highlightOnHover
-        miw={760}
-        styles={{
-          th: {
-            backgroundColor: 'var(--easy-color-surface-muted)',
-            color: 'var(--easy-color-text-muted)',
-            fontSize: 12,
-            fontWeight: 700,
-          },
-          td: {
-            borderColor: 'var(--easy-color-border)',
-          },
-        }}
-      >
+      <Table striped highlightOnHover miw={760}>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>{t.report.hr.col.employeeId}</Table.Th>
@@ -435,6 +533,50 @@ function ReportsTable({
                     </Button>
                   )}
                 </Group>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </ScrollArea>
+  );
+}
+
+function SupersedeHistoryTable({
+  reports,
+}: {
+  reports: ReportResponse[];
+}): React.ReactNode {
+  const t = useT();
+  return (
+    <ScrollArea type="auto" offsetScrollbars>
+      <Table striped highlightOnHover miw={680}>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>{t.report.hr.col.employeeId}</Table.Th>
+            <Table.Th>{t.report.hr.col.finalGrade}</Table.Th>
+            <Table.Th>{t.report.hr.col.publishedAt}</Table.Th>
+            <Table.Th>{t.report.hr.col.status}</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {reports.map((report) => (
+            <Table.Tr key={report.id}>
+              <Table.Td>
+                <Text size="sm" ff="monospace" fw={700} c="var(--easy-color-text)">
+                  {report.employeeId}
+                </Text>
+              </Table.Td>
+              <Table.Td>
+                <GradeBadge grade={report.content.finalGrade} />
+              </Table.Td>
+              <Table.Td>
+                <Text size="sm">{formatReportDateTime(report.publishedAt)}</Text>
+              </Table.Td>
+              <Table.Td>
+                <Badge size="xs" variant="outline" color="gray">
+                  {t.report.hr.superseded}
+                </Badge>
               </Table.Td>
             </Table.Tr>
           ))}

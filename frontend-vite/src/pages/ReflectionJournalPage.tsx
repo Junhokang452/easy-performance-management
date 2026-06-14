@@ -4,7 +4,7 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/reflection-journals` (Page envelope).
  * 방법론: KPT / 4Ls / SSC.
  */
-import { Badge, Card, Group, Stack, Text } from '@mantine/core';
+import { Badge, Stack, Text } from '@mantine/core';
 import {
   PageHeader,
   SectionCard,
@@ -12,6 +12,10 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformancePreWrapText,
+  PerformanceRecordCard,
+} from '@easy/ui-components/performance';
 
 import { useReflectionJournalList, type ReflectionMethod } from '../api/reflectionJournal';
 import { useT } from '../i18n';
@@ -69,26 +73,29 @@ export function ReflectionJournalPage(): React.ReactNode {
         ) : (
           <Stack>
             {rows.map((journal) => (
-              <Card key={journal.id} shadow="sm" padding="lg" radius="md" withBorder>
-                <Group justify="space-between" mb="xs">
-                  <Group gap="xs">
+              <PerformanceRecordCard
+                key={journal.id}
+                mobileSize="comfortable"
+                meta={
+                  <>
                     <Text size="sm" fw={600}>
                       {journal.reflectionDate}
                     </Text>
                     <Badge color={methodColor(journal.method)} variant="light">
                       {methodLabel(journal.method)}
                     </Badge>
-                  </Group>
-                  {journal.isPrivate && (
+                  </>
+                }
+                badges={
+                  journal.isPrivate ? (
                     <Badge color="gray" variant="outline">
                       {t.domain.reflectionJournal.isPrivate}
                     </Badge>
-                  )}
-                </Group>
-                <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>
-                  {journal.content}
-                </Text>
-              </Card>
+                  ) : null
+                }
+              >
+                <PerformancePreWrapText>{journal.content}</PerformancePreWrapText>
+              </PerformanceRecordCard>
             ))}
           </Stack>
         )}

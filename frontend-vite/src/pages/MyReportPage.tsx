@@ -17,16 +17,19 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Badge,
   Button,
-  Card,
-  Divider,
   Group,
-  SimpleGrid,
   Stack,
   Text,
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconCircleCheck, IconSearch } from '@tabler/icons-react';
+import {
+  IconChartBar,
+  IconChecklist,
+  IconCircleCheck,
+  IconFileAnalytics,
+  IconSearch,
+} from '@tabler/icons-react';
 import {
   PageHeader,
   SectionCard,
@@ -34,6 +37,11 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformanceMetricGrid,
+  PerformancePreWrapText,
+  PerformanceScoreGrid,
+} from '@easy/ui-components/performance';
 
 import {
   formatReportDateTime,
@@ -213,8 +221,10 @@ function ReportCard({
 
   return (
     <>
-      {/* 최종 등급 + 점수 분해 */}
-      <SectionCard>
+      <SectionCard
+        title={t.report.packet.title}
+        description={t.report.packet.description}
+      >
         <Stack>
           <Group justify="space-between" align="flex-start" wrap="nowrap">
             <Stack gap={4}>
@@ -233,49 +243,109 @@ function ReportCard({
             </Stack>
           </Group>
 
-          <Divider />
-
-          <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="sm">
-            <ScoreTile label={t.report.card.kpiScore} value={content.kpiScore} />
-            <ScoreTile
-              label={t.report.card.mboScore}
-              value={content.mboScore}
-              p1
-            />
-            <ScoreTile
-              label={t.report.card.competencyScore}
-              value={content.competencyScore}
-              p1
-            />
-            <ScoreTile
-              label={t.report.card.mraScore}
-              value={content.mraScore}
-              p1
-            />
-          </SimpleGrid>
+          <PerformanceMetricGrid
+            columns={{ base: 2, sm: 4 }}
+            items={[
+              {
+                label: t.report.card.finalScore,
+                value: formatScore(content.finalScore),
+                description: t.report.packet.publishedAt.replace(
+                  '{date}',
+                  formatReportDateTime(report.publishedAt),
+                ),
+                icon: <IconFileAnalytics size={20} />,
+                tone: 'brand',
+              },
+              {
+                label: t.report.card.kpiScore,
+                value: formatScore(content.kpiScore),
+                description: t.report.packet.kpiItems.replace(
+                  '{count}',
+                  String(kpiItems.length),
+                ),
+                icon: <IconChecklist size={20} />,
+                tone: 'blue',
+              },
+              {
+                label: t.report.packet.viewStatus,
+                value: report.viewedAt
+                  ? t.report.packet.viewed
+                  : t.report.packet.notViewed,
+                description: report.viewedAt
+                  ? formatReportDateTime(report.viewedAt)
+                  : t.report.packet.lifecyclePending,
+                icon: <IconChartBar size={20} />,
+                tone: report.viewedAt ? 'green' : 'gray',
+              },
+              {
+                label: t.report.packet.ackStatus,
+                value: report.acknowledged
+                  ? t.report.packet.acknowledged
+                  : t.report.packet.notAcknowledged,
+                description: report.acknowledgedAt
+                  ? formatReportDateTime(report.acknowledgedAt)
+                  : t.report.packet.lifecyclePending,
+                icon: <IconCircleCheck size={20} />,
+                tone: report.acknowledged ? 'green' : 'yellow',
+              },
+            ]}
+          />
         </Stack>
       </SectionCard>
 
+      <SectionCard
+        title={t.report.packet.scoreTitle}
+        description={t.report.packet.scoreDescription}
+      >
+        <PerformanceScoreGrid
+          items={[
+            {
+              label: t.report.card.kpiScore,
+              value: formatScore(content.kpiScore),
+            },
+            {
+              label: t.report.card.mboScore,
+              value: content.mboScore != null
+                ? formatScore(content.mboScore)
+                : t.report.card.scoreP1,
+              muted: content.mboScore == null,
+            },
+            {
+              label: t.report.card.competencyScore,
+              value: content.competencyScore != null
+                ? formatScore(content.competencyScore)
+                : t.report.card.scoreP1,
+              muted: content.competencyScore == null,
+            },
+            {
+              label: t.report.card.mraScore,
+              value: content.mraScore != null
+                ? formatScore(content.mraScore)
+                : t.report.card.scoreP1,
+              muted: content.mraScore == null,
+            },
+          ]}
+        />
+      </SectionCard>
+
       {/* KPI 항목 요약 (read-only — ReviewKpiItemsTable 재사용) */}
-      <SectionCard>
+      <SectionCard
+        title={t.report.card.kpiSection}
+        description={t.report.packet.kpiDescription}
+      >
         <Stack gap="xs">
-          <Text fw={600} size="sm">
-            {t.report.card.kpiSection}
-          </Text>
           <ReviewKpiItemsTable mode="readOnly" items={kpiItems} />
         </Stack>
       </SectionCard>
 
       {/* 매니저 의견 */}
-      <SectionCard>
+      <SectionCard
+        title={t.report.card.managerComment}
+        description={t.report.packet.commentDescription}
+      >
         <Stack gap="xs">
-          <Text fw={600} size="sm">
-            {t.report.card.managerComment}
-          </Text>
           {content.managerComment ? (
-            <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>
-              {content.managerComment}
-            </Text>
+            <PerformancePreWrapText>{content.managerComment}</PerformancePreWrapText>
           ) : (
             <Text size="sm" c="dimmed">
               {t.report.card.noComment}
@@ -285,11 +355,11 @@ function ReportCard({
       </SectionCard>
 
       {/* 전사 분포 % (본인 등급 강조) */}
-      <SectionCard>
+      <SectionCard
+        title={t.report.card.distributionHeading}
+        description={t.report.card.distributionHint}
+      >
         <Stack gap="xs">
-          <Text fw={600} size="sm">
-            {t.report.card.distributionHeading}
-          </Text>
           <ReportDistributionBars
             distribution={content.distribution}
             myGrade={content.finalGrade}
@@ -297,14 +367,23 @@ function ReportCard({
         </Stack>
       </SectionCard>
 
+      <SectionCard
+        title={t.report.packet.developmentTitle}
+        description={t.report.packet.developmentDescription}
+      >
+        <EmptyState
+          title={t.report.packet.developmentEmpty}
+          description={t.report.packet.developmentEmptyDescription}
+        />
+      </SectionCard>
+
       {/* 확인(acknowledge) */}
-      <SectionCard>
-        <Card withBorder padding="md">
+      <SectionCard
+        title={t.report.card.acknowledgeHeading}
+        description={t.report.card.acknowledgeHint}
+      >
           <Group justify="space-between" wrap="nowrap">
             <Stack gap={2}>
-              <Text size="sm" fw={500}>
-                {t.report.card.acknowledgeHeading}
-              </Text>
               {report.acknowledged ? (
                 <Group gap={6}>
                   <Badge color="green" variant="light" size="sm">
@@ -332,35 +411,7 @@ function ReportCard({
                 : t.report.card.acknowledge}
             </Button>
           </Group>
-        </Card>
       </SectionCard>
     </>
-  );
-}
-
-interface ScoreTileProps {
-  label: string;
-  value: number | null;
-  /** P0 미산출 항목 — null 일 때 "P1 예정" 안내. */
-  p1?: boolean;
-}
-
-function ScoreTile({ label, value, p1 }: ScoreTileProps): React.ReactNode {
-  const t = useT();
-  return (
-    <Card withBorder padding="sm">
-      <Text size="xs" c="dimmed">
-        {label}
-      </Text>
-      {value != null ? (
-        <Text fw={600} fz="lg">
-          {formatScore(value)}
-        </Text>
-      ) : (
-        <Text fw={500} fz="lg" c="dimmed">
-          {p1 ? t.report.card.scoreP1 : '—'}
-        </Text>
-      )}
-    </Card>
   );
 }

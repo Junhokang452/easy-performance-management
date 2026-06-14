@@ -39,11 +39,13 @@ interface I18nShape {
     };
   };
   nav: {
+    cockpit: string;
     hr: {
       cycles: string;
     };
     kpi: {
       my: string;
+      alignment: string;
       managerTree: string;
       directorTree: string;
     };
@@ -54,6 +56,7 @@ interface I18nShape {
     calibration: {
       sessions: string;
       director: string;
+      analytics: string;
       distribution: string;
     };
     report: {
@@ -62,6 +65,38 @@ interface I18nShape {
     };
     admin: {
       tenants: string;
+    };
+  };
+  cockpit: {
+    title: string;
+    description: string;
+    empty: string;
+    emptyDescription: string;
+    stat: {
+      cycles: string;
+      cyclesHint: string;
+      reviewProgress: string;
+      reviewProgressHint: string;
+      calibrationReady: string;
+      calibrationReadyHint: string;
+      reports: string;
+      reportsHint: string;
+    };
+    pipeline: {
+      title: string;
+      description: string;
+    };
+    distribution: {
+      title: string;
+      description: string;
+      current: string;
+      total: string;
+      empty: string;
+    };
+    cycles: {
+      title: string;
+      description: string;
+      policy: string;
     };
   };
   login: {
@@ -151,6 +186,18 @@ interface I18nShape {
       FINALIZED: string;
       CANCELLED: string;
     };
+    operating: {
+      total: string;
+      totalHint: string;
+      policyReady: string;
+      inOperation: string;
+      inOperationHint: string;
+      transitionable: string;
+      transitionableHint: string;
+      policyProgress: string;
+      timelineTitle: string;
+      timelineDescription: string;
+    };
   };
   policy: {
     title: string;
@@ -222,6 +269,31 @@ interface I18nShape {
       reportActual: string;
       actualHistory: string;
     };
+    alignment: {
+      title: string;
+      description: string;
+      tree: string;
+      treePlaceholder: string;
+      needCycle: string;
+      empty: string;
+      emptyDescription: string;
+      treePanel: string;
+      personalPanel: string;
+      personalPanelDescription: string;
+      orgMatch: string;
+      matched: string;
+      unmatched: string;
+      stat: {
+        aligned: string;
+        alignedHint: string;
+        coverage: string;
+        coverageHint: string;
+        avgAchievement: string;
+        avgAchievementHint: string;
+        unmatched: string;
+        unmatchedHint: string;
+      };
+    };
     manager: {
       title: string;
       description: string;
@@ -244,6 +316,23 @@ interface I18nShape {
       bscToggle: string;
       readonly: string;
       empty: string;
+      operating: {
+        trees: string;
+        treesHint: string;
+        bscCoverage: string;
+        orgScoped: string;
+        orgScopedHint: string;
+        levels: string;
+        levelsHint: string;
+        bscProgress: string;
+        nodes: string;
+        nodesHint: string;
+        bscAssigned: string;
+        weightComplete: string;
+        assignments: string;
+        assignmentsHint: string;
+        weightProgress: string;
+      };
     };
     tree: {
       name: string;
@@ -372,6 +461,26 @@ interface I18nShape {
       previewKpiScore: string;
       previewHint: string;
       notEditableHint: string;
+      workspace: {
+        queue: string;
+        queueHint: string;
+        managerPending: string;
+        managerPendingHint: string;
+        submitted: string;
+        avgKpi: string;
+        avgKpiHint: string;
+        progress: string;
+        reviewee: string;
+        revieweeHint: string;
+        serverScoreHint: string;
+        noGrade: string;
+        finalizedAt: string;
+        finalized: string;
+        notFinalized: string;
+        scoredItems: string;
+        scoredItemsHint: string;
+        scoringProgress: string;
+      };
     };
     create: {
       title: string;
@@ -482,6 +591,33 @@ interface I18nShape {
         grade: string;
       };
     };
+    analytics: {
+      title: string;
+      description: string;
+      needCycle: string;
+      distributionTitle: string;
+      distributionDescription: string;
+      sessionsTitle: string;
+      sessionsDescription: string;
+      timelineTitle: string;
+      timelineDescription: string;
+      stat: {
+        sessions: string;
+        sessionsHint: string;
+        ready: string;
+        readyHint: string;
+        adjustments: string;
+        adjustmentsHint: string;
+        forced: string;
+        forcedHint: string;
+      };
+      timelineCol: {
+        when: string;
+        employee: string;
+        grade: string;
+        reason: string;
+      };
+    };
   };
   distribution: {
     bars: {
@@ -554,6 +690,24 @@ interface I18nShape {
       supersedeTitle: string;
       supersedeWarning: string;
       supersedeDone: string;
+      governance: {
+        title: string;
+        description: string;
+        readiness: string;
+        readinessHint: string;
+        published: string;
+        viewed: string;
+        acknowledged: string;
+        superseded: string;
+        progressPublished: string;
+        progressViewed: string;
+        progressAcknowledged: string;
+        listTitle: string;
+        listDescription: string;
+        historyTitle: string;
+        historyDescription: string;
+        historyEmpty: string;
+      };
       col: {
         employeeId: string;
         finalGrade: string;
@@ -592,6 +746,27 @@ interface I18nShape {
       acknowledge: string;
       acknowledgedButton: string;
       acknowledged: string;
+    };
+    packet: {
+      title: string;
+      description: string;
+      publishedAt: string;
+      kpiItems: string;
+      viewStatus: string;
+      viewed: string;
+      notViewed: string;
+      ackStatus: string;
+      acknowledged: string;
+      notAcknowledged: string;
+      lifecyclePending: string;
+      scoreTitle: string;
+      scoreDescription: string;
+      kpiDescription: string;
+      commentDescription: string;
+      developmentTitle: string;
+      developmentDescription: string;
+      developmentEmpty: string;
+      developmentEmptyDescription: string;
     };
   };
   domain: {
@@ -749,11 +924,13 @@ export const ko: I18nShape = {
     },
   },
   nav: {
+    cockpit: '성과 Cockpit',
     hr: {
       cycles: 'HR > 사이클 관리',
     },
     kpi: {
       my: '내 KPI',
+      alignment: '목표 정렬',
       managerTree: 'KPI 트리 (매니저)',
       directorTree: 'KPI 트리 (본부)',
     },
@@ -764,6 +941,7 @@ export const ko: I18nShape = {
     calibration: {
       sessions: 'Calibration 세션',
       director: 'Calibration (본부)',
+      analytics: 'Calibration 분석',
       distribution: '분포 시뮬레이터',
     },
     report: {
@@ -772,6 +950,38 @@ export const ko: I18nShape = {
     },
     admin: {
       tenants: '시스템 > 테넌트 관리',
+    },
+  },
+  cockpit: {
+    title: '성과 Cockpit',
+    description: '평가 사이클, 리뷰 진행, 보정 준비도, 리포트 발행 상태를 한 화면에서 확인합니다.',
+    empty: '운영 중인 평가 사이클이 없습니다',
+    emptyDescription: '사이클을 생성하면 리뷰, 보정, 리포트 현황이 자동으로 집계됩니다.',
+    stat: {
+      cycles: '사이클',
+      cyclesHint: '최근 사이클 기준 운영 현황',
+      reviewProgress: '리뷰 진행률',
+      reviewProgressHint: '{done}/{total}건 제출 이후 단계',
+      calibrationReady: '보정 준비',
+      calibrationReadyHint: '총 {total}건 중 보정 대상',
+      reports: '리포트',
+      reportsHint: 'FINALIZED {finalized}건 기준 발행',
+    },
+    pipeline: {
+      title: '리뷰 파이프라인',
+      description: '현재 선택된 사이클의 리뷰 상태 분포입니다.',
+    },
+    distribution: {
+      title: '등급 분포',
+      description: '보정/강제분포 API 응답을 그대로 시각화합니다.',
+      current: '현재 분포',
+      total: '총 {count}건',
+      empty: '분포 데이터가 없습니다.',
+    },
+    cycles: {
+      title: '최근 사이클',
+      description: '현재 운영 사이클과 주변 사이클 상태를 함께 확인합니다.',
+      policy: '정책',
     },
   },
   login: {
@@ -863,6 +1073,18 @@ export const ko: I18nShape = {
       FINALIZED: '확정',
       CANCELLED: '취소',
     },
+    operating: {
+      total: '사이클',
+      totalHint: '등록된 평가 사이클',
+      policyReady: '정책 준비',
+      inOperation: '운영 중',
+      inOperationHint: '종결·취소 전 사이클',
+      transitionable: '전이 가능',
+      transitionableHint: '다음 상태로 이동 가능한 사이클',
+      policyProgress: '정책 설정률',
+      timelineTitle: '사이클 상태 타임라인',
+      timelineDescription: '평가 사이클이 현재 어느 운영 단계에 분포되어 있는지 확인합니다.',
+    },
   },
   policy: {
     title: '평가 정책',
@@ -934,6 +1156,31 @@ export const ko: I18nShape = {
       reportActual: '실적 입력',
       actualHistory: '실적 이력',
     },
+    alignment: {
+      title: '목표 정렬',
+      description: '조직 KPI 트리와 개인 KPI 배정·실적을 나란히 비교해 정렬도를 확인합니다.',
+      tree: '조직 KPI 트리',
+      treePlaceholder: '비교할 트리 선택',
+      needCycle: '사이클을 선택하면 조직 KPI 트리를 불러옵니다.',
+      empty: '비교할 KPI 데이터가 없습니다',
+      emptyDescription: '조직 KPI 트리 또는 개인 KPI 배정을 먼저 생성하세요.',
+      treePanel: '조직 목표',
+      personalPanel: '개인 배정',
+      personalPanelDescription: '개인 배정 KPI가 선택한 조직 트리와 연결되는지 확인합니다.',
+      orgMatch: '조직 매칭',
+      matched: '매칭',
+      unmatched: '미매칭',
+      stat: {
+        aligned: '매칭 KPI',
+        alignedHint: '개인 배정 중 선택 트리에 연결된 KPI',
+        coverage: '정렬도',
+        coverageHint: '{tree} 기준',
+        avgAchievement: '평균 달성률',
+        avgAchievementHint: '실적이 있는 개인 KPI 평균',
+        unmatched: '미매칭',
+        unmatchedHint: '선택한 조직 트리에 없는 개인 배정',
+      },
+    },
     manager: {
       title: 'KPI 트리 (매니저)',
       description: '평가 사이클별 KPI 트리를 구성하고 노드·배정을 관리하세요.',
@@ -956,6 +1203,23 @@ export const ko: I18nShape = {
       bscToggle: 'BSC 4 관점 보기',
       readonly: '읽기 전용',
       empty: '이 사이클에는 KPI 트리가 없습니다',
+      operating: {
+        trees: 'KPI 트리',
+        treesHint: '현재 사이클의 조직 KPI 포트폴리오',
+        bscCoverage: 'BSC 적용률',
+        orgScoped: '조직 범위',
+        orgScopedHint: '소유 조직이 지정된 트리',
+        levels: '레벨 수',
+        levelsHint: '포트폴리오에 포함된 트리 레벨',
+        bscProgress: 'BSC 적용 진행',
+        nodes: 'KPI 노드',
+        nodesHint: '선택된 트리의 KPI 항목',
+        bscAssigned: '관점 지정',
+        weightComplete: '가중치 완결',
+        assignments: '배정',
+        assignmentsHint: '노드별 대상자 배정 합계',
+        weightProgress: '가중치 완결 진행',
+      },
     },
     tree: {
       name: '트리 이름',
@@ -1084,6 +1348,26 @@ export const ko: I18nShape = {
       previewKpiScore: 'KPI 점수 프리뷰',
       previewHint: '입력값 기준 가중 합산 미리보기입니다. 최종 점수는 제출 후 서버 계산값을 사용합니다.',
       notEditableHint: '매니저 평가 대기 상태가 아니어서 점수 입력이 비활성화되었습니다.',
+      workspace: {
+        queue: '평가 대기열',
+        queueHint: '현재 사이클 전체 대상자',
+        managerPending: '채점 대기',
+        managerPendingHint: '매니저 입력이 필요한 평가',
+        submitted: '제출 이후',
+        avgKpi: '평균 KPI',
+        avgKpiHint: '서버 계산 KPI 점수 기준',
+        progress: '매니저 평가 진행',
+        reviewee: '평가 대상',
+        revieweeHint: '선택된 대상자',
+        serverScoreHint: '서버 계산값',
+        noGrade: '등급 없음',
+        finalizedAt: '확정 일시',
+        finalized: '확정됨',
+        notFinalized: '아직 확정되지 않음',
+        scoredItems: '채점 항목',
+        scoredItemsHint: '매니저 점수가 입력된 KPI 항목',
+        scoringProgress: '채점 진행',
+      },
     },
     create: {
       title: '평가 생성',
@@ -1194,6 +1478,33 @@ export const ko: I18nShape = {
         grade: '유효 등급',
       },
     },
+    analytics: {
+      title: 'Calibration 분석',
+      description: '세션 상태, 등급 분포, 조정 이력을 한 화면에서 검토합니다.',
+      needCycle: '평가 사이클을 선택하면 보정 분석을 표시합니다.',
+      distributionTitle: '등급 분포',
+      distributionDescription: '현재 분포와 목표 분포를 함께 확인합니다.',
+      sessionsTitle: '세션 현황',
+      sessionsDescription: '사이클에 등록된 캘리브레이션 세션 목록입니다.',
+      timelineTitle: '조정 이력',
+      timelineDescription: '선택한 세션의 등급 조정 로그입니다.',
+      stat: {
+        sessions: '세션',
+        sessionsHint: '이 사이클의 캘리브레이션 세션 수',
+        ready: '보정 준비',
+        readyHint: '총 {total}건 중 보정 가능 대상',
+        adjustments: '조정',
+        adjustmentsHint: '세션 전체 조정 로그 합계',
+        forced: '강제 분포',
+        forcedHint: '분포 적용 상태',
+      },
+      timelineCol: {
+        when: '시간',
+        employee: '사원',
+        grade: '등급 변경',
+        reason: '사유',
+      },
+    },
   },
   distribution: {
     bars: {
@@ -1266,6 +1577,24 @@ export const ko: I18nShape = {
       supersedeTitle: '리포트 재발행',
       supersedeWarning: '재발행하면 현재 평가 확정값과 최신 분포로 내용이 다시 동결된 새 리포트가 생성됩니다. 기존 리포트는 이력으로 보존됩니다.',
       supersedeDone: '리포트를 재발행했습니다.',
+      governance: {
+        title: '리포트 운영 현황',
+        description: '발행 준비, 열람, 확인, 재발행 이력을 한 화면에서 점검합니다.',
+        readiness: '발행 대기',
+        readinessHint: '확정 평가 {count}건 기준',
+        published: 'Active 리포트',
+        viewed: '열람률',
+        acknowledged: '확인률',
+        superseded: '이력 리포트',
+        progressPublished: '발행 진행',
+        progressViewed: '열람 진행',
+        progressAcknowledged: '확인 진행',
+        listTitle: 'Active 리포트',
+        listDescription: '현재 사원에게 유효한 최신 리포트 목록입니다.',
+        historyTitle: '재발행 이력',
+        historyDescription: '재발행으로 대체된 이전 리포트를 감사 이력으로 보존합니다.',
+        historyEmpty: '재발행 이력이 없습니다',
+      },
       col: {
         employeeId: '사원 ID',
         finalGrade: '최종 등급',
@@ -1304,6 +1633,27 @@ export const ko: I18nShape = {
       acknowledge: '결과 확인',
       acknowledgedButton: '확인 완료',
       acknowledged: '확인 완료',
+    },
+    packet: {
+      title: '결과 패킷',
+      description: '발행 시점에 동결된 최종 등급, 점수, 열람 상태를 한 번에 확인하세요.',
+      publishedAt: '발행 {date}',
+      kpiItems: 'KPI 항목 {count}개',
+      viewStatus: '열람 상태',
+      viewed: '열람 완료',
+      notViewed: '자동 기록 중',
+      ackStatus: '확인 상태',
+      acknowledged: '확인 완료',
+      notAcknowledged: '확인 필요',
+      lifecyclePending: '아직 기록되지 않음',
+      scoreTitle: '점수 분해',
+      scoreDescription: '최종 점수에 반영된 성과 축을 읽기 전용으로 제공합니다.',
+      kpiDescription: '확정 리포트에 포함된 KPI 항목 스냅샷입니다.',
+      commentDescription: '평가 확정 시점의 매니저 코멘트입니다.',
+      developmentTitle: '후속 성장 액션',
+      developmentDescription: '성과 결과 이후의 개발 과제와 다음 체크인을 이 영역에서 관리합니다.',
+      developmentEmpty: '후속 액션이 아직 없습니다',
+      developmentEmptyDescription: '개발 목표, 멘토 피드백, 학습 추천 연동 시 이 패킷에 함께 표시됩니다.',
     },
   },
   domain: {

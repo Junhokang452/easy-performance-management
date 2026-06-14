@@ -14,7 +14,6 @@ import {
   Alert,
   Badge,
   Button,
-  Card,
   Group,
   LoadingOverlay,
   Stack,
@@ -24,7 +23,20 @@ import {
   Textarea,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconPlus } from '@tabler/icons-react';
+import {
+  IconCircleCheck,
+  IconClock,
+  IconListCheck,
+  IconPlus,
+  IconTargetArrow,
+} from '@tabler/icons-react';
+import {
+  PerformanceChangedTableRow,
+  PerformanceMetricGrid,
+  PerformanceProgressSummary,
+  formatPerformanceRatioPercent,
+  formatPerformanceRatioText,
+} from '@easy/ui-components/performance';
 import {
   PageHeader,
   SectionCard,
@@ -63,7 +75,6 @@ export function ManagerReviewPage(): React.ReactNode {
   const reviewsQuery = useReviewsByCycleQuery(cycleId);
   const reviews = reviewsQuery.data ?? [];
 
-  // cycle 변경 시 선택 초기화.
   useEffect(() => {
     setSelectedReviewId(null);
   }, [cycleId]);
@@ -72,6 +83,7 @@ export function ManagerReviewPage(): React.ReactNode {
     () => reviews.find((r) => r.id === selectedReviewId) ?? null,
     [reviews, selectedReviewId],
   );
+  const queueStats = useMemo(() => buildReviewQueueStats(reviews), [reviews]);
 
   return (
     <ErrorBoundary>
@@ -113,63 +125,61 @@ export function ManagerReviewPage(): React.ReactNode {
               }}
             />
           ) : (
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t.review.manager.col.employeeId}</Table.Th>
-                  <Table.Th>{t.review.manager.col.status}</Table.Th>
-                  <Table.Th>{t.review.manager.col.kpiScore}</Table.Th>
-                  <Table.Th>{t.review.manager.col.finalScore}</Table.Th>
-                  <Table.Th />
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {reviews.map((review) => (
-                  <Table.Tr
-                    key={review.id}
-                    onClick={() => setSelectedReviewId(review.id)}
-                    style={{
-                      cursor: 'pointer',
-                      backgroundColor:
-                        review.id === selectedReviewId
-                          ? 'var(--mantine-color-blue-light)'
-                          : undefined,
-                    }}
-                  >
-                    <Table.Td>
-                      <Text size="sm" ff="monospace">
-                        {review.employeeId}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <ReviewStatusBadge status={review.status} />
-                    </Table.Td>
-                    <Table.Td>
-                      <Text size="sm">{formatScore(review.kpiScore)}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Group gap={6}>
-                        <Text size="sm">{formatScore(review.finalScore)}</Text>
-                        {review.finalGrade && (
-                          <Badge size="sm" variant="light" color="blue">
-                            {review.finalGrade}
-                          </Badge>
-                        )}
-                      </Group>
-                    </Table.Td>
-                    <Table.Td>
-                      <Group
-                        gap={4}
-                        justify="flex-end"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ReviewTransitionMenu review={review} />
-                      </Group>
-                    </Table.Td>
+            <Stack>
+              <ReviewQueueOverview stats={queueStats} />
+              <Table striped highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>{t.review.manager.col.employeeId}</Table.Th>
+                    <Table.Th>{t.review.manager.col.status}</Table.Th>
+                    <Table.Th>{t.review.manager.col.kpiScore}</Table.Th>
+                    <Table.Th>{t.review.manager.col.finalScore}</Table.Th>
+                    <Table.Th />
                   </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
+                </Table.Thead>
+                <Table.Tbody>
+                  {reviews.map((review) => (
+                    <PerformanceChangedTableRow
+                      key={review.id}
+                      onClick={() => setSelectedReviewId(review.id)}
+                      changed={review.id === selectedReviewId}
+                      interactive
+                    >
+                      <Table.Td>
+                        <Text size="sm" ff="monospace">
+                          {review.employeeId}
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <ReviewStatusBadge status={review.status} />
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="sm">{formatScore(review.kpiScore)}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Group gap={6}>
+                          <Text size="sm">{formatScore(review.finalScore)}</Text>
+                          {review.finalGrade && (
+                            <Badge size="sm" variant="light" color="blue">
+                              {review.finalGrade}
+                            </Badge>
+                          )}
+                        </Group>
+                      </Table.Td>
+                      <Table.Td>
+                        <Group
+                          gap={4}
+                          justify="flex-end"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ReviewTransitionMenu review={review} />
+                        </Group>
+                      </Table.Td>
+                    </PerformanceChangedTableRow>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Stack>
           )}
         </Stack>
       </SectionCard>
@@ -194,6 +204,62 @@ export function ManagerReviewPage(): React.ReactNode {
   );
 }
 
+interface ReviewQueueStats {
+  total: number;
+  managerPending: number;
+  submittedOrLater: number;
+  averageKpiScore: number | null;
+}
+
+function ReviewQueueOverview({
+  stats,
+}: {
+  stats: ReviewQueueStats;
+}): React.ReactNode {
+  const t = useT();
+  return (
+    <Stack gap="sm">
+      <PerformanceMetricGrid
+        items={[
+          {
+            label: t.review.manager.workspace.queue,
+            value: String(stats.total),
+            description: t.review.manager.workspace.queueHint,
+            icon: <IconListCheck size={20} />,
+            tone: 'brand',
+          },
+          {
+            label: t.review.manager.workspace.managerPending,
+            value: String(stats.managerPending),
+            description: t.review.manager.workspace.managerPendingHint,
+            icon: <IconClock size={20} />,
+            tone: stats.managerPending > 0 ? 'yellow' : 'green',
+          },
+          {
+            label: t.review.manager.workspace.submitted,
+            value: formatPerformanceRatioPercent(stats.submittedOrLater, stats.total),
+            description: formatPerformanceRatioText(stats.submittedOrLater, stats.total),
+            icon: <IconCircleCheck size={20} />,
+            tone: 'green',
+          },
+          {
+            label: t.review.manager.workspace.avgKpi,
+            value: formatScore(stats.averageKpiScore),
+            description: t.review.manager.workspace.avgKpiHint,
+            icon: <IconTargetArrow size={20} />,
+            tone: 'blue',
+          },
+        ]}
+      />
+      <PerformanceProgressSummary
+        label={t.review.manager.workspace.progress}
+        value={stats.submittedOrLater}
+        total={stats.total}
+      />
+    </Stack>
+  );
+}
+
 interface PanelProps {
   review: ReviewResponse;
 }
@@ -213,6 +279,8 @@ function ReviewEvaluationPanel({ review }: PanelProps): React.ReactNode {
           <ReviewStatusBadge status={review.status} />
         </Group>
       </Group>
+
+      <ReviewContextSummary review={review} />
 
       {itemsQuery.isError ? (
         <Text c="red">
@@ -240,6 +308,48 @@ function ReviewEvaluationPanel({ review }: PanelProps): React.ReactNode {
   );
 }
 
+function ReviewContextSummary({
+  review,
+}: {
+  review: ReviewResponse;
+}): React.ReactNode {
+  const t = useT();
+  return (
+    <PerformanceMetricGrid
+      items={[
+        {
+          label: t.review.manager.workspace.reviewee,
+          value: review.employeeId,
+          description: t.review.manager.workspace.revieweeHint,
+          icon: <IconListCheck size={20} />,
+          tone: 'brand',
+        },
+        {
+          label: t.review.manager.col.kpiScore,
+          value: formatScore(review.kpiScore),
+          description: t.review.manager.workspace.serverScoreHint,
+          icon: <IconTargetArrow size={20} />,
+          tone: 'blue',
+        },
+        {
+          label: t.review.manager.col.finalScore,
+          value: formatScore(review.finalScore),
+          description: review.finalGrade ?? t.review.manager.workspace.noGrade,
+          icon: <IconCircleCheck size={20} />,
+          tone: review.finalGrade ? 'green' : 'gray',
+        },
+        {
+          label: t.review.manager.workspace.finalizedAt,
+          value: review.finalizedAt ? t.review.manager.workspace.finalized : '-',
+          description: review.finalizedAt ?? t.review.manager.workspace.notFinalized,
+          icon: <IconClock size={20} />,
+          tone: review.finalizedAt ? 'green' : 'gray',
+        },
+      ]}
+    />
+  );
+}
+
 interface ScoreTabProps {
   review: ReviewResponse;
   items: ReviewKpiItemResponse[];
@@ -250,10 +360,8 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
   const updateMut = useUpdateReviewMutation(review.id);
   const submitMut = useSubmitManagerMutation(review.id);
 
-  // MANAGER_PENDING 에서만 채점·제출 가능 (계약 §3/§6).
   const editable = review.status === 'MANAGER_PENDING';
 
-  // per-item 매니저 점수 입력 (assignmentId → number|''). 저장된 managerScore 로 초기화.
   const [overrides, setOverrides] = useState<Record<string, number | string>>(
     {},
   );
@@ -277,7 +385,6 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
     setOverrides((prev) => ({ ...prev, [assignmentId]: value }));
   };
 
-  // 가중 합산 프리뷰 — 표시 전용 (§5 산식, BE kpiScore 가 SoT).
   const preview = useMemo(() => {
     const numeric: Record<string, number | null> = {};
     for (const [id, v] of Object.entries(overrides)) {
@@ -363,19 +470,7 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
         <ReviewKpiItemsTable mode="readOnly" items={items} />
       )}
 
-      <Card withBorder padding="sm" mt="xs">
-        <Group justify="space-between">
-          <Text size="sm" c="dimmed">
-            {t.review.manager.previewKpiScore}
-          </Text>
-          <Text size="lg" fw={700}>
-            {formatScore(preview)}
-          </Text>
-        </Group>
-        <Text size="xs" c="dimmed" mt={4}>
-          {t.review.manager.previewHint}
-        </Text>
-      </Card>
+      <ScoreInputSummary preview={preview} items={items} overrides={overrides} />
 
       <Textarea
         label={t.review.manager.managerComment}
@@ -405,4 +500,76 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
       )}
     </Stack>
   );
+}
+
+function ScoreInputSummary({
+  preview,
+  items,
+  overrides,
+}: {
+  preview: number | null;
+  items: ReviewKpiItemResponse[];
+  overrides: Record<string, number | string>;
+}): React.ReactNode {
+  const t = useT();
+  const scored = items.filter((item) => {
+    const value = overrides[item.assignmentId];
+    return value !== '' && value != null;
+  }).length;
+
+  return (
+    <Stack gap="sm">
+      <PerformanceMetricGrid
+        columns={{ base: 1, sm: 2 }}
+        items={[
+          {
+            label: t.review.manager.previewKpiScore,
+            value: formatScore(preview),
+            description: t.review.manager.previewHint,
+            icon: <IconTargetArrow size={20} />,
+            tone: 'blue',
+          },
+          {
+            label: t.review.manager.workspace.scoredItems,
+            value: formatPerformanceRatioText(scored, items.length),
+            description: t.review.manager.workspace.scoredItemsHint,
+            icon: <IconListCheck size={20} />,
+            tone: items.length > 0 && scored === items.length ? 'green' : 'yellow',
+          },
+        ]}
+      />
+      <PerformanceProgressSummary
+        label={t.review.manager.workspace.scoringProgress}
+        value={scored}
+        total={items.length}
+      />
+    </Stack>
+  );
+}
+
+function buildReviewQueueStats(reviews: ReviewResponse[]): ReviewQueueStats {
+  const submittedStatuses = new Set([
+    'MANAGER_SUBMITTED',
+    'CALIBRATION',
+    'FINALIZED',
+    'APPEAL_REQUESTED',
+    'APPEAL_RESOLVED',
+    'ARCHIVED',
+  ]);
+  const kpiScores = reviews
+    .map((review) => review.kpiScore)
+    .filter((score): score is number => score != null);
+
+  return {
+    total: reviews.length,
+    managerPending: reviews.filter((review) => review.status === 'MANAGER_PENDING')
+      .length,
+    submittedOrLater: reviews.filter((review) =>
+      submittedStatuses.has(review.status),
+    ).length,
+    averageKpiScore:
+      kpiScores.length > 0
+        ? kpiScores.reduce((sum, score) => sum + score, 0) / kpiScores.length
+        : null,
+  };
 }

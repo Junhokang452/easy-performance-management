@@ -13,7 +13,6 @@ import {
   Alert,
   Badge,
   Button,
-  Card,
   Group,
   Modal,
   Stack,
@@ -22,6 +21,10 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconPlayerPlay, IconAlertTriangle } from '@tabler/icons-react';
+import {
+  PerformanceChangedTableRow,
+  PerformanceLogEntryCard,
+} from '@easy/ui-components/performance';
 import {
   PageHeader,
   SectionCard,
@@ -306,14 +309,7 @@ function ProposedTable({ result }: ProposedTableProps): React.ReactNode {
             {result.proposed.map((row) => {
               const changed = row.currentGrade !== row.proposedGrade;
               return (
-                <Table.Tr
-                  key={row.reviewId}
-                  style={{
-                    backgroundColor: changed
-                      ? 'var(--mantine-color-orange-light)'
-                      : undefined,
-                  }}
-                >
+                <PerformanceChangedTableRow key={row.reviewId} changed={changed}>
                   <Table.Td>
                     <Text size="sm" ff="monospace">
                       {row.employeeId}
@@ -335,7 +331,7 @@ function ProposedTable({ result }: ProposedTableProps): React.ReactNode {
                       )}
                     </Group>
                   </Table.Td>
-                </Table.Tr>
+                </PerformanceChangedTableRow>
               );
             })}
           </Table.Tbody>
@@ -359,35 +355,32 @@ function SimulationLogPanel({ log }: LogPanelProps): React.ReactNode {
         {t.distribution.log.heading}
       </Text>
       {entries.map((entry, idx) => (
-        <Card key={`${entry.at}-${idx}`} withBorder padding="sm">
-          <Group justify="space-between" wrap="nowrap">
-            <Group gap="xs">
+        <PerformanceLogEntryCard
+          key={`${entry.at}-${idx}`}
+          primary={
               <Text size="sm" fw={500}>
                 {t.distribution.log.applied.replace(
                   '{count}',
                   String(entry.appliedCount),
                 )}
               </Text>
+          }
+          secondary={
               <Text size="xs" c="dimmed">
                 {t.distribution.log.skipped.replace(
                   '{count}',
                   String(entry.skippedCount),
                 )}
               </Text>
-            </Group>
-            <Text size="xs" c="dimmed">
-              {formatDateTime(entry.at)}
-            </Text>
-          </Group>
-          <Group gap="xs" mt={6}>
-            {(['S', 'A', 'B', 'C', 'D'] as const).map((g) => (
+          }
+          timestamp={formatDateTime(entry.at)}
+          details={(['S', 'A', 'B', 'C', 'D'] as const).map((g) => (
               <Text key={g} size="xs" c="dimmed">
                 {g} {entry.resultingDistribution[g] ?? 0} (
                 {formatRatio(entry.targetDistribution[g])})
               </Text>
-            ))}
-          </Group>
-        </Card>
+          ))}
+        />
       ))}
     </Stack>
   );

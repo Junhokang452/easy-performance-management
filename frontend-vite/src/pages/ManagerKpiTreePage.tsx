@@ -12,7 +12,6 @@ import {
   ActionIcon,
   Alert,
   Button,
-  Card,
   Center,
   Group,
   Loader,
@@ -26,6 +25,7 @@ import {
   IconDotsVertical,
   IconPlus,
 } from '@tabler/icons-react';
+import { PerformanceSelectableSurface } from '@easy/ui-components/performance';
 import {
   PageHeader,
   SectionCard,
@@ -194,16 +194,9 @@ function TreeChip({
   };
 
   return (
-    <Card
-      withBorder
-      padding="xs"
-      style={{
-        borderColor: active ? 'var(--mantine-color-blue-5)' : undefined,
-        cursor: 'pointer',
-      }}
-    >
+    <PerformanceSelectableSurface active={active}>
       <Group gap="xs" wrap="nowrap">
-        <Stack gap={0} onClick={onSelect} style={{ minWidth: 0 }}>
+        <Stack gap={0} onClick={onSelect} miw={0}>
           <Text size="sm" fw={active ? 700 : 500} truncate>
             {tree.name}
           </Text>
@@ -254,7 +247,7 @@ function TreeChip({
           </Group>
         </Stack>
       </Modal>
-    </Card>
+    </PerformanceSelectableSurface>
   );
 }
 

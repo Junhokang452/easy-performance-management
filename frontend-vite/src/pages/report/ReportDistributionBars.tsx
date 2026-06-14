@@ -7,7 +7,8 @@
  * 기존 calibration/DistributionBars 는 current=건수 / target=비율 듀얼 표기라 키 단위가 달라 그대로 재사용 불가
  * (본 슬라이스는 distribution 이 비율 단일 + 본인 강조 + UNRATED 없음) → 비율 전용 경량 변형 (P0_S5_FRONTEND 박제).
  */
-import { Box, Group, Progress, Stack, Text } from '@mantine/core';
+import { Text } from '@mantine/core';
+import { PerformanceDistributionBars } from '@easy/ui-components/performance';
 
 import { formatReportRatio, type ReportDistribution } from '../../api/reports';
 import { useT } from '../../i18n';
@@ -43,45 +44,22 @@ export function ReportDistributionBars({
   }
 
   return (
-    <Stack gap="xs">
-      <Text size="xs" c="dimmed">
-        {t.report.card.distributionHint}
-      </Text>
-      {SABCD.map((bucket) => {
+    <PerformanceDistributionBars
+      label={t.report.card.distributionHint}
+      highlightLabel={t.report.card.distributionMine}
+      mobileSize="compact"
+      buckets={SABCD.map((bucket) => {
         const ratio = distribution[bucket] ?? 0;
         const isMine = myGrade != null && myGrade === bucket;
-        return (
-          <Group key={bucket} gap="sm" wrap="nowrap" align="center">
-            <Text
-              size="sm"
-              fw={isMine ? 700 : 600}
-              w={32}
-              ta="center"
-              c={isMine ? BAR_COLOR[bucket] : undefined}
-            >
-              {bucket}
-            </Text>
-            <Box style={{ flex: 1 }}>
-              <Progress.Root size={isMine ? 'xl' : 'lg'} radius="sm">
-                <Progress.Section
-                  value={ratio * 100}
-                  color={BAR_COLOR[bucket]}
-                />
-              </Progress.Root>
-            </Box>
-            <Group gap={6} w={90} justify="flex-end" wrap="nowrap">
-              <Text size="sm" fw={isMine ? 700 : 500}>
-                {formatReportRatio(ratio)}
-              </Text>
-              {isMine && (
-                <Text size="xs" c={BAR_COLOR[bucket]} fw={600}>
-                  {t.report.card.distributionMine}
-                </Text>
-              )}
-            </Group>
-          </Group>
-        );
+        return {
+          key: bucket,
+          label: bucket,
+          color: BAR_COLOR[bucket],
+          ratio,
+          ratioLabel: formatReportRatio(ratio),
+          highlighted: isMine,
+        };
       })}
-    </Stack>
+    />
   );
 }

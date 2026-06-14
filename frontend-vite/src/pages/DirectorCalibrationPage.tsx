@@ -12,7 +12,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Badge,
-  Card,
   Group,
   ScrollArea,
   Select,
@@ -27,6 +26,10 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformanceLogEntryCard,
+  PerformancePreWrapText,
+} from '@easy/ui-components/performance';
 
 import {
   canAdjustSession,
@@ -104,7 +107,7 @@ export function DirectorCalibrationPage(): React.ReactNode {
                 clearable
                 miw={240}
                 maw={360}
-                style={{ flex: '1 1 240px' }}
+                flex="1 1 240px"
               />
             )}
           </Group>
@@ -285,9 +288,10 @@ function AdjustmentLogPanel({ log }: LogPanelProps): React.ReactNode {
         </Text>
       ) : (
         entries.map((entry, idx) => (
-          <Card key={`${entry.reviewId}-${entry.at}-${idx}`} withBorder padding="sm" radius="md">
-            <Group justify="space-between" align="flex-start" gap="xs" wrap="wrap">
-              <Group gap="xs" wrap="wrap">
+          <PerformanceLogEntryCard
+            key={`${entry.reviewId}-${entry.at}-${idx}`}
+            primary={
+              <>
                 <GradeBadge grade={entry.fromGrade} />
                 <Text size="sm" c="dimmed">
                   →
@@ -296,17 +300,14 @@ function AdjustmentLogPanel({ log }: LogPanelProps): React.ReactNode {
                 <Text size="sm" ff="monospace" c="dimmed">
                   {entry.employeeId}
                 </Text>
-              </Group>
-              <Text size="xs" c="dimmed">
-                {formatDateTime(entry.at)}
-              </Text>
-            </Group>
+              </>
+            }
+            timestamp={formatDateTime(entry.at)}
+          >
             {entry.reason && (
-              <Text size="sm" mt={6} style={{ whiteSpace: 'pre-wrap' }}>
-                {entry.reason}
-              </Text>
+              <PerformancePreWrapText>{entry.reason}</PerformancePreWrapText>
             )}
-          </Card>
+          </PerformanceLogEntryCard>
         ))
       )}
     </Stack>

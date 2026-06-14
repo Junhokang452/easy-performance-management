@@ -1,5 +1,5 @@
 /**
- * main.tsx — performance FE 단계 4 EC-FE 진입점 (G71 D=A, Task #113, 2026-06-08).
+ * main.tsx — performance FE 단계 4 EC-FE 진입점 (G71 D=A, Task 113, 2026-06-08).
  *
  * Provider 계층 (외→내):
  * - StrictMode (STD-FE-STRICT)

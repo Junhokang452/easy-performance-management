@@ -4,7 +4,7 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/personal-okrs` (Page envelope).
  * Status 상태 머신: ACTIVE / AT_RISK / COMPLETED / ARCHIVED.
  */
-import { Badge, Card, Group, Progress, Stack, Text } from '@mantine/core';
+import { Badge, Stack, Text } from '@mantine/core';
 import {
   PageHeader,
   SectionCard,
@@ -12,6 +12,7 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import { PerformanceRecordCard } from '@easy/ui-components/performance';
 
 import { usePersonalOkrList, type PersonalOkrStatus } from '../api/personalOkr';
 import { useT } from '../i18n';
@@ -72,24 +73,25 @@ export function PersonalOkrPage(): React.ReactNode {
         ) : (
           <Stack>
             {rows.map((okr) => (
-              <Card key={okr.id} shadow="sm" padding="lg" radius="md" withBorder>
-                <Group justify="space-between" mb="md">
+              <PerformanceRecordCard
+                key={okr.id}
+                mobileSize="comfortable"
+                meta={
                   <Text size="sm" c="dimmed">
                     {okr.periodStart} ~ {okr.periodEnd}
                   </Text>
+                }
+                badges={
                   <Badge color={statusColor(okr.status)} variant="light">
                     {statusLabel(okr.status)}
                   </Badge>
-                </Group>
-                <Text fw={600} size="lg">
-                  {okr.objective}
-                </Text>
-                <Progress value={typeof okr.progress === 'number' ? okr.progress : 0} mt="sm" />
-                <Text size="xs" c="dimmed" mt={4}>
-                  {t.domain.personalOkr.progress}{' '}
-                  {typeof okr.progress === 'number' ? okr.progress.toFixed(0) : 0}%
-                </Text>
-              </Card>
+                }
+                title={okr.objective}
+                progressValue={typeof okr.progress === 'number' ? okr.progress : 0}
+                progressLabel={`${t.domain.personalOkr.progress} ${
+                  typeof okr.progress === 'number' ? okr.progress.toFixed(0) : 0
+                }%`}
+              />
             ))}
           </Stack>
         )}

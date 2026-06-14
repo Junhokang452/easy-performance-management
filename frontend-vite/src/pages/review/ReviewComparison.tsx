@@ -7,7 +7,11 @@
  *
  * kpi-items 는 매니저 폼과 동일 소스(live 계산 + 저장 managerScore merge). 점수는 BE 표시값 — 입력 폼 아님.
  */
-import { Card, Grid, Group, SimpleGrid, Stack, Table, Text } from '@mantine/core';
+import { SimpleGrid, Stack, Table, Text } from '@mantine/core';
+import {
+  PerformanceCommentPanel,
+  PerformanceScoreGrid,
+} from '@easy/ui-components/performance';
 
 import {
   formatScore,
@@ -27,15 +31,19 @@ export function ReviewComparison({ review, items }: Props): React.ReactNode {
   return (
     <Stack>
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-        <CommentCard
+        <PerformanceCommentPanel
           title={t.review.compare.self}
           comment={review.selfComment}
-          color="cyan"
+          empty={t.review.compare.noComment}
+          titleColor="cyan"
+          mobileSize="comfortable"
         />
-        <CommentCard
+        <PerformanceCommentPanel
           title={t.review.compare.manager}
           comment={review.managerComment}
-          color="grape"
+          empty={t.review.compare.noComment}
+          titleColor="grape"
+          mobileSize="comfortable"
         />
       </SimpleGrid>
 
@@ -90,52 +98,25 @@ export function ReviewComparison({ review, items }: Props): React.ReactNode {
         </Table>
       )}
 
-      <Grid mt="xs">
-        <Grid.Col span={{ base: 12, sm: 6 }}>
-          <ScoreSummary
-            label={t.review.field.kpiScore}
-            value={review.kpiScore}
-          />
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6 }}>
-          <ScoreSummary
-            label={t.review.field.finalScore}
-            value={review.finalScore}
-            grade={review.finalGrade}
-          />
-        </Grid.Col>
-      </Grid>
+      <PerformanceScoreGrid
+        columns={{ base: 1, sm: 2 }}
+        items={[
+          {
+            label: t.review.field.kpiScore,
+            value: formatScore(review.kpiScore),
+          },
+          {
+            label: t.review.field.finalScore,
+            value: formatScore(review.finalScore),
+            badge: review.finalGrade ? (
+              <Text size="sm" fw={600} c="blue">
+                {review.finalGrade}
+              </Text>
+            ) : null,
+          },
+        ]}
+      />
     </Stack>
-  );
-}
-
-function CommentCard({
-  title,
-  comment,
-  color,
-}: {
-  title: string;
-  comment: string | null;
-  color: string;
-}): React.ReactNode {
-  const t = useT();
-  return (
-    <Card withBorder padding="md">
-      <Group gap="xs" mb="xs">
-        <Text size="sm" fw={600} c={color}>
-          {title}
-        </Text>
-      </Group>
-      {comment ? (
-        <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>
-          {comment}
-        </Text>
-      ) : (
-        <Text size="sm" c="dimmed">
-          {t.review.compare.noComment}
-        </Text>
-      )}
-    </Card>
   );
 }
 
@@ -161,33 +142,5 @@ function DeltaText({
       {sign}
       {delta.toFixed(2)}
     </Text>
-  );
-}
-
-function ScoreSummary({
-  label,
-  value,
-  grade,
-}: {
-  label: string;
-  value: number | null;
-  grade?: string | null;
-}): React.ReactNode {
-  return (
-    <Card withBorder padding="sm">
-      <Text size="xs" c="dimmed">
-        {label}
-      </Text>
-      <Group gap="xs" align="baseline">
-        <Text size="lg" fw={700}>
-          {formatScore(value)}
-        </Text>
-        {grade && (
-          <Text size="sm" fw={600} c="blue">
-            {grade}
-          </Text>
-        )}
-      </Group>
-    </Card>
   );
 }

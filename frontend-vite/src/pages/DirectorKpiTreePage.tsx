@@ -7,24 +7,36 @@
  *
  * STD-FE 5 정합.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Badge,
-  Card,
   Center,
   Group,
   Loader,
-  SimpleGrid,
   Stack,
   Switch,
   Text,
 } from '@mantine/core';
+import {
+  IconChartBar,
+  IconGitBranch,
+  IconListTree,
+  IconTargetArrow,
+} from '@tabler/icons-react';
 import {
   PageHeader,
   SectionCard,
   EmptyState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformanceGroupedListGrid,
+  PerformanceMetricGrid,
+  PerformanceProgressSummary,
+  PerformanceSelectableSurface,
+  formatPerformanceRatioPercent,
+  formatPerformanceRatioText,
+} from '@easy/ui-components/performance';
 
 import {
   ALL_BSC_PERSPECTIVES,
@@ -33,6 +45,7 @@ import {
   useKpiTreesQuery,
   type BscPerspective,
   type KpiNodeResponse,
+  type KpiTreeResponse,
 } from '../api/kpi';
 import { useT } from '../i18n';
 import { getErrorMessage } from '../api/error';
@@ -46,6 +59,7 @@ export function DirectorKpiTreePage(): React.ReactNode {
 
   const treesQuery = useKpiTreesQuery(cycleId);
   const trees = treesQuery.data ?? [];
+  const portfolioStats = useMemo(() => buildTreePortfolioStats(trees), [trees]);
 
   useEffect(() => {
     setSelectedTreeId(null);
@@ -80,31 +94,26 @@ export function DirectorKpiTreePage(): React.ReactNode {
             )}
 
           {trees.length > 0 && (
-            <Group gap="xs" wrap="wrap">
-              {trees.map((tree) => (
-                <Card
-                  key={tree.id}
-                  withBorder
-                  padding="xs"
-                  style={{
-                    borderColor:
-                      tree.id === selectedTreeId
-                        ? 'var(--mantine-color-blue-5)'
-                        : undefined,
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setSelectedTreeId(tree.id)}
-                >
-                  <Text size="sm" fw={tree.id === selectedTreeId ? 700 : 500}>
-                    {tree.name}
-                  </Text>
-                  <Text size="xs" c="dimmed">
-                    {t.kpi.level[tree.level]}
-                    {tree.bscEnabled ? ' · BSC' : ''}
-                  </Text>
-                </Card>
-              ))}
-            </Group>
+            <Stack>
+              <TreePortfolioOverview stats={portfolioStats} />
+              <Group gap="xs" wrap="wrap">
+                {trees.map((tree) => (
+                  <PerformanceSelectableSurface
+                    key={tree.id}
+                    active={tree.id === selectedTreeId}
+                    onClick={() => setSelectedTreeId(tree.id)}
+                  >
+                    <Text size="sm" fw={tree.id === selectedTreeId ? 700 : 500}>
+                      {tree.name}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      {t.kpi.level[tree.level]}
+                      {tree.bscEnabled ? ' · BSC' : ''}
+                    </Text>
+                  </PerformanceSelectableSurface>
+                ))}
+              </Group>
+            </Stack>
           )}
         </Stack>
       </SectionCard>
@@ -120,6 +129,62 @@ export function DirectorKpiTreePage(): React.ReactNode {
 
 interface DetailProps {
   treeId: string;
+}
+
+interface TreePortfolioStats {
+  total: number;
+  bscEnabled: number;
+  orgScoped: number;
+  levels: number;
+}
+
+function TreePortfolioOverview({
+  stats,
+}: {
+  stats: TreePortfolioStats;
+}): React.ReactNode {
+  const t = useT();
+  return (
+    <Stack gap="sm">
+      <PerformanceMetricGrid
+        items={[
+          {
+            label: t.kpi.director.operating.trees,
+            value: String(stats.total),
+            description: t.kpi.director.operating.treesHint,
+            icon: <IconListTree size={20} />,
+            tone: 'brand',
+          },
+          {
+            label: t.kpi.director.operating.bscCoverage,
+            value: formatPerformanceRatioPercent(stats.bscEnabled, stats.total),
+            description: formatPerformanceRatioText(stats.bscEnabled, stats.total),
+            icon: <IconChartBar size={20} />,
+            tone: stats.bscEnabled === stats.total ? 'green' : 'yellow',
+          },
+          {
+            label: t.kpi.director.operating.orgScoped,
+            value: String(stats.orgScoped),
+            description: t.kpi.director.operating.orgScopedHint,
+            icon: <IconGitBranch size={20} />,
+            tone: 'blue',
+          },
+          {
+            label: t.kpi.director.operating.levels,
+            value: String(stats.levels),
+            description: t.kpi.director.operating.levelsHint,
+            icon: <IconTargetArrow size={20} />,
+            tone: 'gray',
+          },
+        ]}
+      />
+      <PerformanceProgressSummary
+        label={t.kpi.director.operating.bscProgress}
+        value={stats.bscEnabled}
+        total={stats.total}
+      />
+    </Stack>
+  );
 }
 
 function DirectorTreeDetail({ treeId }: DetailProps): React.ReactNode {
@@ -168,6 +233,8 @@ function DirectorTreeDetail({ treeId }: DetailProps): React.ReactNode {
         />
       </Group>
 
+      <TreeDetailOverview nodes={data.nodes} />
+
       {data.nodes.length === 0 ? (
         <Text c="dimmed" size="sm">
           {t.kpi.manager.emptyTree}
@@ -177,6 +244,63 @@ function DirectorTreeDetail({ treeId }: DetailProps): React.ReactNode {
       ) : (
         <KpiNodeTree nodes={data.nodes} readOnly />
       )}
+    </Stack>
+  );
+}
+
+interface TreeDetailStats {
+  nodes: number;
+  bscAssigned: number;
+  weightComplete: number;
+  assignments: number;
+}
+
+function TreeDetailOverview({
+  nodes,
+}: {
+  nodes: KpiNodeResponse[];
+}): React.ReactNode {
+  const t = useT();
+  const stats = useMemo(() => buildTreeDetailStats(nodes), [nodes]);
+  return (
+    <Stack gap="sm">
+      <PerformanceMetricGrid
+        items={[
+          {
+            label: t.kpi.director.operating.nodes,
+            value: String(stats.nodes),
+            description: t.kpi.director.operating.nodesHint,
+            icon: <IconListTree size={20} />,
+            tone: 'brand',
+          },
+          {
+            label: t.kpi.director.operating.bscAssigned,
+            value: formatPerformanceRatioPercent(stats.bscAssigned, stats.nodes),
+            description: formatPerformanceRatioText(stats.bscAssigned, stats.nodes),
+            icon: <IconChartBar size={20} />,
+            tone: stats.bscAssigned === stats.nodes ? 'green' : 'yellow',
+          },
+          {
+            label: t.kpi.director.operating.weightComplete,
+            value: formatPerformanceRatioPercent(stats.weightComplete, stats.nodes),
+            description: formatPerformanceRatioText(stats.weightComplete, stats.nodes),
+            icon: <IconTargetArrow size={20} />,
+            tone: stats.weightComplete === stats.nodes ? 'green' : 'yellow',
+          },
+          {
+            label: t.kpi.director.operating.assignments,
+            value: String(stats.assignments),
+            description: t.kpi.director.operating.assignmentsHint,
+            icon: <IconGitBranch size={20} />,
+            tone: 'blue',
+          },
+        ]}
+      />
+      <PerformanceProgressSummary
+        label={t.kpi.director.operating.weightProgress}
+        value={stats.weightComplete}
+        total={stats.nodes}
+      />
     </Stack>
   );
 }
@@ -208,42 +332,46 @@ function BscGroupedView({ nodes }: BscGroupedViewProps): React.ReactNode {
   }
 
   return (
-    <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
-      {groups.map((group) => {
+    <PerformanceGroupedListGrid
+      mobileSize="comfortable"
+      groups={groups.map((group) => {
         const items = (byPerspective.get(group.key) ?? []).slice().sort((a, b) =>
           a.label.localeCompare(b.label),
         );
-        return (
-          <Card key={group.key} withBorder padding="sm">
-            <Stack gap="xs">
-              <Group justify="space-between">
-                <Text fw={600} size="sm">
-                  {group.label}
-                </Text>
-                <Badge size="sm" variant="light">
-                  {items.length}
-                </Badge>
-              </Group>
-              {items.length === 0 ? (
-                <Text size="xs" c="dimmed">
-                  —
-                </Text>
-              ) : (
-                items.map((node) => (
-                  <Group key={node.id} justify="space-between" gap="xs" wrap="nowrap">
-                    <Text size="sm" truncate>
-                      {node.label}
-                    </Text>
-                    <Badge size="sm" variant="light" color="blue">
-                      {formatWeight(node.weight)}
-                    </Badge>
-                  </Group>
-                ))
-              )}
-            </Stack>
-          </Card>
-        );
+        return {
+          key: group.key,
+          label: group.label,
+          count: items.length,
+          empty: '—',
+          items: items.map((node) => ({
+            key: node.id,
+            label: node.label,
+            trailing: (
+              <Badge size="sm" variant="light" color="blue">
+                {formatWeight(node.weight)}
+              </Badge>
+            ),
+          })),
+        };
       })}
-    </SimpleGrid>
+    />
   );
+}
+
+function buildTreePortfolioStats(trees: KpiTreeResponse[]): TreePortfolioStats {
+  return {
+    total: trees.length,
+    bscEnabled: trees.filter((tree) => tree.bscEnabled).length,
+    orgScoped: trees.filter((tree) => tree.ownerOrgUnitId).length,
+    levels: new Set(trees.map((tree) => tree.level)).size,
+  };
+}
+
+function buildTreeDetailStats(nodes: KpiNodeResponse[]): TreeDetailStats {
+  return {
+    nodes: nodes.length,
+    bscAssigned: nodes.filter((node) => node.bscPerspective).length,
+    weightComplete: nodes.filter((node) => node.childWeightComplete).length,
+    assignments: nodes.reduce((sum, node) => sum + node.assignmentCount, 0),
+  };
 }

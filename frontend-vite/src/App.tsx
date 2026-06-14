@@ -1,5 +1,5 @@
 /**
- * App — performance FE 단계 4 EC-FE 진입 (G71 D=A, Task #113, 2026-06-08).
+ * App — performance FE 단계 4 EC-FE 진입 (G71 D=A, Task 113, 2026-06-08).
  *
  * STD-FE 5 정합:
  * - LAZY: 모든 페이지 `React.lazy()`
@@ -21,7 +21,6 @@
 import { lazy } from 'react';
 import {
   AppShell,
-  Box,
   NavLink,
   Title,
   Text,
@@ -31,15 +30,18 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
+import { LoginBrandMark } from '@easy/ui-components';
 
 import { PageBoundary } from './shared/PageBoundary';
 import { AppHeaderActions } from './shared/AppHeaderActions';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { useAuth } from './auth/AuthProvider';
 import { useT } from './i18n';
-import classes from './App.module.css';
 
 // STD-FE-LAZY — 모든 페이지 lazy import
+const CockpitPage = lazy(() =>
+  import('./pages/CockpitPage').then((m) => ({ default: m.CockpitPage })),
+);
 const SelfEvaluationPage = lazy(() =>
   import('./pages/SelfEvaluationPage').then((m) => ({ default: m.SelfEvaluationPage })),
 );
@@ -57,6 +59,11 @@ const CyclesPage = lazy(() =>
 );
 const MyKpiPage = lazy(() =>
   import('./pages/MyKpiPage').then((m) => ({ default: m.MyKpiPage })),
+);
+const GoalAlignmentPage = lazy(() =>
+  import('./pages/GoalAlignmentPage').then((m) => ({
+    default: m.GoalAlignmentPage,
+  })),
 );
 const ManagerKpiTreePage = lazy(() =>
   import('./pages/ManagerKpiTreePage').then((m) => ({
@@ -86,6 +93,11 @@ const HrCalibrationSessionsPage = lazy(() =>
 const DirectorCalibrationPage = lazy(() =>
   import('./pages/DirectorCalibrationPage').then((m) => ({
     default: m.DirectorCalibrationPage,
+  })),
+);
+const CalibrationAnalyticsPage = lazy(() =>
+  import('./pages/CalibrationAnalyticsPage').then((m) => ({
+    default: m.CalibrationAnalyticsPage,
   })),
 );
 const HrDistributionPage = lazy(() =>
@@ -136,15 +148,17 @@ export default function App(): React.ReactNode {
       header={{ height: 56 }}
       navbar={{ width: 240, breakpoint: 'sm', collapsed: { mobile: !navOpened } }}
       padding="md"
-      className={classes.shell}
+      bg="var(--easy-color-canvas)"
     >
-      <AppShell.Header p="md" className={classes.header}>
+      <AppShell.Header p="md" bg="var(--easy-color-surface)" bd="0 0 1px 0 solid var(--easy-color-border)">
         <Group justify="space-between" h="100%" wrap="nowrap">
-          <Group gap="md" wrap="nowrap" className={classes.brandGroup}>
+          <Group gap="md" wrap="nowrap" miw={0}>
             <Burger opened={navOpened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Box className={classes.logoMark}>P</Box>
-            <Title order={4} className={classes.brandTitle}>{t.domain.app.title}</Title>
-            <Text size="xs" c="dimmed" visibleFrom="sm" className={classes.subtitle}>
+            <LoginBrandMark size={30} radius={8}>
+              <Text fw={800} c="var(--easy-color-text-inverse)">P</Text>
+            </LoginBrandMark>
+            <Title order={4} c="var(--easy-color-text)" textWrap="nowrap">{t.domain.app.title}</Title>
+            <Text size="xs" c="dimmed" visibleFrom="sm" truncate>
               {t.domain.app.subtitle}
             </Text>
           </Group>
@@ -158,10 +172,16 @@ export default function App(): React.ReactNode {
           </Group>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="xs" className={classes.navbar}>
-        <Text size="xs" c="dimmed" mt="xs" mb={4} className={classes.sectionTitle}>
+      <AppShell.Navbar p="xs" bg="var(--easy-color-surface)" bd="0 1px 0 0 solid var(--easy-color-border)">
+        <Text size="xs" c="dimmed" mt="xs" mb={4} px="xs" fw={700}>
           {t.domain.nav.section}
         </Text>
+        <NavLink
+          component={Link}
+          to="/"
+          label={t.nav.cockpit}
+          active={location.pathname === '/'}
+        />
         <NavLink
           component={Link}
           to="/self-evaluations"
@@ -197,6 +217,12 @@ export default function App(): React.ReactNode {
           to="/my/kpi"
           label={t.nav.kpi.my}
           active={location.pathname.startsWith('/my/kpi')}
+        />
+        <NavLink
+          component={Link}
+          to="/kpi/alignment"
+          label={t.nav.kpi.alignment}
+          active={location.pathname.startsWith('/kpi/alignment')}
         />
         <NavLink
           component={Link}
@@ -236,6 +262,12 @@ export default function App(): React.ReactNode {
         />
         <NavLink
           component={Link}
+          to="/hr/calibration-analytics"
+          label={t.nav.calibration.analytics}
+          active={location.pathname.startsWith('/hr/calibration-analytics')}
+        />
+        <NavLink
+          component={Link}
           to="/hr/distribution"
           label={t.nav.calibration.distribution}
           active={location.pathname.startsWith('/hr/distribution')}
@@ -261,14 +293,14 @@ export default function App(): React.ReactNode {
           />
         )}
       </AppShell.Navbar>
-      <AppShell.Main className={classes.main}>
+      <AppShell.Main bg="var(--easy-color-canvas)">
         <PageBoundary>
           <Routes>
             <Route
               path="/"
               element={
                 <ProtectedRoute>
-                  <SelfEvaluationPage />
+                  <CockpitPage />
                 </ProtectedRoute>
               }
             />
@@ -321,6 +353,14 @@ export default function App(): React.ReactNode {
               }
             />
             <Route
+              path="/kpi/alignment"
+              element={
+                <ProtectedRoute>
+                  <GoalAlignmentPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/manager/kpi-tree"
               element={
                 <ProtectedRoute>
@@ -365,6 +405,14 @@ export default function App(): React.ReactNode {
               element={
                 <ProtectedRoute>
                   <DirectorCalibrationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/calibration-analytics"
+              element={
+                <ProtectedRoute>
+                  <CalibrationAnalyticsPage />
                 </ProtectedRoute>
               }
             />

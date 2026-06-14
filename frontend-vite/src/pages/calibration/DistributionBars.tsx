@@ -7,7 +7,7 @@
  *
  * 듀얼 표기: 각 버킷에 건수 + 비율(%) 동시 노출. 목표가 있으면 목표 비율도 병기.
  */
-import { Box, Group, Progress, Stack, Text } from '@mantine/core';
+import { PerformanceDistributionBars } from '@easy/ui-components/performance';
 
 import {
   GRADE_BUCKETS,
@@ -40,87 +40,32 @@ export function DistributionBars({ current, target }: Props): React.ReactNode {
   const total = distributionTotal(current);
 
   return (
-    <Stack gap="xs">
-      <Group justify="space-between">
-        <Text size="xs" c="dimmed">
-          {t.distribution.bars.current}
-          {target ? ` / ${t.distribution.bars.target}` : ''}
-        </Text>
-        <Text size="xs" c="dimmed">
-          {t.distribution.bars.totalCount.replace('{count}', String(total))}
-        </Text>
-      </Group>
-
-      {GRADE_BUCKETS.map((bucket) => {
+    <PerformanceDistributionBars
+      label={`${t.distribution.bars.current}${target ? ` / ${t.distribution.bars.target}` : ''}`}
+      totalLabel={t.distribution.bars.totalCount.replace('{count}', String(total))}
+      highlightLabel={t.distribution.bars.target}
+      mobileSize="compact"
+      buckets={GRADE_BUCKETS.map((bucket) => {
         const count = current?.[bucket] ?? 0;
         const currentRatio = total > 0 ? count / total : 0;
-        // UNRATED 는 목표 비율 대상 아님.
         const targetRatio =
           bucket === 'UNRATED' ? null : (target?.[bucket] ?? null);
-        return (
-          <BucketRow
-            key={bucket}
-            bucket={bucket}
-            label={
-              bucket === 'UNRATED'
-                ? t.calibration.grade.UNRATED
-                : bucket
-            }
-            count={count}
-            currentRatio={currentRatio}
-            targetRatio={targetRatio}
-          />
-        );
+        return {
+          key: bucket,
+          label: bucket === 'UNRATED' ? t.calibration.grade.UNRATED : bucket,
+          count,
+          ratio: currentRatio,
+          ratioLabel: formatRatio(currentRatio),
+          color: BAR_COLOR[bucket],
+          targetLabel:
+            targetRatio == null
+              ? undefined
+              : t.distribution.bars.targetMarker.replace(
+                  '{ratio}',
+                  formatRatio(targetRatio),
+                ),
+        };
       })}
-    </Stack>
-  );
-}
-
-interface BucketRowProps {
-  bucket: GradeBucket;
-  label: string;
-  count: number;
-  currentRatio: number;
-  targetRatio: number | null;
-}
-
-function BucketRow({
-  bucket,
-  label,
-  count,
-  currentRatio,
-  targetRatio,
-}: BucketRowProps): React.ReactNode {
-  const t = useT();
-  return (
-    <Group gap="sm" wrap="nowrap" align="center">
-      <Text size="sm" fw={600} w={32} ta="center">
-        {label}
-      </Text>
-      <Box style={{ flex: 1 }}>
-        <Progress.Root size="lg" radius="sm">
-          <Progress.Section
-            value={currentRatio * 100}
-            color={BAR_COLOR[bucket]}
-          />
-        </Progress.Root>
-      </Box>
-      <Group gap={6} w={150} justify="flex-end" wrap="nowrap">
-        <Text size="sm" fw={500}>
-          {count}
-        </Text>
-        <Text size="xs" c="dimmed">
-          {formatRatio(currentRatio)}
-        </Text>
-        {targetRatio != null && (
-          <Text size="xs" c="teal" title={t.distribution.bars.target}>
-            {t.distribution.bars.targetMarker.replace(
-              '{ratio}',
-              formatRatio(targetRatio),
-            )}
-          </Text>
-        )}
-      </Group>
-    </Group>
+    />
   );
 }

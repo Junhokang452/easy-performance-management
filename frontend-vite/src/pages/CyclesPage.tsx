@@ -4,38 +4,36 @@
  * SoT: `_workspace/evaluation_research_2026-06-11/decisions_2026-06-11.md`
  *
  * 기능:
+ * - 사이클 운영 지표 + 상태 타임라인
  * - 사이클 목록 Table (이름·유형·기간·상태·정책 여부·Actions)
- * - 사이클 생성 모달 (선택적 Policy 동시 생성)
- * - 사이클 편집 모달 (PATCH 부분 수정)
+ * - 사이클 생성/편집/정책 모달
  * - 상태 전이 메뉴 (현재 상태 → 가능한 다음 상태만)
- * - 정책 편집 모달 (없으면 신규, 있으면 prefill 후 PUT)
  * - 사이클 삭제 (PLANNED 단계만 BE 허용; FE 는 확인 후 삭제 요청)
  *
- * STD-FE 5 정합:
- * - LAZY: App.tsx 에서 lazy import
- * - RQ: useQuery / useMutation 만 (useState fetch 금지)
- * - STRICT: tsconfig strict 통과
- * - ERROR-BOUNDARY: PageBoundary 상위에서 wrap
- * - NEST: Menu / Modal / Button 중첩 패턴 — react 19 nested-button 위반 없음
+ * STD-FE 5 정합.
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ActionIcon,
-  Alert,
   Badge,
   Button,
   Group,
   Menu,
   Modal,
+  Progress,
   Stack,
   Table,
   Text,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import {
+  IconCalendarStats,
   IconChevronDown,
+  IconCircleCheck,
   IconDotsVertical,
+  IconGitBranch,
   IconPlus,
+  IconSettings,
 } from '@tabler/icons-react';
 import {
   PageHeader,
@@ -44,6 +42,13 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import {
+  PerformanceMetricGrid,
+  PerformanceProgressSummary,
+  formatPerformanceRatioNumber,
+  formatPerformanceRatioPercent,
+  formatPerformanceRatioText,
+} from '@easy/ui-components/performance';
 
 import {
   getAllowedNextStatuses,
@@ -61,6 +66,18 @@ import { CycleStatusBadge } from './cycles/CycleStatusBadge';
 import { PolicyEditModal } from './cycles/PolicyEditModal';
 import { mapApiErrorToMessage } from './cycles/errorMapping';
 
+const STATUS_FLOW: CycleStatus[] = [
+  'PLANNED',
+  'ACTIVE',
+  'GOAL_SETTING',
+  'MID_REVIEW',
+  'SELF_REVIEW',
+  'MANAGER_REVIEW',
+  'CALIBRATION',
+  'FINALIZED',
+  'CANCELLED',
+];
+
 export function CyclesPage(): React.ReactNode {
   const t = useT();
   const { data, isLoading, isError, error } = useCyclesQuery();
@@ -70,6 +87,7 @@ export function CyclesPage(): React.ReactNode {
   const [policyTarget, setPolicyTarget] = useState<CycleResponse | null>(null);
 
   const rows = data?.content ?? [];
+  const stats = useMemo(() => buildCycleStats(rows), [rows]);
 
   return (
     <ErrorBoundary>
@@ -101,6 +119,8 @@ export function CyclesPage(): React.ReactNode {
           />
         ) : (
           <Stack>
+            <CycleOperatingOverview stats={stats} />
+            <CycleStatusTimeline stats={stats} />
             <Table striped highlightOnHover>
               <Table.Thead>
                 <Table.Tr>
@@ -146,6 +166,99 @@ export function CyclesPage(): React.ReactNode {
         />
       )}
     </ErrorBoundary>
+  );
+}
+
+interface CycleStats {
+  total: number;
+  policyReady: number;
+  inOperation: number;
+  transitionable: number;
+  statusCounts: Record<CycleStatus, number>;
+}
+
+function CycleOperatingOverview({
+  stats,
+}: {
+  stats: CycleStats;
+}): React.ReactNode {
+  const t = useT();
+  return (
+    <Stack gap="sm">
+      <PerformanceMetricGrid
+        items={[
+          {
+            label: t.cycles.operating.total,
+            value: String(stats.total),
+            description: t.cycles.operating.totalHint,
+            icon: <IconCalendarStats size={20} />,
+            tone: 'brand',
+          },
+          {
+            label: t.cycles.operating.policyReady,
+            value: formatPerformanceRatioPercent(stats.policyReady, stats.total),
+            description: formatPerformanceRatioText(stats.policyReady, stats.total),
+            icon: <IconSettings size={20} />,
+            tone: stats.policyReady === stats.total ? 'green' : 'yellow',
+          },
+          {
+            label: t.cycles.operating.inOperation,
+            value: String(stats.inOperation),
+            description: t.cycles.operating.inOperationHint,
+            icon: <IconGitBranch size={20} />,
+            tone: 'blue',
+          },
+          {
+            label: t.cycles.operating.transitionable,
+            value: String(stats.transitionable),
+            description: t.cycles.operating.transitionableHint,
+            icon: <IconCircleCheck size={20} />,
+            tone: stats.transitionable > 0 ? 'yellow' : 'gray',
+          },
+        ]}
+      />
+      <PerformanceProgressSummary
+        label={t.cycles.operating.policyProgress}
+        value={stats.policyReady}
+        total={stats.total}
+      />
+    </Stack>
+  );
+}
+
+function CycleStatusTimeline({
+  stats,
+}: {
+  stats: CycleStats;
+}): React.ReactNode {
+  const t = useT();
+  return (
+    <SectionCard
+      title={t.cycles.operating.timelineTitle}
+      description={t.cycles.operating.timelineDescription}
+    >
+      <Stack gap="sm">
+        {STATUS_FLOW.map((status) => {
+          const count = stats.statusCounts[status];
+          return (
+            <Stack key={status} gap={4}>
+              <Group justify="space-between" wrap="nowrap">
+                <Group gap="xs" wrap="nowrap">
+                  <CycleStatusBadge status={status} />
+                  <Text size="sm" fw={600}>
+                    {t.cycles.status[status]}
+                  </Text>
+                </Group>
+                <Badge variant="light" color="gray">
+                  {count}
+                </Badge>
+              </Group>
+              <Progress value={formatPerformanceRatioNumber(count, stats.total)} />
+            </Stack>
+          );
+        })}
+      </Stack>
+    </SectionCard>
   );
 }
 
@@ -229,20 +342,9 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
             OK
           </Badge>
         ) : (
-          <Alert
-            color="yellow"
-            variant="light"
-            p={6}
-            style={{ display: 'inline-block' }}
-          >
-            <Text
-              size="xs"
-              style={{ cursor: 'pointer', textDecoration: 'underline' }}
-              onClick={onPolicy}
-            >
-              {t.cycles.policy.notSet}
-            </Text>
-          </Alert>
+          <Button size="xs" variant="light" color="yellow" onClick={onPolicy}>
+            {t.cycles.policy.notSet}
+          </Button>
         )}
       </Table.Td>
       <Table.Td>
@@ -318,4 +420,26 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
       </Table.Td>
     </Table.Tr>
   );
+}
+
+function buildCycleStats(rows: CycleResponse[]): CycleStats {
+  const statusCounts = Object.fromEntries(
+    STATUS_FLOW.map((status) => [status, 0]),
+  ) as Record<CycleStatus, number>;
+
+  for (const row of rows) {
+    statusCounts[row.status] += 1;
+  }
+
+  return {
+    total: rows.length,
+    policyReady: rows.filter((row) => row.policyId).length,
+    inOperation: rows.filter(
+      (row) => row.status !== 'FINALIZED' && row.status !== 'CANCELLED',
+    ).length,
+    transitionable: rows.filter(
+      (row) => getAllowedNextStatuses(row.status).length > 0,
+    ).length,
+    statusCounts,
+  };
 }

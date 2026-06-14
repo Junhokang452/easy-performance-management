@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "openapi:types": "openapi-typescript ${OPENAPI_URL:-http://localhost:8087/v3/api-docs} -o src/api/generated/schema.d.ts",
-    "design:check": "node ../lib/easy-platform/easy-platform-core/scripts/check-design-system.mjs src --max-hex=2 --max-inline-style=17"
+    "design:check": "node ../lib/easy-platform/easy-platform-core/scripts/check-design-system.mjs src --max-hex=0 --max-inline-style=0"
   },
   "dependencies": {
     "@easy/http-client": "file:../lib/easy-platform/easy-platform-core/packages/http-client",
