@@ -43,6 +43,7 @@ spring:
         default_schema: public
         order_inserts: true
         order_updates: true
+        default_batch_fetch_size: 100  # D3.2 (2026-06-14, 90-conformance/sibling-jpa-performance-2026-06-14.md): SELECT N+1 방지
         jdbc:
           batch_size: 20
           batch_versioned_data: true
@@ -99,6 +100,11 @@ springdoc:
 # lib autoconfig 게이트 — 옵션 A 보수 (기본 OFF) + dev 명시 ON.
 # 단계 1 진입 = tenantctx + error + audit. 단계 2 진입 = stage2 + tenantbootstrap (G65 D=A, Task #100).
 easyplatform:
+  # lib BE 23 (2026-06-14) — mono Render Docker SPA index.html 폴백 lib 흡수.
+  # 게이트 ON 으로 lib `easyplatformSpaForwardingConfig` 활성, 자체 클래스 폐기 (자매품 정합 사본).
+  spa:
+    forwarding:
+      enabled: ${EASY_PLATFORM_SPA_FORWARDING_ENABLED:true}
   tenantctx:
     enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:false}
     header-name: ${EASYPLATFORM_TENANTCTX_HEADER:X-Tenant-Id}

@@ -1,0 +1,65 @@
+# D5.C — easy-standards 06-naming-conventions §4 정합 게이트.
+# 자매품 신규 db/tenant 마이그 파일명을 VYYYYMMDD_NNN__description.sql 로 강제.
+# db/control 영역은 정수형 예외 허용 (Render LIVE checksum 보존 정합).
+# legacy 정수형 마이그 (이미 main 에 있는 V1~V22 등) 는 본 게이트 무관 (changed-files 만 검사).
+# 박제: easy-standards 90-conformance/sibling-flyway-naming-2026-06-14.md
+name: Check migration file naming
+
+on:
+  pull_request:
+    paths:
+      - "**/db/tenant/**"
+      - "**/db/migration/**"
+  push:
+    branches: [main, master]
+    paths:
+      - "**/db/tenant/**"
+      - "**/db/migration/**"
+
+jobs:
+  validate-tenant-naming:
+    runs-on: ubuntu-latest
+    name: db/tenant 신규 마이그 VYYYYMMDD_NNN__ 강제
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+
+      - name: Determine base commit
+        id: base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ref=${{ github.event.pull_request.base.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "ref=HEAD~1" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate new migrations
+        run: |
+          set -e
+          BASE="${{ steps.base.outputs.ref }}"
+          # 신규 추가 파일만 검증 (수정/삭제는 건너뜀 — Flyway checksum 보존 정합).
+          NEW_FILES=$(git diff --name-only --diff-filter=A "$BASE"...HEAD -- "**/db/tenant/V*.sql" "**/db/migration/V*.sql" || true)
+          if [ -z "$NEW_FILES" ]; then
+            echo "✅ db/tenant 또는 db/migration 영역에 신규 마이그 없음 — 게이트 통과"
+            exit 0
+          fi
+          FAIL=0
+          for f in $NEW_FILES; do
+            base=$(basename "$f")
+            # 표준 = V20260614_001__description.sql (8자리 날짜 + _ + 3자리 seq + __ + 소문자/숫자/언더스코어 + .sql)
+            if echo "$base" | grep -qE "^V[0-9]{8}_[0-9]{3}__[a-z0-9_]+\.sql$"; then
+              echo "✅ $f"
+            else
+              echo "❌ $f"
+              echo "   → 자매품 신규 마이그는 VYYYYMMDD_NNN__description.sql 표준 적용"
+              echo "   → 예: V$(date +%Y%m%d)_001__add_employee_status_index.sql"
+              echo "   → 박제: easy-standards 06-naming-conventions §4 + 90-conformance/sibling-flyway-naming-2026-06-14.md"
+              FAIL=1
+            fi
+          done
+          if [ "$FAIL" = "1" ]; then
+            exit 1
+          fi
+          echo ""
+          echo "✅ 신규 마이그 $(echo "$NEW_FILES" | wc -l) 건 모두 표준 정합"
