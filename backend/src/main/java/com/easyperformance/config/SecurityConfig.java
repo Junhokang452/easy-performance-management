@@ -20,6 +20,7 @@ import com.easyperformance.security.JwtAuthFilter;
 import com.easyperformance.security.JwtService;
 import com.easyware.platform.TenantRoutingContext;
 import com.easyware.platform.tenantctx.TenantContextFilter;
+import com.easyware.platform.web.PlatformSecurityMatchers;
 
 /**
  * Spring Security — 단계 3 BE-CC-2 JWT 5분리 + mono 표면 매처 (2026-06-12 격상).
@@ -71,17 +72,17 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(PlatformSecurityMatchers.ACTUATOR_HEALTH_INFO_PROMETHEUS_PUBLIC).permitAll()
+                .requestMatchers(PlatformSecurityMatchers.API_AUTH_ALL_PUBLIC).permitAll()
                 // S2S 수신 (P0-S6) — Bearer+HMAC 자체 인증 (SyncReceiveController 3중 가드). JWT 불요. 보존.
-                .requestMatchers("/api/internal/**").permitAll()
+                .requestMatchers(PlatformSecurityMatchers.INTERNAL_S2S).permitAll()
                 // OpenAPI spec endpoint (EC-FE-7) — FE openapi-typescript fetch.
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers(PlatformSecurityMatchers.SWAGGER_UI_HTML_API_DOCS).permitAll()
                 // SystemAdmin (control plane tenants 콘솔) — SUPER_ADMIN 가드 (prefix 없는 authority 실측).
-                .requestMatchers("/api/admin/**").hasAuthority("SUPER_ADMIN")
+                .requestMatchers(PlatformSecurityMatchers.ADMIN_SUPER_ADMIN).hasAuthority("SUPER_ADMIN")
                 // mono 표면 — 인증 영역 = /api/** + /actuator**(위 health 등 외) 만 (store-hr 0c4a262 정합).
-                .requestMatchers("/api/**").authenticated()
-                .requestMatchers("/actuator/**").authenticated()
+                .requestMatchers(PlatformSecurityMatchers.API_AUTHENTICATED).authenticated()
+                .requestMatchers(PlatformSecurityMatchers.ACTUATOR_ALL).authenticated()
                 // 나머지 = 정적 자원(/, /index.html, /assets/**) + SPA 라우트 → SpaForwardingConfig 폴백.
                 .anyRequest().permitAll())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
