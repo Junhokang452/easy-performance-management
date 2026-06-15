@@ -50,6 +50,15 @@
 - `PerformanceLogEntryCard`
   - 분포 시뮬레이션/보정 조정 이력처럼 primary+secondary+timestamp+details를 가진 로그 카드 표준화
   - `mobileSize: compact | comfortable`
+- `PerformanceStatusIconGroup`
+  - 열람/확인처럼 테이블 안에 들어가는 상태 아이콘 묶음 표준화
+  - `mobileSize: compact | comfortable`
+
+`@easy/ui-components/forms`
+
+- `FormSegmentedControl`
+  - 페르소나/모드 전환처럼 폼 맥락의 segmented control 사용을 DS 래퍼로 표준화
+  - Mantine 원시 컴포넌트 직접 import 제거용 공통 표면
 
 ## 성과관리 리서치 반영 방향
 
@@ -74,11 +83,15 @@
 ## DS Extraction Cleanup Slice (2026-06-14)
 
 - 변경 DS: `lib/easy-platform/easy-platform-core/packages/ui-components/src/performance/Performance.tsx`
-- 신규 Variant: `PerformanceMetricGrid`, `PerformanceProgressSummary`, `PerformanceScoreGrid`, `PerformanceCommentPanel`, `PerformanceGroupedListGrid`, `PerformanceRecordCard`, `PerformanceLogEntryCard`, `formatPerformanceRatio*`
+- 신규 Variant: `PerformanceMetricGrid`, `PerformanceProgressSummary`, `PerformanceScoreGrid`, `PerformanceCommentPanel`, `PerformanceGroupedListGrid`, `PerformanceRecordCard`, `PerformanceLogEntryCard`, `PerformanceStatusIconGroup`, `formatPerformanceRatio*`
 - 적용 화면: `/`, `/kpi/alignment`, `/hr/calibration-analytics`, `/my/report`, `/hr/reports`, `/manager/review`, `/hr/cycles`, `/director/kpi-tree`
 - 결과: `frontend-vite/src/pages` 직접 `StatCard` 사용 0건, 반복 `ratioNumber/ratioPercent/ratioText` helper 제거, 로컬 `ScoreTile`/`ScoreSummary`/`CommentCard` 제거, KPI BSC 그룹 카드 DS화
 - 추가 결과: reflection/mentor/OKR 목록 카드, calibration/distribution log card DS화
-- 잔여 후보: Login form card, AdminTenants console cards, table status icon cluster
+- 추가 결과: Login form card는 `ProductLoginShell`, AdminTenants console cards는 `SurfaceCard`로 전환
+- 추가 결과: HR report 상태 아이콘 묶음은 `PerformanceStatusIconGroup`, AdminTenants 오류 tooltip은 `EasyTooltip`으로 전환
+- 추가 결과: Login form controls는 `FormTextInput`/`FormPasswordInput`/`FormSegmentedControl`/`PrimaryButton`, AdminTenants form/actions는 `FormTextInput`/`FormActions`/DS Button으로 전환
+- 추가 결과: Cycle create/edit/policy modal controls는 `FormTextInput`/`FormSelect`/`FormActions`/DS Button으로 전환
+- 잔여 후보: kpi/review/report/calibration modal의 직접 Mantine primitive 사용 중 DS 승격 가치가 있는 작은 패턴
 - 검증: `npm run typecheck`, `npm run design:check`, `npm run build`, `git diff --check` 통과
 
 ## Cockpit Slice (2026-06-14)
