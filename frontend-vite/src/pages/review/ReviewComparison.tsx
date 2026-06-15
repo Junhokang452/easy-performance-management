@@ -7,7 +7,7 @@
  *
  * kpi-items 는 매니저 폼과 동일 소스(live 계산 + 저장 managerScore merge). 점수는 BE 표시값 — 입력 폼 아님.
  */
-import { SimpleGrid, Stack, Table, Text } from '@easy/ui-components/mantine';
+import { SimpleGrid, Stack, Text } from '@easy/ui-components/mantine';
 import {
   PerformanceCommentPanel,
   PerformanceScoreGrid,
@@ -19,6 +19,7 @@ import {
   type ReviewResponse,
 } from '../../api/reviews';
 import { useT } from '../../i18n';
+import { UiTable } from '@easy/ui-components';
 
 interface Props {
   review: ReviewResponse;
@@ -55,47 +56,47 @@ export function ReviewComparison({ review, items }: Props): React.ReactNode {
           {t.review.kpi.empty}
         </Text>
       ) : (
-        <Table striped highlightOnHover>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t.review.kpi.col.node}</Table.Th>
-              <Table.Th>{t.review.compare.autoScore}</Table.Th>
-              <Table.Th>{t.review.compare.managerScore}</Table.Th>
-              <Table.Th>{t.review.compare.delta}</Table.Th>
-              <Table.Th>{t.review.kpi.col.itemScore}</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
+        <UiTable striped highlightOnHover>
+          <UiTable.Thead>
+            <UiTable.Tr>
+              <UiTable.Th>{t.review.kpi.col.node}</UiTable.Th>
+              <UiTable.Th>{t.review.compare.autoScore}</UiTable.Th>
+              <UiTable.Th>{t.review.compare.managerScore}</UiTable.Th>
+              <UiTable.Th>{t.review.compare.delta}</UiTable.Th>
+              <UiTable.Th>{t.review.kpi.col.itemScore}</UiTable.Th>
+            </UiTable.Tr>
+          </UiTable.Thead>
+          <UiTable.Tbody>
             {items.map((item) => (
-              <Table.Tr key={item.assignmentId}>
-                <Table.Td>
+              <UiTable.Tr key={item.assignmentId}>
+                <UiTable.Td>
                   <Text size="sm" fw={500}>
                     {item.nodeLabel}
                   </Text>
                   <Text size="xs" c="dimmed">
                     {item.treeName}
                   </Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm" c="dimmed">
                     {formatScore(item.autoScore)}
                   </Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm">{formatScore(item.managerScore)}</Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <DeltaText auto={item.autoScore} manager={item.managerScore} />
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm" fw={500}>
                     {formatScore(item.itemScore)}
                   </Text>
-                </Table.Td>
-              </Table.Tr>
+                </UiTable.Td>
+              </UiTable.Tr>
             ))}
-          </Table.Tbody>
-        </Table>
+          </UiTable.Tbody>
+        </UiTable>
       )}
 
       <PerformanceScoreGrid

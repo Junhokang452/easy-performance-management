@@ -2,15 +2,11 @@
  * CycleEditModal — 사이클 부분 수정 (PATCH).
  */
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  Group,
-  Modal,
-  Stack,
-} from '@easy/ui-components/mantine';
+import { Group, Modal, Stack } from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
 import {
+  UiAlert,
   FormActions,
   FormSelect,
   FormTextInput,
@@ -136,9 +132,9 @@ export function CycleEditModal({
         />
 
         {errorMessage && (
-          <Alert color="red" variant="light">
+          <UiAlert color="red" variant="light">
             {errorMessage}
-          </Alert>
+          </UiAlert>
         )}
 
         <FormActions

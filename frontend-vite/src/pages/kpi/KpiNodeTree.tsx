@@ -8,11 +8,7 @@
  *
  * 파생값(weight·childWeightSum 등)은 BE 응답 그대로 표시 — FE 재계산 금지.
  */
-import {
-  ActionIcon,
-  Badge,
-  Menu,
-} from '@easy/ui-components/mantine';
+import { Menu } from '@easy/ui-components/mantine';
 import {
   IconDotsVertical,
   IconPlus,
@@ -30,6 +26,7 @@ import {
   type KpiNodeResponse,
 } from '../../api/kpi';
 import { useT } from '../../i18n';
+import { UiActionIcon, UiBadge } from '@easy/ui-components';
 
 export interface KpiNodeActions {
   onAddChild: (parent: KpiNodeResponse) => void;
@@ -68,18 +65,18 @@ export function KpiNodeTree({
         : `${t.kpi.node.target}: ${node.target}${node.unit ? ` ${node.unit}` : ''}`,
     badges: (
       <>
-        <Badge size="sm" variant="light" color="blue">
+        <UiBadge size="sm" variant="light" color="blue">
           {formatWeight(node.weight)}
-        </Badge>
+        </UiBadge>
         {node.bscPerspective && (
-          <Badge size="sm" variant="outline" color="grape">
+          <UiBadge size="sm" variant="outline" color="grape">
             {t.kpi.bscPerspective[node.bscPerspective]}
-          </Badge>
+          </UiBadge>
         )}
         {node.assignmentCount > 0 && (
-          <Badge size="sm" variant="dot" color="teal">
+          <UiBadge size="sm" variant="dot" color="teal">
             {t.kpi.node.assignmentCount}: {node.assignmentCount}
-          </Badge>
+          </UiBadge>
         )}
       </>
     ),
@@ -92,25 +89,25 @@ export function KpiNodeTree({
     actions:
       !readOnly && actions ? (
         <>
-          <ActionIcon
+          <UiActionIcon
             variant="subtle"
             aria-label={t.kpi.manager.addChild}
             onClick={() => actions.onAddChild(node)}
           >
             <IconPlus size={16} />
-          </ActionIcon>
-          <ActionIcon
+          </UiActionIcon>
+          <UiActionIcon
             variant="subtle"
             aria-label={t.kpi.manager.manageAssignments}
             onClick={() => actions.onManageAssignments(node)}
           >
             <IconUsers size={16} />
-          </ActionIcon>
+          </UiActionIcon>
           <Menu shadow="md" position="bottom-end" withinPortal>
             <Menu.Target>
-              <ActionIcon variant="subtle" aria-label="more">
+              <UiActionIcon variant="subtle" aria-label="more">
                 <IconDotsVertical size={16} />
-              </ActionIcon>
+              </UiActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item onClick={() => actions.onEdit(node)}>

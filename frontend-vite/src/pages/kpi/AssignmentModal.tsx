@@ -10,16 +10,11 @@
  */
 import { useEffect, useState } from 'react';
 import {
-  ActionIcon,
-  Alert,
-  Button,
   Center,
   Group,
-  Loader,
   Modal,
   NumberInput,
   Stack,
-  Table,
   Text,
   TextInput,
 } from '@easy/ui-components/mantine';
@@ -35,6 +30,7 @@ import {
 import { useT } from '../../i18n';
 import { getErrorMessage } from '../../api/error';
 import { mapKpiErrorToMessage } from './errorMapping';
+import { UiActionIcon, UiAlert, UiButton, UiLoader, UiTable } from '@easy/ui-components';
 
 interface Props {
   opened: boolean;
@@ -153,52 +149,52 @@ export function AssignmentModal({
           </Text>
         ) : isLoading ? (
           <Center mih={100}>
-            <Loader />
+            <UiLoader />
           </Center>
         ) : rows.length === 0 ? (
           <Text c="dimmed" size="sm">
             {t.kpi.assignment.empty}
           </Text>
         ) : (
-          <Table striped highlightOnHover>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>{t.kpi.assignment.employeeId}</Table.Th>
-                <Table.Th>{t.kpi.assignment.weight}</Table.Th>
-                <Table.Th>{t.kpi.assignment.targetOverride}</Table.Th>
-                <Table.Th />
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+          <UiTable striped highlightOnHover>
+            <UiTable.Thead>
+              <UiTable.Tr>
+                <UiTable.Th>{t.kpi.assignment.employeeId}</UiTable.Th>
+                <UiTable.Th>{t.kpi.assignment.weight}</UiTable.Th>
+                <UiTable.Th>{t.kpi.assignment.targetOverride}</UiTable.Th>
+                <UiTable.Th />
+              </UiTable.Tr>
+            </UiTable.Thead>
+            <UiTable.Tbody>
               {rows.map((row) => (
-                <Table.Tr key={row.id}>
-                  <Table.Td>
+                <UiTable.Tr key={row.id}>
+                  <UiTable.Td>
                     <Text size="sm" ff="monospace">
                       {row.employeeId}
                     </Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="sm">{row.weight ?? '—'}</Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="sm">{row.targetOverride ?? '—'}</Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Group justify="flex-end">
-                      <ActionIcon
+                      <UiActionIcon
                         variant="subtle"
                         color="red"
                         aria-label={t.common.action.delete}
                         onClick={() => setDeleteId(row.id)}
                       >
                         <IconTrash size={16} />
-                      </ActionIcon>
+                      </UiActionIcon>
                     </Group>
-                  </Table.Td>
-                </Table.Tr>
+                  </UiTable.Td>
+                </UiTable.Tr>
               ))}
-            </Table.Tbody>
-          </Table>
+            </UiTable.Tbody>
+          </UiTable>
         )}
 
         <Stack gap="xs">
@@ -230,15 +226,15 @@ export function AssignmentModal({
           </Group>
 
           {errorMessage && (
-            <Alert color="red" variant="light">
+            <UiAlert color="red" variant="light">
               {errorMessage}
-            </Alert>
+            </UiAlert>
           )}
 
           <Group justify="flex-end">
-            <Button onClick={handleAdd} loading={createMut.isPending}>
+            <UiButton onClick={handleAdd} loading={createMut.isPending}>
               {t.kpi.assignment.add}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Stack>
@@ -253,20 +249,20 @@ export function AssignmentModal({
         <Stack>
           <Text size="sm">{t.kpi.confirmDeleteAssignment}</Text>
           <Group justify="flex-end">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setDeleteId(null)}
               disabled={deleteMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               color="red"
               onClick={confirmDelete}
               loading={deleteMut.isPending}
             >
               {t.common.action.delete}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>

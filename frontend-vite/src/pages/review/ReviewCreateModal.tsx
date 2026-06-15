@@ -10,8 +10,6 @@
  */
 import { useEffect, useState } from 'react';
 import {
-  Alert,
-  Button,
   Group,
   Modal,
   SegmentedControl,
@@ -28,6 +26,7 @@ import {
 } from '../../api/reviews';
 import { useT } from '../../i18n';
 import { mapReviewErrorToMessage } from './errorMapping';
+import { UiAlert, UiButton } from '@easy/ui-components';
 
 interface Props {
   opened: boolean;
@@ -163,9 +162,9 @@ export function ReviewCreateModal({
         )}
 
         {errorMessage && (
-          <Alert color="red" variant="light">
+          <UiAlert color="red" variant="light">
             {errorMessage}
-          </Alert>
+          </UiAlert>
         )}
 
         <Text size="xs" c="dimmed">
@@ -173,12 +172,12 @@ export function ReviewCreateModal({
         </Text>
 
         <Group justify="flex-end" mt="sm">
-          <Button variant="default" onClick={handleClose} disabled={pending}>
+          <UiButton variant="default" onClick={handleClose} disabled={pending}>
             {t.common.action.cancel}
-          </Button>
-          <Button onClick={handleSubmit} loading={pending}>
+          </UiButton>
+          <UiButton onClick={handleSubmit} loading={pending}>
             {t.common.action.create}
-          </Button>
+          </UiButton>
         </Group>
       </Stack>
     </Modal>

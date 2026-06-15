@@ -8,7 +8,7 @@
  * 계약 §6 ReviewKpiItemResponse / §5 산식. 점수는 BE 응답 표시가 원칙 —
  * score-input 의 입력값(overrides)은 매니저 폼 로컬 상태로 상위가 관리(프리뷰·제출에 사용).
  */
-import { NumberInput, Table, Text } from '@easy/ui-components/mantine';
+import { NumberInput, Text } from '@easy/ui-components/mantine';
 
 import {
   formatReviewAchievementRate,
@@ -17,6 +17,7 @@ import {
   type ReviewKpiItemResponse,
 } from '../../api/reviews';
 import { useT } from '../../i18n';
+import { UiTable } from '@easy/ui-components';
 
 interface ReadOnlyProps {
   mode: 'readOnly';
@@ -49,60 +50,60 @@ export function ReviewKpiItemsTable(props: Props): React.ReactNode {
   const scoreInput = props.mode === 'score-input';
 
   return (
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t.review.kpi.col.node}</Table.Th>
-          <Table.Th>{t.review.kpi.col.weight}</Table.Th>
-          <Table.Th>{t.review.kpi.col.target}</Table.Th>
-          <Table.Th>{t.review.kpi.col.actual}</Table.Th>
-          <Table.Th>{t.review.kpi.col.achievementRate}</Table.Th>
-          <Table.Th>{t.review.kpi.col.autoScore}</Table.Th>
+    <UiTable striped highlightOnHover>
+      <UiTable.Thead>
+        <UiTable.Tr>
+          <UiTable.Th>{t.review.kpi.col.node}</UiTable.Th>
+          <UiTable.Th>{t.review.kpi.col.weight}</UiTable.Th>
+          <UiTable.Th>{t.review.kpi.col.target}</UiTable.Th>
+          <UiTable.Th>{t.review.kpi.col.actual}</UiTable.Th>
+          <UiTable.Th>{t.review.kpi.col.achievementRate}</UiTable.Th>
+          <UiTable.Th>{t.review.kpi.col.autoScore}</UiTable.Th>
           {scoreInput ? (
-            <Table.Th>{t.review.kpi.col.managerScore}</Table.Th>
+            <UiTable.Th>{t.review.kpi.col.managerScore}</UiTable.Th>
           ) : (
-            <Table.Th>{t.review.kpi.col.itemScore}</Table.Th>
+            <UiTable.Th>{t.review.kpi.col.itemScore}</UiTable.Th>
           )}
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
+        </UiTable.Tr>
+      </UiTable.Thead>
+      <UiTable.Tbody>
         {items.map((item) => (
-          <Table.Tr key={item.assignmentId}>
-            <Table.Td>
+          <UiTable.Tr key={item.assignmentId}>
+            <UiTable.Td>
               <Text size="sm" fw={500}>
                 {item.nodeLabel}
               </Text>
               <Text size="xs" c="dimmed">
                 {item.treeName}
               </Text>
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm">{formatReviewWeight(item.weight)}</Text>
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm">
                 {item.target != null
                   ? `${item.target}${item.unit ? ` ${item.unit}` : ''}`
                   : '—'}
               </Text>
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm">
                 {item.latestActualValue != null ? item.latestActualValue : '—'}
               </Text>
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm">
                 {formatReviewAchievementRate(item.achievementRate)}
               </Text>
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm" c="dimmed">
                 {formatScore(item.autoScore)}
               </Text>
-            </Table.Td>
+            </UiTable.Td>
             {props.mode === 'score-input' ? (
-              <Table.Td>
+              <UiTable.Td>
                 <NumberInput
                   aria-label={t.review.kpi.col.managerScore}
                   value={props.overrides[item.assignmentId] ?? ''}
@@ -115,17 +116,17 @@ export function ReviewKpiItemsTable(props: Props): React.ReactNode {
                   disabled={props.disabled}
                   w={120}
                 />
-              </Table.Td>
+              </UiTable.Td>
             ) : (
-              <Table.Td>
+              <UiTable.Td>
                 <Text size="sm" fw={500}>
                   {formatScore(item.itemScore)}
                 </Text>
-              </Table.Td>
+              </UiTable.Td>
             )}
-          </Table.Tr>
+          </UiTable.Tr>
         ))}
-      </Table.Tbody>
-    </Table>
+      </UiTable.Tbody>
+    </UiTable>
   );
 }

@@ -8,15 +8,7 @@
  * STD-FE 5 정합.
  */
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Badge,
-  Center,
-  Group,
-  Loader,
-  Stack,
-  Switch,
-  Text,
-} from '@easy/ui-components/mantine';
+import { Center, Group, Stack, Switch, Text } from '@easy/ui-components/mantine';
 import {
   IconChartBar,
   IconGitBranch,
@@ -24,6 +16,8 @@ import {
   IconTargetArrow,
 } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiLoader,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -77,7 +71,7 @@ export function DirectorKpiTreePage(): React.ReactNode {
 
           {cycleId && treesQuery.isLoading && (
             <Center mih={80}>
-              <Loader />
+              <UiLoader />
             </Center>
           )}
           {cycleId && treesQuery.isError && (
@@ -207,7 +201,7 @@ function DirectorTreeDetail({ treeId }: DetailProps): React.ReactNode {
   if (isLoading || !data) {
     return (
       <Center mih={100}>
-        <Loader />
+        <UiLoader />
       </Center>
     );
   }
@@ -218,9 +212,9 @@ function DirectorTreeDetail({ treeId }: DetailProps): React.ReactNode {
         <Stack gap={0}>
           <Group gap={8}>
             <Text fw={600}>{data.name}</Text>
-            <Badge color="gray" variant="light" size="sm">
+            <UiBadge color="gray" variant="light" size="sm">
               {t.kpi.director.readonly}
-            </Badge>
+            </UiBadge>
           </Group>
           <Text size="xs" c="dimmed">
             {t.kpi.level[data.level]}
@@ -347,9 +341,9 @@ function BscGroupedView({ nodes }: BscGroupedViewProps): React.ReactNode {
             key: node.id,
             label: node.label,
             trailing: (
-              <Badge size="sm" variant="light" color="blue">
+              <UiBadge size="sm" variant="light" color="blue">
                 {formatWeight(node.weight)}
-              </Badge>
+              </UiBadge>
             ),
           })),
         };

@@ -9,7 +9,6 @@
  */
 import { useState } from 'react';
 import {
-  Button,
   Group,
   Menu,
   Modal,
@@ -27,6 +26,7 @@ import {
 import { useT } from '../../i18n';
 import { GradeBadge } from './GradeBadge';
 import { mapCalibrationErrorToMessage } from './errorMapping';
+import { UiButton } from '@easy/ui-components';
 
 interface Props {
   cycleId: string;
@@ -89,14 +89,14 @@ export function AdjustGradeMenu({
     <>
       <Menu shadow="md" position="bottom-end" withinPortal disabled={!enabled}>
         <Menu.Target>
-          <Button
+          <UiButton
             size="xs"
             variant="subtle"
             rightSection={<IconChevronDown size={14} />}
             disabled={!enabled}
           >
             {t.calibration.adjust.move}
-          </Button>
+          </UiButton>
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Label>{t.calibration.adjust.selectGrade}</Menu.Label>
@@ -139,16 +139,16 @@ export function AdjustGradeMenu({
           />
 
           <Group justify="flex-end" mt="sm">
-            <Button
+            <UiButton
               variant="default"
               onClick={closeReason}
               disabled={adjustMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button onClick={handleSubmit} loading={adjustMut.isPending}>
+            </UiButton>
+            <UiButton onClick={handleSubmit} loading={adjustMut.isPending}>
               {t.calibration.adjust.apply}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>

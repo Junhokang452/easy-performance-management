@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "openapi:types": "openapi-typescript ${OPENAPI_URL:-http://localhost:8087/v3/api-docs} -o src/api/generated/schema.d.ts",
     "design:check": "node ../lib/easy-platform/easy-platform-core/scripts/check-design-system.mjs src --max-hex=0 --max-inline-style=0",
-    "local-ui:check": "node scripts/check-local-ui.mjs src --max-tags=418 --max-blocked-imports=66"
+    "local-ui:check": "node scripts/check-local-ui.mjs src --max-tags=0 --max-blocked-imports=0"
   },
   "dependencies": {
     "@easy/http-client": "file:../lib/easy-platform/easy-platform-core/packages/http-client",

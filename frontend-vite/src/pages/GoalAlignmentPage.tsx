@@ -6,19 +6,19 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Badge,
-  Button,
   Group,
   Progress,
   Select,
   SimpleGrid,
   Stack,
-  Table,
   Text,
   TextInput,
 } from '@easy/ui-components/mantine';
 import { IconSearch, IconTargetArrow } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiButton,
+  UiTable,
   EmptyState,
   ErrorBoundary,
   LoadingState,
@@ -114,14 +114,14 @@ export function GoalAlignmentPage(): React.ReactNode {
               onChange={(e) => setEmployeeIdInput(e.currentTarget.value)}
               w={320}
             />
-            <Button
+            <UiButton
               leftSection={<IconSearch size={16} />}
               onClick={handleLoad}
               disabled={!canLoad}
               loading={myQuery.isFetching && Boolean(applied)}
             >
               {t.kpi.my.load}
-            </Button>
+            </UiButton>
           </Group>
           {!cycleId ? (
             <Text size="sm" c="dimmed">
@@ -280,21 +280,21 @@ function AssignmentTable({
   }
 
   return (
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t.kpi.my.col.node}</Table.Th>
-          <Table.Th>{t.kpi.alignment.orgMatch}</Table.Th>
-          <Table.Th>{t.kpi.my.col.weight}</Table.Th>
-          <Table.Th>{t.kpi.my.col.achievementRate}</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
+    <UiTable striped highlightOnHover>
+      <UiTable.Thead>
+        <UiTable.Tr>
+          <UiTable.Th>{t.kpi.my.col.node}</UiTable.Th>
+          <UiTable.Th>{t.kpi.alignment.orgMatch}</UiTable.Th>
+          <UiTable.Th>{t.kpi.my.col.weight}</UiTable.Th>
+          <UiTable.Th>{t.kpi.my.col.achievementRate}</UiTable.Th>
+        </UiTable.Tr>
+      </UiTable.Thead>
+      <UiTable.Tbody>
         {assignments.map((assignment) => {
           const node = nodeById.get(assignment.kpiNodeId);
           return (
-            <Table.Tr key={assignment.id}>
-              <Table.Td>
+            <UiTable.Tr key={assignment.id}>
+              <UiTable.Td>
                 <Stack gap={2}>
                   <Text size="sm" fw={500}>
                     {assignment.nodeLabel}
@@ -303,26 +303,26 @@ function AssignmentTable({
                     {assignment.treeName}
                   </Text>
                 </Stack>
-              </Table.Td>
-              <Table.Td>
-                <Badge
+              </UiTable.Td>
+              <UiTable.Td>
+                <UiBadge
                   variant={node ? 'light' : 'outline'}
                   color={node ? 'green' : 'yellow'}
                 >
                   {node ? t.kpi.alignment.matched : t.kpi.alignment.unmatched}
-                </Badge>
-              </Table.Td>
-              <Table.Td>
+                </UiBadge>
+              </UiTable.Td>
+              <UiTable.Td>
                 <Text size="sm">{formatWeight(assignment.weight)}</Text>
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <AchievementCell rate={assignment.achievementRate} />
-              </Table.Td>
-            </Table.Tr>
+              </UiTable.Td>
+            </UiTable.Tr>
           );
         })}
-      </Table.Tbody>
-    </Table>
+      </UiTable.Tbody>
+    </UiTable>
   );
 }
 
@@ -338,9 +338,9 @@ function AchievementCell({ rate }: { rate: number | null }): React.ReactNode {
   return (
     <Group gap="xs" wrap="nowrap">
       <Progress value={Math.min(rate * 100, 100)} w={72} color={color} />
-      <Badge color={color} variant="light">
+      <UiBadge color={color} variant="light">
         {formatAchievementRate(rate)}
-      </Badge>
+      </UiBadge>
     </Group>
   );
 }
@@ -394,25 +394,25 @@ function buildHierarchyRows(
           : `${node.target}${node.unit ? ` ${node.unit}` : ''}`,
       badges: (
         <>
-          <Badge size="sm" variant="light" color="blue">
+          <UiBadge size="sm" variant="light" color="blue">
             {formatWeight(node.weight)}
-          </Badge>
+          </UiBadge>
           {node.bscPerspective ? (
-            <Badge size="sm" variant="outline" color="grape">
+            <UiBadge size="sm" variant="outline" color="grape">
               {node.bscPerspective}
-            </Badge>
+            </UiBadge>
           ) : null}
         </>
       ),
       status:
         assignments.length > 0 ? (
-          <Badge size="sm" variant="light" color="green">
+          <UiBadge size="sm" variant="light" color="green">
             {assignments.length}
-          </Badge>
+          </UiBadge>
         ) : (
-          <Badge size="sm" variant="outline" color="gray">
+          <UiBadge size="sm" variant="outline" color="gray">
             0
-          </Badge>
+          </UiBadge>
         ),
     };
   });

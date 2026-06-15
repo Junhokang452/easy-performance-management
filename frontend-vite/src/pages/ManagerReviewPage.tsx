@@ -1,7 +1,7 @@
 /**
  * ManagerReviewPage (#12) — 매니저 평가 폼 (`/manager/review`).
  *
- * cycle Select → GET /cycles/{id}/reviews 목록(employeeId·status Badge·kpiScore) +
+ * cycle Select → GET /cycles/{id}/reviews 목록(employeeId·status UiBadge·kpiScore) +
  * 개별/일괄 생성 모달 + transition 메뉴(§3 매트릭스 4개) → 행 선택 시 평가 패널:
  *   Tabs 2개 — [KPI 채점] kpi-items + per-item managerScore NumberInput + 가중 합산 프리뷰 + managerComment + 임시저장·제출
  *            [Self ↔ Manager 비교] selfComment ↔ managerComment + per-item autoScore ↔ managerScore
@@ -11,13 +11,9 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
-  Badge,
-  Button,
   Group,
   LoadingOverlay,
   Stack,
-  Table,
   Tabs,
   Text,
   Textarea,
@@ -38,6 +34,10 @@ import {
   formatPerformanceRatioText,
 } from '@easy/ui-components/performance';
 import {
+  UiBadge,
+  UiAlert,
+  UiButton,
+  UiTable,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -96,12 +96,12 @@ export function ManagerReviewPage(): React.ReactNode {
           <Group justify="space-between" align="end">
             <CycleSelect value={cycleId} onChange={setCycleId} />
             {cycleId && (
-              <Button
+              <UiButton
                 leftSection={<IconPlus size={16} />}
                 onClick={() => setCreateOpen(true)}
               >
                 {t.review.manager.create}
-              </Button>
+              </UiButton>
             )}
           </Group>
 
@@ -127,17 +127,17 @@ export function ManagerReviewPage(): React.ReactNode {
           ) : (
             <Stack>
               <ReviewQueueOverview stats={queueStats} />
-              <Table striped highlightOnHover>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>{t.review.manager.col.employeeId}</Table.Th>
-                    <Table.Th>{t.review.manager.col.status}</Table.Th>
-                    <Table.Th>{t.review.manager.col.kpiScore}</Table.Th>
-                    <Table.Th>{t.review.manager.col.finalScore}</Table.Th>
-                    <Table.Th />
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+              <UiTable striped highlightOnHover>
+                <UiTable.Thead>
+                  <UiTable.Tr>
+                    <UiTable.Th>{t.review.manager.col.employeeId}</UiTable.Th>
+                    <UiTable.Th>{t.review.manager.col.status}</UiTable.Th>
+                    <UiTable.Th>{t.review.manager.col.kpiScore}</UiTable.Th>
+                    <UiTable.Th>{t.review.manager.col.finalScore}</UiTable.Th>
+                    <UiTable.Th />
+                  </UiTable.Tr>
+                </UiTable.Thead>
+                <UiTable.Tbody>
                   {reviews.map((review) => (
                     <PerformanceChangedTableRow
                       key={review.id}
@@ -145,28 +145,28 @@ export function ManagerReviewPage(): React.ReactNode {
                       changed={review.id === selectedReviewId}
                       interactive
                     >
-                      <Table.Td>
+                      <UiTable.Td>
                         <Text size="sm" ff="monospace">
                           {review.employeeId}
                         </Text>
-                      </Table.Td>
-                      <Table.Td>
+                      </UiTable.Td>
+                      <UiTable.Td>
                         <ReviewStatusBadge status={review.status} />
-                      </Table.Td>
-                      <Table.Td>
+                      </UiTable.Td>
+                      <UiTable.Td>
                         <Text size="sm">{formatScore(review.kpiScore)}</Text>
-                      </Table.Td>
-                      <Table.Td>
+                      </UiTable.Td>
+                      <UiTable.Td>
                         <Group gap={6}>
                           <Text size="sm">{formatScore(review.finalScore)}</Text>
                           {review.finalGrade && (
-                            <Badge size="sm" variant="light" color="blue">
+                            <UiBadge size="sm" variant="light" color="blue">
                               {review.finalGrade}
-                            </Badge>
+                            </UiBadge>
                           )}
                         </Group>
-                      </Table.Td>
-                      <Table.Td>
+                      </UiTable.Td>
+                      <UiTable.Td>
                         <Group
                           gap={4}
                           justify="flex-end"
@@ -174,11 +174,11 @@ export function ManagerReviewPage(): React.ReactNode {
                         >
                           <ReviewTransitionMenu review={review} />
                         </Group>
-                      </Table.Td>
+                      </UiTable.Td>
                     </PerformanceChangedTableRow>
                   ))}
-                </Table.Tbody>
-              </Table>
+                </UiTable.Tbody>
+              </UiTable>
             </Stack>
           )}
         </Stack>
@@ -453,9 +453,9 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
       <LoadingOverlay visible={pending} />
 
       {!editable && (
-        <Alert color="gray" variant="light">
+        <UiAlert color="gray" variant="light">
           {t.review.manager.notEditableHint}
-        </Alert>
+        </UiAlert>
       )}
 
       {editable ? (
@@ -486,16 +486,16 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
 
       {editable && (
         <Group justify="flex-end">
-          <Button
+          <UiButton
             variant="default"
             onClick={handleSave}
             loading={updateMut.isPending}
           >
             {t.review.manager.saveDraft}
-          </Button>
-          <Button onClick={handleSubmit} loading={submitMut.isPending}>
+          </UiButton>
+          <UiButton onClick={handleSubmit} loading={submitMut.isPending}>
             {t.review.manager.submit}
-          </Button>
+          </UiButton>
         </Group>
       )}
     </Stack>

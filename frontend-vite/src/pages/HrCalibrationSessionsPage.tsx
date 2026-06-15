@@ -1,26 +1,20 @@
 /**
  * HrCalibrationSessionsPage (#28) — Calibration 세션 관리 (`/hr/calibration-sessions`).
  *
- * cycle Select(CycleSelect 재사용) → 세션 목록 테이블(상태 Badge·일정·참가자 수·orgUnit·조정 건수) +
+ * cycle Select(CycleSelect 재사용) → 세션 목록 테이블(상태 UiBadge·일정·참가자 수·orgUnit·조정 건수) +
  * 생성/수정 모달(participantIds TagsInput) + transition 메뉴(PLANNED→IN_SESSION / CONFIRMED→CLOSED) +
  * confirm 모달(finalizeReviews Switch + finalized/skipped 결과 notification) + PLANNED 한정 삭제 confirm.
  *
  * 계약 §6 11 endpoint. 상태 전이·등급 계산은 BE 가 SoT. STD-FE 5 정합.
  */
 import { useState } from 'react';
-import {
-  ActionIcon,
-  Button,
-  Group,
-  Menu,
-  Modal,
-  Stack,
-  Table,
-  Text,
-} from '@easy/ui-components/mantine';
+import { Group, Menu, Modal, Stack, Text } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import { IconDotsVertical, IconPlus } from '@tabler/icons-react';
 import {
+  UiActionIcon,
+  UiButton,
+  UiTable,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -62,12 +56,12 @@ export function HrCalibrationSessionsPage(): React.ReactNode {
           <Group justify="space-between" align="end">
             <CycleSelect value={cycleId} onChange={setCycleId} />
             {cycleId && (
-              <Button
+              <UiButton
                 leftSection={<IconPlus size={16} />}
                 onClick={() => setCreateOpen(true)}
               >
                 {t.calibration.page.create}
-              </Button>
+              </UiButton>
             )}
           </Group>
 
@@ -91,18 +85,18 @@ export function HrCalibrationSessionsPage(): React.ReactNode {
               }}
             />
           ) : (
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t.calibration.page.col.status}</Table.Th>
-                  <Table.Th>{t.calibration.page.col.scheduledAt}</Table.Th>
-                  <Table.Th>{t.calibration.page.col.ownerOrgUnit}</Table.Th>
-                  <Table.Th>{t.calibration.page.col.participants}</Table.Th>
-                  <Table.Th>{t.calibration.page.col.adjustments}</Table.Th>
-                  <Table.Th />
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            <UiTable striped highlightOnHover>
+              <UiTable.Thead>
+                <UiTable.Tr>
+                  <UiTable.Th>{t.calibration.page.col.status}</UiTable.Th>
+                  <UiTable.Th>{t.calibration.page.col.scheduledAt}</UiTable.Th>
+                  <UiTable.Th>{t.calibration.page.col.ownerOrgUnit}</UiTable.Th>
+                  <UiTable.Th>{t.calibration.page.col.participants}</UiTable.Th>
+                  <UiTable.Th>{t.calibration.page.col.adjustments}</UiTable.Th>
+                  <UiTable.Th />
+                </UiTable.Tr>
+              </UiTable.Thead>
+              <UiTable.Tbody>
                 {sessions.map((session) => (
                   <SessionRow
                     key={session.id}
@@ -110,8 +104,8 @@ export function HrCalibrationSessionsPage(): React.ReactNode {
                     session={session}
                   />
                 ))}
-              </Table.Tbody>
-            </Table>
+              </UiTable.Tbody>
+            </UiTable>
           )}
         </Stack>
       </SectionCard>
@@ -165,42 +159,42 @@ function SessionRow({ cycleId, session }: RowProps): React.ReactNode {
   };
 
   return (
-    <Table.Tr>
-      <Table.Td>
+    <UiTable.Tr>
+      <UiTable.Td>
         <SessionStatusBadge status={session.status} />
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Text size="sm">{formatDateTime(session.scheduledAt)}</Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Text size="sm" ff="monospace" c={session.ownerOrgUnitId ? undefined : 'dimmed'}>
           {session.ownerOrgUnitId ?? t.calibration.page.companyWide}
         </Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Text size="sm">{participantCount}</Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Text size="sm">{adjustmentCount}</Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Group gap={4} justify="flex-end">
           <SessionTransitionMenu cycleId={cycleId} session={session} />
           {confirmable && (
-            <Button
+            <UiButton
               size="xs"
               variant="light"
               color="teal"
               onClick={() => setConfirmOpen(true)}
             >
               {t.calibration.action.confirm}
-            </Button>
+            </UiButton>
           )}
           <Menu shadow="md" position="bottom-end" withinPortal>
             <Menu.Target>
-              <ActionIcon variant="subtle" aria-label="more">
+              <UiActionIcon variant="subtle" aria-label="more">
                 <IconDotsVertical size={16} />
-              </ActionIcon>
+              </UiActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item
@@ -242,25 +236,25 @@ function SessionRow({ cycleId, session }: RowProps): React.ReactNode {
           <Stack>
             <Text size="sm">{t.calibration.page.confirmDelete}</Text>
             <Group justify="flex-end">
-              <Button
+              <UiButton
                 variant="default"
                 onClick={() => setDeleteOpen(false)}
                 disabled={deleteMut.isPending}
               >
                 {t.common.action.cancel}
-              </Button>
-              <Button
+              </UiButton>
+              <UiButton
                 color="red"
                 onClick={handleDelete}
                 loading={deleteMut.isPending}
               >
                 {t.common.action.delete}
-              </Button>
+              </UiButton>
             </Group>
           </Stack>
         </Modal>
-      </Table.Td>
-    </Table.Tr>
+      </UiTable.Td>
+    </UiTable.Tr>
   );
 }
 

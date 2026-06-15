@@ -9,8 +9,6 @@
  */
 import { useEffect, useState } from 'react';
 import {
-  Alert,
-  Button,
   Group,
   Modal,
   NumberInput,
@@ -30,6 +28,7 @@ import {
 } from '../../api/kpi';
 import { useT } from '../../i18n';
 import { mapKpiErrorToMessage } from './errorMapping';
+import { UiAlert, UiButton } from '@easy/ui-components';
 
 export type NodeFormMode =
   | { kind: 'createRoot' }
@@ -218,20 +217,20 @@ export function NodeFormModal({
         />
 
         {errorMessage && (
-          <Alert color="red" variant="light">
+          <UiAlert color="red" variant="light">
             {errorMessage}
-          </Alert>
+          </UiAlert>
         )}
 
         <Group justify="flex-end" mt="sm">
-          <Button variant="default" onClick={handleClose} disabled={pending}>
+          <UiButton variant="default" onClick={handleClose} disabled={pending}>
             {t.common.action.cancel}
-          </Button>
-          <Button onClick={handleSubmit} loading={pending}>
+          </UiButton>
+          <UiButton onClick={handleSubmit} loading={pending}>
             {mode.kind === 'edit'
               ? t.common.action.save
               : t.common.action.create}
-          </Button>
+          </UiButton>
         </Group>
       </Stack>
     </Modal>

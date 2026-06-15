@@ -8,7 +8,7 @@
  * `@mantine/modals` 미설치 → core Modal 인라인.
  */
 import { useEffect, useState } from 'react';
-import { Alert, Button, Group, Modal, Stack, Switch, Text } from '@easy/ui-components/mantine';
+import { Group, Modal, Stack, Switch, Text } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 
 import {
@@ -17,6 +17,7 @@ import {
 } from '../../api/calibration';
 import { useT } from '../../i18n';
 import { mapCalibrationErrorToMessage } from './errorMapping';
+import { UiAlert, UiButton } from '@easy/ui-components';
 
 interface Props {
   opened: boolean;
@@ -91,32 +92,32 @@ export function ConfirmSessionModal({
         />
 
         {finalizeReviews && (
-          <Alert color="orange" variant="light">
+          <UiAlert color="orange" variant="light">
             {t.calibration.confirm.finalizeWarning}
-          </Alert>
+          </UiAlert>
         )}
 
         {errorMessage && (
-          <Alert color="red" variant="light">
+          <UiAlert color="red" variant="light">
             {errorMessage}
-          </Alert>
+          </UiAlert>
         )}
 
         <Group justify="flex-end" mt="sm">
-          <Button
+          <UiButton
             variant="default"
             onClick={handleClose}
             disabled={confirmMut.isPending}
           >
             {t.common.action.cancel}
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             color="teal"
             onClick={handleConfirm}
             loading={confirmMut.isPending}
           >
             {t.calibration.confirm.submit}
-          </Button>
+          </UiButton>
         </Group>
       </Stack>
     </Modal>

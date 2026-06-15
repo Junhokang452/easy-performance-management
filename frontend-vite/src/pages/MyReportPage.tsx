@@ -2,7 +2,7 @@
  * MyReportPage (#7) — 사원 본인 리포트 (`/my/report`).
  *
  * cycle Select + employeeId 입력(MyKpiPage 패턴) → GET /reports/my (404 = 빈 상태) →
- * 리포트 카드: finalGrade 대형 Badge + 점수 4종 분해(kpi 값 / mbo·competency·mra 는 "—" P1) +
+ * 리포트 카드: finalGrade 대형 UiBadge + 점수 4종 분해(kpi 값 / mbo·competency·mra 는 "—" P1) +
  * KPI 항목 요약 표(content.kpiItems read-only — ReviewKpiItemsTable 재사용) + managerComment +
  * 전사 분포 % 가로 막대(content.distribution — 본인 등급 강조).
  *
@@ -14,14 +14,7 @@
  * 계약 §6/§7. content 는 BE 동결 스냅샷 표시만 (재계산 금지, 분포 % 환산 렌더 한정). STD-FE 5 정합.
  */
 import { useEffect, useRef, useState } from 'react';
-import {
-  Badge,
-  Button,
-  Group,
-  Stack,
-  Text,
-  TextInput,
-} from '@easy/ui-components/mantine';
+import { Group, Stack, Text, TextInput } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import {
   IconChartBar,
@@ -31,6 +24,8 @@ import {
   IconSearch,
 } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiButton,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -93,13 +88,13 @@ export function MyReportPage(): React.ReactNode {
             onChange={(e) => setEmployeeIdInput(e.currentTarget.value)}
             w={320}
           />
-          <Button
+          <UiButton
             leftSection={<IconSearch size={16} />}
             onClick={handleLoad}
             disabled={!canLoad}
           >
             {t.report.my.load}
-          </Button>
+          </UiButton>
         </Group>
       </SectionCard>
 
@@ -386,9 +381,9 @@ function ReportCard({
             <Stack gap={2}>
               {report.acknowledged ? (
                 <Group gap={6}>
-                  <Badge color="green" variant="light" size="sm">
+                  <UiBadge color="green" variant="light" size="sm">
                     {t.report.card.acknowledged}
-                  </Badge>
+                  </UiBadge>
                   <Text size="xs" c="dimmed">
                     {formatReportDateTime(report.acknowledgedAt)}
                   </Text>
@@ -399,7 +394,7 @@ function ReportCard({
                 </Text>
               )}
             </Stack>
-            <Button
+            <UiButton
               leftSection={<IconCircleCheck size={16} />}
               color="green"
               onClick={onAcknowledge}
@@ -409,7 +404,7 @@ function ReportCard({
               {report.acknowledged
                 ? t.report.card.acknowledgedButton
                 : t.report.card.acknowledge}
-            </Button>
+            </UiButton>
           </Group>
       </SectionCard>
     </>

@@ -7,10 +7,11 @@
  */
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Stack, Text, Alert } from '@easy/ui-components/mantine';
+import { Stack, Text } from '@easy/ui-components/mantine';
 import { useForm } from '@mantine/form';
 import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
 import {
+  UiAlert,
   FormPasswordInput,
   FormSegmentedControl,
   FormTextInput,
@@ -105,9 +106,9 @@ export function LoginPage(): React.ReactNode {
         </Text>
       </Stack>
       {error && (
-        <Alert color="red" title={t.error.boundary}>
+        <UiAlert color="red" title={t.error.boundary}>
           {error}
-        </Alert>
+        </UiAlert>
       )}
       <form onSubmit={onSubmit}>
         <Stack>

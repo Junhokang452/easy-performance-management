@@ -5,7 +5,7 @@
  *
  * 기능:
  * - 사이클 운영 지표 + 상태 타임라인
- * - 사이클 목록 Table (이름·유형·기간·상태·정책 여부·Actions)
+ * - 사이클 목록 UiTable (이름·유형·기간·상태·정책 여부·Actions)
  * - 사이클 생성/편집/정책 모달
  * - 상태 전이 메뉴 (현재 상태 → 가능한 다음 상태만)
  * - 사이클 삭제 (PLANNED 단계만 BE 허용; FE 는 확인 후 삭제 요청)
@@ -14,15 +14,11 @@
  */
 import { useMemo, useState } from 'react';
 import {
-  ActionIcon,
-  Badge,
-  Button,
   Group,
   Menu,
   Modal,
   Progress,
   Stack,
-  Table,
   Text,
 } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
@@ -36,6 +32,10 @@ import {
   IconSettings,
 } from '@tabler/icons-react';
 import {
+  UiTable,
+  UiActionIcon,
+  UiBadge,
+  UiButton,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -94,12 +94,12 @@ export function CyclesPage(): React.ReactNode {
       <PageHeader
         title={t.cycles.title}
         actions={
-          <Button
+          <UiButton
             leftSection={<IconPlus size={16} />}
             onClick={() => setCreateOpen(true)}
           >
             {t.cycles.create}
-          </Button>
+          </UiButton>
         }
       />
       <SectionCard>
@@ -121,18 +121,18 @@ export function CyclesPage(): React.ReactNode {
           <Stack>
             <CycleOperatingOverview stats={stats} />
             <CycleStatusTimeline stats={stats} />
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t.cycles.field.name}</Table.Th>
-                  <Table.Th>{t.cycles.field.cycleType}</Table.Th>
-                  <Table.Th>{t.cycles.field.periodStart}</Table.Th>
-                  <Table.Th>{t.cycles.field.status}</Table.Th>
-                  <Table.Th>{t.policy.title}</Table.Th>
-                  <Table.Th />
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            <UiTable striped highlightOnHover>
+              <UiTable.Thead>
+                <UiTable.Tr>
+                  <UiTable.Th>{t.cycles.field.name}</UiTable.Th>
+                  <UiTable.Th>{t.cycles.field.cycleType}</UiTable.Th>
+                  <UiTable.Th>{t.cycles.field.periodStart}</UiTable.Th>
+                  <UiTable.Th>{t.cycles.field.status}</UiTable.Th>
+                  <UiTable.Th>{t.policy.title}</UiTable.Th>
+                  <UiTable.Th />
+                </UiTable.Tr>
+              </UiTable.Thead>
+              <UiTable.Tbody>
                 {rows.map((row) => (
                   <CycleRow
                     key={row.id}
@@ -141,8 +141,8 @@ export function CyclesPage(): React.ReactNode {
                     onPolicy={() => setPolicyTarget(row)}
                   />
                 ))}
-              </Table.Tbody>
-            </Table>
+              </UiTable.Tbody>
+            </UiTable>
           </Stack>
         )}
       </SectionCard>
@@ -249,9 +249,9 @@ function CycleStatusTimeline({
                     {t.cycles.status[status]}
                   </Text>
                 </Group>
-                <Badge variant="light" color="gray">
+                <UiBadge variant="light" color="gray">
                   {count}
-                </Badge>
+                </UiBadge>
               </Group>
               <Progress value={formatPerformanceRatioNumber(count, stats.total)} />
             </Stack>
@@ -315,16 +315,16 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
   };
 
   return (
-    <Table.Tr>
-      <Table.Td>
+    <UiTable.Tr>
+      <UiTable.Td>
         <Text size="sm" fw={500}>
           {row.name}
         </Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Text size="sm">{t.cycles.type[row.cycleType]}</Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Group gap={6}>
           <Text size="sm">{row.periodStart}</Text>
           <Text size="sm" c="dimmed">
@@ -332,34 +332,34 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
           </Text>
           <Text size="sm">{row.periodEnd}</Text>
         </Group>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <CycleStatusBadge status={row.status} />
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         {row.policyId ? (
-          <Badge color="teal" variant="dot">
+          <UiBadge color="teal" variant="dot">
             OK
-          </Badge>
+          </UiBadge>
         ) : (
-          <Button size="xs" variant="light" color="yellow" onClick={onPolicy}>
+          <UiButton size="xs" variant="light" color="yellow" onClick={onPolicy}>
             {t.cycles.policy.notSet}
-          </Button>
+          </UiButton>
         )}
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Group gap={4} justify="flex-end">
           {nextStatuses.length > 0 && (
             <Menu shadow="md" position="bottom-end" withinPortal>
               <Menu.Target>
-                <Button
+                <UiButton
                   size="xs"
                   variant="light"
                   rightSection={<IconChevronDown size={14} />}
                   loading={transitionMut.isPending}
                 >
                   {t.cycles.action.transition}
-                </Button>
+                </UiButton>
               </Menu.Target>
               <Menu.Dropdown>
                 {nextStatuses.map((s) => (
@@ -372,9 +372,9 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
           )}
           <Menu shadow="md" position="bottom-end" withinPortal>
             <Menu.Target>
-              <ActionIcon variant="subtle" aria-label="more">
+              <UiActionIcon variant="subtle" aria-label="more">
                 <IconDotsVertical size={16} />
-              </ActionIcon>
+              </UiActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item onClick={onEdit}>{t.cycles.action.edit}</Menu.Item>
@@ -400,25 +400,25 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
           <Stack>
             <Text size="sm">{row.name}</Text>
             <Group justify="flex-end">
-              <Button
+              <UiButton
                 variant="default"
                 onClick={() => setConfirmDeleteOpen(false)}
                 disabled={deleteMut.isPending}
               >
                 {t.common.action.cancel}
-              </Button>
-              <Button
+              </UiButton>
+              <UiButton
                 color="red"
                 onClick={confirmDelete}
                 loading={deleteMut.isPending}
               >
                 {t.common.action.delete}
-              </Button>
+              </UiButton>
             </Group>
           </Stack>
         </Modal>
-      </Table.Td>
-    </Table.Tr>
+      </UiTable.Td>
+    </UiTable.Tr>
   );
 }
 

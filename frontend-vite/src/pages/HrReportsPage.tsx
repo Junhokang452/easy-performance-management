@@ -3,24 +3,14 @@
  *
  * cycle Select(CycleSelect 재사용) → 발행 요약(FINALIZED review 수 vs 발행 수) +
  * 일괄 발행 confirm 모달(cycle FINALIZED 아닐 때 안내 + published/skipped notification) +
- * 발행 현황 테이블(employeeId·finalGrade GradeBadge·publishedAt·viewed/acknowledged 아이콘·superseded Badge) +
+ * 발행 현황 테이블(employeeId·finalGrade GradeBadge·publishedAt·viewed/acknowledged 아이콘·superseded UiBadge) +
  * 행별 재발행(supersede) confirm 모달("content 재동결" 경고).
  *
  * 계약 §6/§7. publish=일괄(FINALIZED review 중 active report 미존재분만) / supersede=개별 재발행(신규 row).
  * finalGrade·점수는 BE content 표시만. STD-FE 5 정합.
  */
 import { useState } from 'react';
-import {
-  Alert,
-  Badge,
-  Button,
-  Group,
-  Modal,
-  ScrollArea,
-  Stack,
-  Table,
-  Text,
-} from '@easy/ui-components/mantine';
+import { Group, Modal, ScrollArea, Stack, Text } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import {
   IconAlertTriangle,
@@ -32,6 +22,10 @@ import {
   IconSend,
 } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiAlert,
+  UiButton,
+  UiTable,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -275,33 +269,33 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
 
           <Group gap="xs" wrap="wrap">
             {cycleStatus && (
-              <Badge
+              <UiBadge
                 variant={cycleFinalized ? 'filled' : 'outline'}
                 color={cycleFinalized ? 'teal' : 'gray'}
               >
                 {t.cycles.status[cycleStatus]}
-              </Badge>
+              </UiBadge>
             )}
-            <Badge variant="light" color="gray">
+            <UiBadge variant="light" color="gray">
               {t.report.hr.governance.superseded}: {supersededReports.length}
-            </Badge>
+            </UiBadge>
           </Group>
 
           {!cycleFinalized && (
-            <Alert color="yellow" variant="light">
+            <UiAlert color="yellow" variant="light">
               {t.report.hr.needFinalized}
-            </Alert>
+            </UiAlert>
           )}
 
           <Group justify="flex-end" wrap="wrap">
-            <Button
+            <UiButton
               leftSection={<IconSend size={16} />}
               onClick={() => setPublishOpen(true)}
               disabled={!cycleFinalized}
               loading={publishMut.isPending}
             >
               {t.report.hr.publish}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </SectionCard>
@@ -355,13 +349,13 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
       >
         <Stack>
           {!cycleFinalized ? (
-            <Alert
+            <UiAlert
               color="yellow"
               variant="light"
               icon={<IconAlertTriangle size={18} />}
             >
               {t.report.hr.needFinalized}
-            </Alert>
+            </UiAlert>
           ) : (
             <Text size="sm">
               {t.report.hr.publishConfirm.replace(
@@ -371,20 +365,20 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
             </Text>
           )}
           <Group justify="flex-end" mt="sm">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setPublishOpen(false)}
               disabled={publishMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               onClick={handlePublish}
               loading={publishMut.isPending}
               disabled={!cycleFinalized}
             >
               {t.report.hr.publish}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>
@@ -400,33 +394,33 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
         size="md"
       >
         <Stack>
-          <Alert
+          <UiAlert
             color="orange"
             variant="light"
             icon={<IconAlertTriangle size={18} />}
           >
             {t.report.hr.supersedeWarning}
-          </Alert>
+          </UiAlert>
           {supersedeTarget && (
             <Text size="sm" ff="monospace">
               {supersedeTarget.employeeId}
             </Text>
           )}
           <Group justify="flex-end" mt="sm">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setSupersedeTarget(null)}
               disabled={supersedeMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               color="orange"
               onClick={handleSupersede}
               loading={supersedeMut.isPending}
             >
               {t.report.hr.supersede}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>
@@ -450,31 +444,31 @@ function ReportsTable({
   const t = useT();
   return (
     <ScrollArea type="auto" offsetScrollbars>
-      <Table striped highlightOnHover miw={760}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>{t.report.hr.col.employeeId}</Table.Th>
-            <Table.Th>{t.report.hr.col.finalGrade}</Table.Th>
-            <Table.Th>{t.report.hr.col.publishedAt}</Table.Th>
-            <Table.Th>{t.report.hr.col.status}</Table.Th>
-            <Table.Th />
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
+      <UiTable striped highlightOnHover miw={760}>
+        <UiTable.Thead>
+          <UiTable.Tr>
+            <UiTable.Th>{t.report.hr.col.employeeId}</UiTable.Th>
+            <UiTable.Th>{t.report.hr.col.finalGrade}</UiTable.Th>
+            <UiTable.Th>{t.report.hr.col.publishedAt}</UiTable.Th>
+            <UiTable.Th>{t.report.hr.col.status}</UiTable.Th>
+            <UiTable.Th />
+          </UiTable.Tr>
+        </UiTable.Thead>
+        <UiTable.Tbody>
           {reports.map((report) => (
-            <Table.Tr key={report.id}>
-              <Table.Td>
+            <UiTable.Tr key={report.id}>
+              <UiTable.Td>
                 <Text size="sm" ff="monospace" fw={700} c="var(--easy-color-text)">
                   {report.employeeId}
                 </Text>
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <GradeBadge grade={report.content.finalGrade} />
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <Text size="sm">{formatReportDateTime(report.publishedAt)}</Text>
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <PerformanceStatusIconGroup
                   items={[
                     {
@@ -500,17 +494,17 @@ function ReportsTable({
                   ]}
                   trailing={
                     report.superseded ? (
-                    <Badge size="xs" variant="outline" color="gray">
+                    <UiBadge size="xs" variant="outline" color="gray">
                       {t.report.hr.superseded}
-                    </Badge>
+                    </UiBadge>
                     ) : null
                   }
                 />
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <Group justify="flex-end" wrap="nowrap">
                   {!report.superseded && (
-                    <Button
+                    <UiButton
                       size="xs"
                       variant="light"
                       color="orange"
@@ -519,14 +513,14 @@ function ReportsTable({
                       disabled={!cycleFinalized || supersedePending}
                     >
                       {t.report.hr.supersede}
-                    </Button>
+                    </UiButton>
                   )}
                 </Group>
-              </Table.Td>
-            </Table.Tr>
+              </UiTable.Td>
+            </UiTable.Tr>
           ))}
-        </Table.Tbody>
-      </Table>
+        </UiTable.Tbody>
+      </UiTable>
     </ScrollArea>
   );
 }
@@ -539,38 +533,38 @@ function SupersedeHistoryTable({
   const t = useT();
   return (
     <ScrollArea type="auto" offsetScrollbars>
-      <Table striped highlightOnHover miw={680}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>{t.report.hr.col.employeeId}</Table.Th>
-            <Table.Th>{t.report.hr.col.finalGrade}</Table.Th>
-            <Table.Th>{t.report.hr.col.publishedAt}</Table.Th>
-            <Table.Th>{t.report.hr.col.status}</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
+      <UiTable striped highlightOnHover miw={680}>
+        <UiTable.Thead>
+          <UiTable.Tr>
+            <UiTable.Th>{t.report.hr.col.employeeId}</UiTable.Th>
+            <UiTable.Th>{t.report.hr.col.finalGrade}</UiTable.Th>
+            <UiTable.Th>{t.report.hr.col.publishedAt}</UiTable.Th>
+            <UiTable.Th>{t.report.hr.col.status}</UiTable.Th>
+          </UiTable.Tr>
+        </UiTable.Thead>
+        <UiTable.Tbody>
           {reports.map((report) => (
-            <Table.Tr key={report.id}>
-              <Table.Td>
+            <UiTable.Tr key={report.id}>
+              <UiTable.Td>
                 <Text size="sm" ff="monospace" fw={700} c="var(--easy-color-text)">
                   {report.employeeId}
                 </Text>
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <GradeBadge grade={report.content.finalGrade} />
-              </Table.Td>
-              <Table.Td>
+              </UiTable.Td>
+              <UiTable.Td>
                 <Text size="sm">{formatReportDateTime(report.publishedAt)}</Text>
-              </Table.Td>
-              <Table.Td>
-                <Badge size="xs" variant="outline" color="gray">
+              </UiTable.Td>
+              <UiTable.Td>
+                <UiBadge size="xs" variant="outline" color="gray">
                   {t.report.hr.superseded}
-                </Badge>
-              </Table.Td>
-            </Table.Tr>
+                </UiBadge>
+              </UiTable.Td>
+            </UiTable.Tr>
           ))}
-        </Table.Tbody>
-      </Table>
+        </UiTable.Tbody>
+      </UiTable>
     </ScrollArea>
   );
 }

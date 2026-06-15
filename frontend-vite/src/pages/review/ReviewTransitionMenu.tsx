@@ -7,7 +7,7 @@
  *
  * 전이 실패(잘못된 cycle 단계 등)는 ApiError 코드 → mapReviewErrorToMessage 로 표면.
  */
-import { Button, Menu } from '@easy/ui-components/mantine';
+import { Menu } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import { IconChevronDown } from '@tabler/icons-react';
 
@@ -19,6 +19,7 @@ import {
 } from '../../api/reviews';
 import { useT } from '../../i18n';
 import { mapReviewErrorToMessage } from './errorMapping';
+import { UiButton } from '@easy/ui-components';
 
 interface Props {
   review: ReviewResponse;
@@ -59,14 +60,14 @@ export function ReviewTransitionMenu({
   return (
     <Menu shadow="md" position="bottom-end" withinPortal>
       <Menu.Target>
-        <Button
+        <UiButton
           size="xs"
           variant="light"
           rightSection={<IconChevronDown size={14} />}
           loading={transitionMut.isPending}
         >
           {t.review.action.transition}
-        </Button>
+        </UiButton>
       </Menu.Target>
       <Menu.Dropdown>
         {nextStatuses.map((s) => (

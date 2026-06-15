@@ -4,7 +4,7 @@
  * 기존 cycle/review/calibration/report API 조합만 사용한다. 집계값은 화면
  * 진행률 표시용이며, 점수·등급·분포 계산의 SoT는 각 BE 응답이다.
  */
-import { Badge, Group, Progress, SimpleGrid, Stack, Table, Text } from '@easy/ui-components/mantine';
+import { Group, Progress, SimpleGrid, Stack, Text } from '@easy/ui-components/mantine';
 import {
   IconChartBar,
   IconChecklist,
@@ -12,6 +12,8 @@ import {
   IconTargetArrow,
 } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiTable,
   EmptyState,
   ErrorBoundary,
   LoadingState,
@@ -262,40 +264,40 @@ function CockpitContent({
         title={t.cockpit.cycles.title}
         description={t.cockpit.cycles.description}
       >
-        <Table striped highlightOnHover>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t.cycles.field.name}</Table.Th>
-              <Table.Th>{t.cycles.field.status}</Table.Th>
-              <Table.Th>{t.cycles.field.periodStart}</Table.Th>
-              <Table.Th>{t.cockpit.cycles.policy}</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
+        <UiTable striped highlightOnHover>
+          <UiTable.Thead>
+            <UiTable.Tr>
+              <UiTable.Th>{t.cycles.field.name}</UiTable.Th>
+              <UiTable.Th>{t.cycles.field.status}</UiTable.Th>
+              <UiTable.Th>{t.cycles.field.periodStart}</UiTable.Th>
+              <UiTable.Th>{t.cockpit.cycles.policy}</UiTable.Th>
+            </UiTable.Tr>
+          </UiTable.Thead>
+          <UiTable.Tbody>
             {cycles.slice(0, 5).map((row) => (
-              <Table.Tr key={row.id}>
-                <Table.Td>
+              <UiTable.Tr key={row.id}>
+                <UiTable.Td>
                   <Text size="sm" fw={row.id === cycle.id ? 700 : 500}>
                     {row.name}
                   </Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <CycleStatusBadge status={row.status} />
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm">
                     {row.periodStart} - {row.periodEnd}
                   </Text>
-                </Table.Td>
-                <Table.Td>
-                  <Badge variant={row.policyId ? 'light' : 'outline'}>
+                </UiTable.Td>
+                <UiTable.Td>
+                  <UiBadge variant={row.policyId ? 'light' : 'outline'}>
                     {row.policyId ? t.common.status.active : t.cycles.policy.notSet}
-                  </Badge>
-                </Table.Td>
-              </Table.Tr>
+                  </UiBadge>
+                </UiTable.Td>
+              </UiTable.Tr>
             ))}
-          </Table.Tbody>
-        </Table>
+          </UiTable.Tbody>
+        </UiTable>
       </SectionCard>
     </Stack>
   );

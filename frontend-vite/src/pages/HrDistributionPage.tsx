@@ -1,7 +1,7 @@
 /**
  * HrDistributionPage (#24) — HR 분포 시뮬레이터 (`/hr/distribution`).
  *
- * cycle Select → 분포 비교 막대(현재 vs 목표) + 정책 정보(distributionMode·ratingScale·forcedApplied Badge) +
+ * cycle Select → 분포 비교 막대(현재 vs 목표) + 정책 정보(distributionMode·ratingScale·forcedApplied UiBadge) +
  * 시뮬레이션 실행 → proposed 테이블(현재≠제안 행 강조) +
  * 강제 적용(확인 모달 — "review 등급 일괄 변경" 경고 + applied/skipped 결과) + simulationLog 이력.
  *
@@ -9,16 +9,7 @@
  * 등급·분포 계산은 BE 응답 표시만 (FE 재계산 금지). STD-FE 5 정합.
  */
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  Badge,
-  Button,
-  Group,
-  Modal,
-  Stack,
-  Table,
-  Text,
-} from '@easy/ui-components/mantine';
+import { Group, Modal, Stack, Text } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import { IconPlayerPlay, IconAlertTriangle } from '@tabler/icons-react';
 import {
@@ -26,6 +17,10 @@ import {
   PerformanceLogEntryCard,
 } from '@easy/ui-components/performance';
 import {
+  UiBadge,
+  UiAlert,
+  UiButton,
+  UiTable,
   PageHeader,
   SectionCard,
   LoadingState,
@@ -168,24 +163,24 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
       <SectionCard>
         <Stack>
           <Group gap="xs">
-            <Badge variant="light" color="blue">
+            <UiBadge variant="light" color="blue">
               {t.distribution.policy.mode}:{' '}
               {distribution.distributionMode}
-            </Badge>
-            <Badge variant="light" color="grape">
+            </UiBadge>
+            <UiBadge variant="light" color="grape">
               {t.distribution.policy.scale}: {distribution.ratingScale}
-            </Badge>
-            <Badge
+            </UiBadge>
+            <UiBadge
               variant={distribution.forcedApplied ? 'filled' : 'outline'}
               color={distribution.forcedApplied ? 'teal' : 'gray'}
             >
               {distribution.forcedApplied
                 ? t.distribution.policy.applied
                 : t.distribution.policy.notApplied}
-            </Badge>
-            <Badge variant="light" color="gray">
+            </UiBadge>
+            <UiBadge variant="light" color="gray">
               {t.distribution.policy.ready}: {distribution.calibrationReadyCount}
-            </Badge>
+            </UiBadge>
           </Group>
 
           <DistributionBars
@@ -194,13 +189,13 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
           />
 
           {!forcedSupported && (
-            <Alert color="yellow" variant="light">
+            <UiAlert color="yellow" variant="light">
               {t.distribution.page.notSupported}
-            </Alert>
+            </UiAlert>
           )}
 
           <Group justify="flex-end">
-            <Button
+            <UiButton
               leftSection={<IconPlayerPlay size={16} />}
               variant="default"
               onClick={handleSimulate}
@@ -208,15 +203,15 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
               disabled={!forcedSupported}
             >
               {t.distribution.action.simulate}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               leftSection={<IconAlertTriangle size={16} />}
               color="orange"
               onClick={() => setApplyOpen(true)}
               disabled={!forcedSupported}
             >
               {t.distribution.action.apply}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </SectionCard>
@@ -243,9 +238,9 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
         size="md"
       >
         <Stack>
-          <Alert color="orange" variant="light" icon={<IconAlertTriangle size={18} />}>
+          <UiAlert color="orange" variant="light" icon={<IconAlertTriangle size={18} />}>
             {t.distribution.apply.warning}
-          </Alert>
+          </UiAlert>
           <Text size="sm">
             {t.distribution.apply.confirmText.replace(
               '{count}',
@@ -253,16 +248,16 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
             )}
           </Text>
           <Group justify="flex-end" mt="sm">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setApplyOpen(false)}
               disabled={applyMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button color="orange" onClick={handleApply} loading={applyMut.isPending}>
+            </UiButton>
+            <UiButton color="orange" onClick={handleApply} loading={applyMut.isPending}>
               {t.distribution.action.apply}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>
@@ -284,9 +279,9 @@ function ProposedTable({ result }: ProposedTableProps): React.ReactNode {
         </Text>
         <Group gap="xs">
           {(['S', 'A', 'B', 'C', 'D'] as const).map((g) => (
-            <Badge key={g} variant="outline" color="gray" size="sm">
+            <UiBadge key={g} variant="outline" color="gray" size="sm">
               {g} {result.resultingDistribution[g] ?? 0}
-            </Badge>
+            </UiBadge>
           ))}
         </Group>
       </Group>
@@ -296,46 +291,46 @@ function ProposedTable({ result }: ProposedTableProps): React.ReactNode {
           {t.distribution.proposed.empty}
         </Text>
       ) : (
-        <Table striped highlightOnHover>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t.distribution.proposed.col.employeeId}</Table.Th>
-              <Table.Th>{t.distribution.proposed.col.kpiScore}</Table.Th>
-              <Table.Th>{t.distribution.proposed.col.currentGrade}</Table.Th>
-              <Table.Th>{t.distribution.proposed.col.proposedGrade}</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
+        <UiTable striped highlightOnHover>
+          <UiTable.Thead>
+            <UiTable.Tr>
+              <UiTable.Th>{t.distribution.proposed.col.employeeId}</UiTable.Th>
+              <UiTable.Th>{t.distribution.proposed.col.kpiScore}</UiTable.Th>
+              <UiTable.Th>{t.distribution.proposed.col.currentGrade}</UiTable.Th>
+              <UiTable.Th>{t.distribution.proposed.col.proposedGrade}</UiTable.Th>
+            </UiTable.Tr>
+          </UiTable.Thead>
+          <UiTable.Tbody>
             {result.proposed.map((row) => {
               const changed = row.currentGrade !== row.proposedGrade;
               return (
                 <PerformanceChangedTableRow key={row.reviewId} changed={changed}>
-                  <Table.Td>
+                  <UiTable.Td>
                     <Text size="sm" ff="monospace">
                       {row.employeeId}
                     </Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="sm">{formatScore(row.kpiScore)}</Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <GradeBadge grade={row.currentGrade} />
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Group gap={4}>
                       <GradeBadge grade={row.proposedGrade} />
                       {changed && (
-                        <Badge size="xs" variant="light" color="orange">
+                        <UiBadge size="xs" variant="light" color="orange">
                           {t.distribution.proposed.changed}
-                        </Badge>
+                        </UiBadge>
                       )}
                     </Group>
-                  </Table.Td>
+                  </UiTable.Td>
                 </PerformanceChangedTableRow>
               );
             })}
-          </Table.Tbody>
-        </Table>
+          </UiTable.Tbody>
+        </UiTable>
       )}
     </Stack>
   );

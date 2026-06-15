@@ -5,10 +5,11 @@
  * `useI18n()` 로 ko/en 전환.
  * jobeval 단계 4 cutover `cc1bc03` 패턴 정합.
  */
-import { ActionIcon, Group, SegmentedControl, useMantineColorScheme, Tooltip } from '@easy/ui-components/mantine';
+import { Group, SegmentedControl, useMantineColorScheme } from '@easy/ui-components/mantine';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 
 import { useI18n } from '../i18n';
+import { UiActionIcon, UiTooltip } from '@easy/ui-components';
 
 export function AppHeaderActions(): React.ReactNode {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -26,15 +27,15 @@ export function AppHeaderActions(): React.ReactNode {
           { label: 'EN', value: 'en' },
         ]}
       />
-      <Tooltip label={t.common.label.darkMode}>
-        <ActionIcon
+      <UiTooltip label={t.common.label.darkMode}>
+        <UiActionIcon
           variant="subtle"
           aria-label={t.common.label.darkMode}
           onClick={() => toggleColorScheme()}
         >
           {isDark ? <IconSun size={18} /> : <IconMoon size={18} />}
-        </ActionIcon>
-      </Tooltip>
+        </UiActionIcon>
+      </UiTooltip>
     </Group>
   );
 }

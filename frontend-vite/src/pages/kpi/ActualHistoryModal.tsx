@@ -8,16 +8,7 @@
  * 계약 §4: 이미 supersede 된 actual 재정정 = E9804925 (BE 차단). FE 는 superseded 행에 정정 버튼 비노출.
  */
 import { useState } from 'react';
-import {
-  Badge,
-  Button,
-  Center,
-  Group,
-  Loader,
-  Modal,
-  Table,
-  Text,
-} from '@easy/ui-components/mantine';
+import { Center, Group, Modal, Text } from '@easy/ui-components/mantine';
 
 import {
   useAssignmentActualsQuery,
@@ -26,6 +17,7 @@ import {
 import { useT } from '../../i18n';
 import { getErrorMessage } from '../../api/error';
 import { ActualFormModal } from './ActualFormModal';
+import { UiBadge, UiButton, UiLoader, UiTable } from '@easy/ui-components';
 
 interface Props {
   opened: boolean;
@@ -64,68 +56,68 @@ export function ActualHistoryModal({
         </Text>
       ) : isLoading ? (
         <Center mih={120}>
-          <Loader />
+          <UiLoader />
         </Center>
       ) : rows.length === 0 ? (
         <Text c="dimmed" size="sm" py="md">
           {t.kpi.actual.empty}
         </Text>
       ) : (
-        <Table striped highlightOnHover>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t.kpi.actual.asOfDate}</Table.Th>
-              <Table.Th>{t.kpi.actual.actualValue}</Table.Th>
-              <Table.Th>{t.kpi.actual.comment}</Table.Th>
-              <Table.Th>{t.kpi.actual.reportedAt}</Table.Th>
-              <Table.Th />
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
+        <UiTable striped highlightOnHover>
+          <UiTable.Thead>
+            <UiTable.Tr>
+              <UiTable.Th>{t.kpi.actual.asOfDate}</UiTable.Th>
+              <UiTable.Th>{t.kpi.actual.actualValue}</UiTable.Th>
+              <UiTable.Th>{t.kpi.actual.comment}</UiTable.Th>
+              <UiTable.Th>{t.kpi.actual.reportedAt}</UiTable.Th>
+              <UiTable.Th />
+            </UiTable.Tr>
+          </UiTable.Thead>
+          <UiTable.Tbody>
             {rows.map((row) => (
-              <Table.Tr key={row.id}>
-                <Table.Td>
+              <UiTable.Tr key={row.id}>
+                <UiTable.Td>
                   <Text size="sm">{row.asOfDate}</Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm">{row.actualValue}</Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm" c="dimmed">
                     {row.comment ?? '—'}
                   </Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="xs" c="dimmed">
                     {formatInstant(row.createdAt)}
                   </Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Group gap={6} justify="flex-end">
                     {row.superseded ? (
-                      <Badge color="gray" variant="light">
+                      <UiBadge color="gray" variant="light">
                         {t.kpi.actual.superseded}
-                      </Badge>
+                      </UiBadge>
                     ) : (
                       <>
-                        <Badge color="teal" variant="light">
+                        <UiBadge color="teal" variant="light">
                           {t.kpi.actual.latest}
-                        </Badge>
-                        <Button
+                        </UiBadge>
+                        <UiButton
                           size="xs"
                           variant="subtle"
                           onClick={() => setCorrectTarget(row)}
                         >
                           {t.kpi.actual.correct}
-                        </Button>
+                        </UiButton>
                       </>
                     )}
                   </Group>
-                </Table.Td>
-              </Table.Tr>
+                </UiTable.Td>
+              </UiTable.Tr>
             ))}
-          </Table.Tbody>
-        </Table>
+          </UiTable.Tbody>
+        </UiTable>
       )}
 
       {correctTarget && (

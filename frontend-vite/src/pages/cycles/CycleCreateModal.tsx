@@ -2,16 +2,11 @@
  * CycleCreateModal — 사이클 생성 모달 + 선택적 Policy 동시 생성.
  */
 import { useState } from 'react';
-import {
-  Alert,
-  Group,
-  Modal,
-  Stack,
-  Switch,
-} from '@easy/ui-components/mantine';
+import { Group, Modal, Stack, Switch } from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
 import {
+  UiAlert,
   FormActions,
   FormSelect,
   FormTextInput,
@@ -158,9 +153,9 @@ export function CycleCreateModal({ opened, onClose }: Props): React.ReactNode {
         {withPolicy && <PolicyForm value={policy} onChange={setPolicy} />}
 
         {errorMessage && (
-          <Alert color="red" variant="light">
+          <UiAlert color="red" variant="light">
             {errorMessage}
-          </Alert>
+          </UiAlert>
         )}
 
         <FormActions

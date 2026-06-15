@@ -13,18 +13,18 @@
 import { useState } from 'react';
 
 import {
-  Alert,
-  Badge,
   Code,
   Group,
-  Loader,
   Modal,
   Stack,
-  Table,
   Text,
   Title,
 } from '@easy/ui-components/mantine';
 import {
+  UiAlert,
+  UiBadge,
+  UiLoader,
+  UiTable,
   DangerButton,
   EasyTooltip,
   FormActions,
@@ -56,10 +56,10 @@ function StatusBadge({ status }: { status?: string | null }): React.ReactNode {
   const value = status ?? 'UNKNOWN';
   return (
     <Group gap={6} wrap="nowrap">
-      <Badge color={STATUS_COLOR[value] ?? 'gray'} variant="light">
+      <UiBadge color={STATUS_COLOR[value] ?? 'gray'} variant="light">
         {value}
-      </Badge>
-      {value === 'PROVISIONING' && <Loader size="xs" />}
+      </UiBadge>
+      {value === 'PROVISIONING' && <UiLoader size="xs" />}
     </Group>
   );
 }
@@ -191,9 +191,9 @@ function CreateTenantModal({
           onChange={(e) => setAdminEmail(e.currentTarget.value)}
         />
         {create.isError && (
-          <Alert color="red" variant="light">
+          <UiAlert color="red" variant="light">
             {t.adminTenants.createFailed}
-          </Alert>
+          </UiAlert>
         )}
         <FormActions
           secondary={<SecondaryButton onClick={onClose}>{t.adminTenants.action.cancel}</SecondaryButton>}
@@ -246,7 +246,7 @@ export function AdminTenantsPage(): React.ReactNode {
 
       {isLoading && (
         <Group justify="center" p="xl">
-          <Loader />
+          <UiLoader />
         </Group>
       )}
 
@@ -263,31 +263,31 @@ export function AdminTenantsPage(): React.ReactNode {
 
       {!isLoading && !isError && (tenants?.length ?? 0) > 0 && (
         <SurfaceCard p={0}>
-          <Table striped highlightOnHover>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>{t.adminTenants.column.code}</Table.Th>
-                <Table.Th>{t.adminTenants.column.name}</Table.Th>
-                <Table.Th>{t.adminTenants.column.status}</Table.Th>
-                <Table.Th>{t.adminTenants.column.region}</Table.Th>
-                <Table.Th>{t.adminTenants.column.neonProject}</Table.Th>
-                <Table.Th>{t.adminTenants.column.admin}</Table.Th>
-                <Table.Th>{t.adminTenants.column.createdAt}</Table.Th>
-                <Table.Th />
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+          <UiTable striped highlightOnHover>
+            <UiTable.Thead>
+              <UiTable.Tr>
+                <UiTable.Th>{t.adminTenants.column.code}</UiTable.Th>
+                <UiTable.Th>{t.adminTenants.column.name}</UiTable.Th>
+                <UiTable.Th>{t.adminTenants.column.status}</UiTable.Th>
+                <UiTable.Th>{t.adminTenants.column.region}</UiTable.Th>
+                <UiTable.Th>{t.adminTenants.column.neonProject}</UiTable.Th>
+                <UiTable.Th>{t.adminTenants.column.admin}</UiTable.Th>
+                <UiTable.Th>{t.adminTenants.column.createdAt}</UiTable.Th>
+                <UiTable.Th />
+              </UiTable.Tr>
+            </UiTable.Thead>
+            <UiTable.Tbody>
               {tenants!.map((tenant) => (
-                <Table.Tr key={tenant.id}>
-                  <Table.Td>
+                <UiTable.Tr key={tenant.id}>
+                  <UiTable.Td>
                     <Text fw={600} size="sm">
                       {tenant.code}
                     </Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="sm">{tenant.name}</Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     {tenant.status === 'FAILED' && tenant.lastError ? (
                       <EasyTooltip label={tenant.lastError} multiline maw={360}>
                         <span>
@@ -297,33 +297,33 @@ export function AdminTenantsPage(): React.ReactNode {
                     ) : (
                       <StatusBadge status={tenant.status} />
                     )}
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="xs" c="dimmed">
                       {tenant.region ?? '—'}
                     </Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Code fz="xs">{tenant.neonProjectId ?? '—'}</Code>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="xs">{tenant.adminUsername ?? '—'}</Text>
                     <Text size="xs" c="dimmed">
                       {tenant.adminEmail ?? ''}
                     </Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <Text size="xs" c="dimmed">
                       {tenant.createdAt ? new Date(tenant.createdAt).toLocaleDateString() : '—'}
                     </Text>
-                  </Table.Td>
-                  <Table.Td>
+                  </UiTable.Td>
+                  <UiTable.Td>
                     <TenantRowActions tenant={tenant} />
-                  </Table.Td>
-                </Table.Tr>
+                  </UiTable.Td>
+                </UiTable.Tr>
               ))}
-            </Table.Tbody>
-          </Table>
+            </UiTable.Tbody>
+          </UiTable>
         </SurfaceCard>
       )}
 

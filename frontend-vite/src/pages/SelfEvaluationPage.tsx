@@ -4,8 +4,10 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/self-evaluations` (Page envelope).
  * Status 상태 머신: DRAFT → SUBMITTED → REVIEWED → FINALIZED.
  */
-import { Badge, Group, Stack, Table, Text } from '@easy/ui-components/mantine';
+import { Group, Stack, Text } from '@easy/ui-components/mantine';
 import {
+  UiBadge,
+  UiTable,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -71,36 +73,36 @@ export function SelfEvaluationPage(): React.ReactNode {
           />
         ) : (
           <Stack>
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t.domain.selfEvaluation.period}</Table.Th>
-                  <Table.Th>{t.domain.selfEvaluation.score}</Table.Th>
-                  <Table.Th>{t.domain.selfEvaluation.status}</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            <UiTable striped highlightOnHover>
+              <UiTable.Thead>
+                <UiTable.Tr>
+                  <UiTable.Th>{t.domain.selfEvaluation.period}</UiTable.Th>
+                  <UiTable.Th>{t.domain.selfEvaluation.score}</UiTable.Th>
+                  <UiTable.Th>{t.domain.selfEvaluation.status}</UiTable.Th>
+                </UiTable.Tr>
+              </UiTable.Thead>
+              <UiTable.Tbody>
                 {rows.map((row) => (
-                  <Table.Tr key={row.id}>
-                    <Table.Td>
+                  <UiTable.Tr key={row.id}>
+                    <UiTable.Td>
                       <Group gap={6}>
                         <Text size="sm">{row.periodStart}</Text>
                         <Text size="sm" c="dimmed">~</Text>
                         <Text size="sm">{row.periodEnd}</Text>
                       </Group>
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       <Text size="sm">{row.score ?? '—'}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Badge color={statusColor(row.status)} variant="light">
+                    </UiTable.Td>
+                    <UiTable.Td>
+                      <UiBadge color={statusColor(row.status)} variant="light">
                         {statusLabel(row.status)}
-                      </Badge>
-                    </Table.Td>
-                  </Table.Tr>
+                      </UiBadge>
+                    </UiTable.Td>
+                  </UiTable.Tr>
                 ))}
-              </Table.Tbody>
-            </Table>
+              </UiTable.Tbody>
+            </UiTable>
           </Stack>
         )}
       </SectionCard>

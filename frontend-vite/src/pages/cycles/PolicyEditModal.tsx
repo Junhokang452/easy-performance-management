@@ -5,15 +5,9 @@
  * - 없으면 DEFAULT_POLICY 로 시작 (신규 생성)
  */
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  Center,
-  Loader,
-  Modal,
-  Stack,
-} from '@easy/ui-components/mantine';
+import { Center, Modal, Stack } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
-import { FormActions, PrimaryButton, SecondaryButton } from '@easy/ui-components';
+import { UiAlert, UiLoader, FormActions, PrimaryButton, SecondaryButton } from '@easy/ui-components';
 
 import {
   isDistributionSumValid,
@@ -106,16 +100,16 @@ export function PolicyEditModal({
     >
       {loading ? (
         <Center mih={120}>
-          <Loader />
+          <UiLoader />
         </Center>
       ) : (
         <Stack>
           <PolicyForm value={form} onChange={setForm} />
 
           {errorMessage && (
-            <Alert color="red" variant="light">
+            <UiAlert color="red" variant="light">
               {errorMessage}
-            </Alert>
+            </UiAlert>
           )}
 
           <FormActions

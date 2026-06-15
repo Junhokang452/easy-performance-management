@@ -4,8 +4,9 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/personal-okrs` (Page envelope).
  * Status 상태 머신: ACTIVE / AT_RISK / COMPLETED / ARCHIVED.
  */
-import { Badge, Stack, Text } from '@easy/ui-components/mantine';
+import { Stack, Text } from '@easy/ui-components/mantine';
 import {
+  UiBadge,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -82,9 +83,9 @@ export function PersonalOkrPage(): React.ReactNode {
                   </Text>
                 }
                 badges={
-                  <Badge color={statusColor(okr.status)} variant="light">
+                  <UiBadge color={statusColor(okr.status)} variant="light">
                     {statusLabel(okr.status)}
-                  </Badge>
+                  </UiBadge>
                 }
                 title={okr.objective}
                 progressValue={typeof okr.progress === 'number' ? okr.progress : 0}

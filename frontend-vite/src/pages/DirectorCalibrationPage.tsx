@@ -2,7 +2,7 @@
  * DirectorCalibrationPage (#19) — 본부 Calibration grid (`/director/calibration`).
  *
  * cycle Select + session Select(해당 cycle 세션 — IN_SESSION/ADJUSTED 만 조정 가능 안내) →
- * 분포 막대(현재 vs 목표, GET distribution) + review 행 테이블(employeeId·kpiScore·effectiveGrade Badge) +
+ * 분포 막대(현재 vs 목표, GET distribution) + review 행 테이블(employeeId·kpiScore·effectiveGrade UiBadge) +
  * 행별 등급 이동(AdjustGradeMenu S~D + reason) → adjustments API +
  * 조정 이력 패널(선택 세션 adjustmentLog 역순 리스트).
  *
@@ -10,16 +10,10 @@
  * STD-FE 5 정합.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { Group, ScrollArea, Select, Stack, Text } from '@easy/ui-components/mantine';
 import {
-  Badge,
-  Group,
-  ScrollArea,
-  Select,
-  Stack,
-  Table,
-  Text,
-} from '@easy/ui-components/mantine';
-import {
+  UiBadge,
+  UiTable,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -212,41 +206,41 @@ function ReviewsTable({
   const t = useT();
   return (
     <ScrollArea type="auto" offsetScrollbars>
-      <Table striped highlightOnHover verticalSpacing="sm" miw={760}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>{t.calibration.director.col.employeeId}</Table.Th>
-            <Table.Th>{t.calibration.director.col.status}</Table.Th>
-            <Table.Th>{t.calibration.director.col.kpiScore}</Table.Th>
-            <Table.Th>{t.calibration.director.col.grade}</Table.Th>
-            <Table.Th />
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
+      <UiTable striped highlightOnHover verticalSpacing="sm" miw={760}>
+        <UiTable.Thead>
+          <UiTable.Tr>
+            <UiTable.Th>{t.calibration.director.col.employeeId}</UiTable.Th>
+            <UiTable.Th>{t.calibration.director.col.status}</UiTable.Th>
+            <UiTable.Th>{t.calibration.director.col.kpiScore}</UiTable.Th>
+            <UiTable.Th>{t.calibration.director.col.grade}</UiTable.Th>
+            <UiTable.Th />
+          </UiTable.Tr>
+        </UiTable.Thead>
+        <UiTable.Tbody>
           {reviews.map((review) => {
             const grade = effectiveGradeLabel(review.finalGrade, review.kpiScore);
             // 조정 가능 = 세션 선택됨 + 조정 가능 상태 + review 가 CALIBRATION 상태.
             const canAdjustRow =
               adjustable && sessionId != null && review.status === 'CALIBRATION';
             return (
-              <Table.Tr key={review.id}>
-                <Table.Td>
+              <UiTable.Tr key={review.id}>
+                <UiTable.Td>
                   <Text size="sm" ff="monospace">
                     {review.employeeId}
                   </Text>
-                </Table.Td>
-                <Table.Td>
-                  <Badge size="sm" variant="light" color="gray">
+                </UiTable.Td>
+                <UiTable.Td>
+                  <UiBadge size="sm" variant="light" color="gray">
                     {t.review.status[review.status]}
-                  </Badge>
-                </Table.Td>
-                <Table.Td>
+                  </UiBadge>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Text size="sm">{formatScore(review.kpiScore)}</Text>
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <GradeBadge grade={grade} />
-                </Table.Td>
-                <Table.Td>
+                </UiTable.Td>
+                <UiTable.Td>
                   <Group justify="flex-end" wrap="nowrap">
                     {sessionId != null && (
                       <AdjustGradeMenu
@@ -258,12 +252,12 @@ function ReviewsTable({
                       />
                     )}
                   </Group>
-                </Table.Td>
-              </Table.Tr>
+                </UiTable.Td>
+              </UiTable.Tr>
             );
           })}
-        </Table.Tbody>
-      </Table>
+        </UiTable.Tbody>
+      </UiTable>
     </ScrollArea>
   );
 }

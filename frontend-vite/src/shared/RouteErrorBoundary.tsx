@@ -9,7 +9,8 @@
  * jobeval 단계 4 cutover `cc1bc03` 패턴 정합.
  */
 import { Component, type ReactNode } from 'react';
-import { Alert, Button, Stack, Text } from '@easy/ui-components/mantine';
+import { Stack, Text } from '@easy/ui-components/mantine';
+import { UiAlert, UiButton } from '@easy/ui-components';
 
 interface Props {
   children: ReactNode;
@@ -49,16 +50,16 @@ export class RouteErrorBoundary extends Component<Props, State> {
   override render(): ReactNode {
     if (this.state.hasError) {
       return (
-        <Alert color="red" title="페이지 렌더링 오류" m="md">
+        <UiAlert color="red" title="페이지 렌더링 오류" m="md">
           <Stack gap="xs">
             <Text size="sm">
               {this.state.error?.message ?? '알 수 없는 오류가 발생했습니다.'}
             </Text>
-            <Button variant="light" size="xs" onClick={this.reset}>
+            <UiButton variant="light" size="xs" onClick={this.reset}>
               다시 시도
-            </Button>
+            </UiButton>
           </Stack>
-        </Alert>
+        </UiAlert>
       );
     }
     return this.props.children;

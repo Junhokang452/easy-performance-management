@@ -2,7 +2,7 @@
  * MySelfReviewPage (#4) — 자기평가 폼 (`/my/self-review`).
  *
  * cycle Select + employeeId 입력(MyKpiPage 패턴 — principal 주입은 P0-S6 이후) →
- * GET /reviews/my → 상태 Badge + KPI 자체 점검 표(read-only) + selfComment Textarea +
+ * GET /reviews/my → 상태 UiBadge + KPI 자체 점검 표(read-only) + selfComment Textarea +
  * 임시저장(PATCH, SELF_PENDING 한정) + 제출(submit-self, 확인 모달) → SELF_SUBMITTED 이후 read-only 잠금.
  *
  * review 없으면(404 E9804447) 빈 상태 안내.
@@ -12,9 +12,6 @@
  */
 import { useEffect, useState } from 'react';
 import {
-  Alert,
-  Badge,
-  Button,
   Group,
   Modal,
   Stack,
@@ -25,6 +22,9 @@ import {
 import { notifications } from '@mantine/notifications';
 import { IconLock, IconSearch } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiAlert,
+  UiButton,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -87,14 +87,14 @@ export function MySelfReviewPage(): React.ReactNode {
               onChange={(e) => setEmployeeIdInput(e.currentTarget.value)}
               w={320}
             />
-            <Button
+            <UiButton
               leftSection={<IconSearch size={16} />}
               onClick={handleLoad}
               disabled={!canLoad}
               loading={isFetching && Boolean(applied)}
             >
               {t.review.self.load}
-            </Button>
+            </UiButton>
           </Group>
 
           {!applied ? (
@@ -196,16 +196,16 @@ function SelfReviewForm({ review }: SelfReviewFormProps): React.ReactNode {
           <ReviewStatusBadge status={review.status} />
         </Group>
         {review.kpiScore != null && (
-          <Badge color="blue" variant="light" size="lg">
+          <UiBadge color="blue" variant="light" size="lg">
             {t.review.field.kpiScore}: {review.kpiScore.toFixed(2)}
-          </Badge>
+          </UiBadge>
         )}
       </Group>
 
       {locked && (
-        <Alert color="gray" variant="light" icon={<IconLock size={16} />}>
+        <UiAlert color="gray" variant="light" icon={<IconLock size={16} />}>
           {t.review.self.lockedHint}
-        </Alert>
+        </UiAlert>
       )}
 
       <Text size="sm" fw={500} mt="xs">
@@ -235,19 +235,19 @@ function SelfReviewForm({ review }: SelfReviewFormProps): React.ReactNode {
 
       {editable && (
         <Group justify="flex-end">
-          <Button
+          <UiButton
             variant="default"
             onClick={handleSave}
             loading={updateMut.isPending}
           >
             {t.review.self.saveDraft}
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             onClick={() => setConfirmSubmit(true)}
             loading={submitMut.isPending}
           >
             {t.review.self.submit}
-          </Button>
+          </UiButton>
         </Group>
       )}
 
@@ -261,16 +261,16 @@ function SelfReviewForm({ review }: SelfReviewFormProps): React.ReactNode {
         <Stack>
           <Text size="sm">{t.review.self.confirmSubmit}</Text>
           <Group justify="flex-end">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setConfirmSubmit(false)}
               disabled={submitMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button onClick={handleSubmit} loading={submitMut.isPending}>
+            </UiButton>
+            <UiButton onClick={handleSubmit} loading={submitMut.isPending}>
               {t.review.self.submit}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>

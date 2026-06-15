@@ -26,11 +26,10 @@ import {
   Text,
   Group,
   Burger,
-  Button,
 } from '@easy/ui-components/mantine';
 import { useDisclosure } from '@mantine/hooks';
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
-import { LoginBrandMark } from '@easy/ui-components';
+import { UiButton, LoginBrandMark } from '@easy/ui-components';
 
 import { PageBoundary } from './shared/PageBoundary';
 import { AppHeaderActions } from './shared/AppHeaderActions';
@@ -165,9 +164,9 @@ export default function App(): React.ReactNode {
           <Group gap="xs" wrap="nowrap">
             <AppHeaderActions />
             {isAuthenticated && session && (
-              <Button variant="subtle" size="xs" radius="md" onClick={() => void logout()}>
+              <UiButton variant="subtle" size="xs" radius="md" onClick={() => void logout()}>
                 {t.common.label.logout}
-              </Button>
+              </UiButton>
             )}
           </Group>
         </Group>

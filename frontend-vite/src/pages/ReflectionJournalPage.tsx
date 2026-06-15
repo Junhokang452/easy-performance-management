@@ -4,8 +4,9 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/reflection-journals` (Page envelope).
  * 방법론: KPT / 4Ls / SSC.
  */
-import { Badge, Stack, Text } from '@easy/ui-components/mantine';
+import { Stack, Text } from '@easy/ui-components/mantine';
 import {
+  UiBadge,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -81,16 +82,16 @@ export function ReflectionJournalPage(): React.ReactNode {
                     <Text size="sm" fw={600}>
                       {journal.reflectionDate}
                     </Text>
-                    <Badge color={methodColor(journal.method)} variant="light">
+                    <UiBadge color={methodColor(journal.method)} variant="light">
                       {methodLabel(journal.method)}
-                    </Badge>
+                    </UiBadge>
                   </>
                 }
                 badges={
                   journal.isPrivate ? (
-                    <Badge color="gray" variant="outline">
+                    <UiBadge color="gray" variant="outline">
                       {t.domain.reflectionJournal.isPrivate}
-                    </Badge>
+                    </UiBadge>
                   ) : null
                 }
               >

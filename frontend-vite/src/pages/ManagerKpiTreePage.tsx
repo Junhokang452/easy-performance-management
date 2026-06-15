@@ -9,12 +9,8 @@
  */
 import { useEffect, useState } from 'react';
 import {
-  ActionIcon,
-  Alert,
-  Button,
   Center,
   Group,
-  Loader,
   Menu,
   Modal,
   Stack,
@@ -27,6 +23,10 @@ import {
 } from '@tabler/icons-react';
 import { PerformanceSelectableSurface } from '@easy/ui-components/performance';
 import {
+  UiActionIcon,
+  UiAlert,
+  UiButton,
+  UiLoader,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -80,13 +80,13 @@ export function ManagerKpiTreePage(): React.ReactNode {
               <Text size="sm" fw={500}>
                 {t.kpi.manager.treeList}
               </Text>
-              <Button
+              <UiButton
                 size="xs"
                 leftSection={<IconPlus size={14} />}
                 onClick={() => setTreeFormMode({ kind: 'create' })}
               >
                 {t.kpi.manager.createTree}
-              </Button>
+              </UiButton>
             </Group>
           )}
 
@@ -98,7 +98,7 @@ export function ManagerKpiTreePage(): React.ReactNode {
           )}
           {cycleId && treesQuery.isLoading && (
             <Center mih={80}>
-              <Loader />
+              <UiLoader />
             </Center>
           )}
           {cycleId &&
@@ -207,9 +207,9 @@ function TreeChip({
         </Stack>
         <Menu shadow="md" position="bottom-end" withinPortal>
           <Menu.Target>
-            <ActionIcon variant="subtle" aria-label="more">
+            <UiActionIcon variant="subtle" aria-label="more">
               <IconDotsVertical size={16} />
-            </ActionIcon>
+            </UiActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={onEdit}>{t.kpi.manager.editTree}</Menu.Item>
@@ -230,20 +230,20 @@ function TreeChip({
         <Stack>
           <Text size="sm">{t.kpi.confirmDeleteTree}</Text>
           <Group justify="flex-end">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setConfirmDelete(false)}
               disabled={deleteMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               color="red"
               onClick={handleDelete}
               loading={deleteMut.isPending}
             >
               {t.common.action.delete}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>
@@ -277,7 +277,7 @@ function TreeDetail({ treeId }: TreeDetailProps): React.ReactNode {
   if (isLoading || !data) {
     return (
       <Center mih={100}>
-        <Loader />
+        <UiLoader />
       </Center>
     );
   }
@@ -312,20 +312,20 @@ function TreeDetail({ treeId }: TreeDetailProps): React.ReactNode {
             {data.bscEnabled ? ' · BSC' : ''}
           </Text>
         </Stack>
-        <Button
+        <UiButton
           size="xs"
           variant="light"
           leftSection={<IconPlus size={14} />}
           onClick={() => setNodeFormMode({ kind: 'createRoot' })}
         >
           {t.kpi.manager.addRootNode}
-        </Button>
+        </UiButton>
       </Group>
 
       {data.nodes.length === 0 ? (
-        <Alert color="gray" variant="light">
+        <UiAlert color="gray" variant="light">
           {t.kpi.manager.emptyTree}
-        </Alert>
+        </UiAlert>
       ) : (
         <KpiNodeTree
           nodes={data.nodes}
@@ -365,20 +365,20 @@ function TreeDetail({ treeId }: TreeDetailProps): React.ReactNode {
         <Stack>
           <Text size="sm">{t.kpi.confirmDeleteNode}</Text>
           <Group justify="flex-end">
-            <Button
+            <UiButton
               variant="default"
               onClick={() => setDeleteNode(null)}
               disabled={deleteNodeMut.isPending}
             >
               {t.common.action.cancel}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               color="red"
               onClick={handleConfirmDeleteNode}
               loading={deleteNodeMut.isPending}
             >
               {t.common.action.delete}
-            </Button>
+            </UiButton>
           </Group>
         </Stack>
       </Modal>

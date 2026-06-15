@@ -10,17 +10,12 @@
  * STD-FE 5 정합 — LAZY(App.tsx) / RQ(useQuery+useMutation) / STRICT / ERROR-BOUNDARY / NEST.
  */
 import { useState } from 'react';
-import {
-  Badge,
-  Button,
-  Group,
-  Stack,
-  Table,
-  Text,
-  TextInput,
-} from '@easy/ui-components/mantine';
+import { Group, Stack, Text, TextInput } from '@easy/ui-components/mantine';
 import { IconSearch } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiButton,
+  UiTable,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -84,14 +79,14 @@ export function MyKpiPage(): React.ReactNode {
               onChange={(e) => setEmployeeIdInput(e.currentTarget.value)}
               w={320}
             />
-            <Button
+            <UiButton
               leftSection={<IconSearch size={16} />}
               onClick={handleLoad}
               disabled={!canLoad}
               loading={isFetching && Boolean(applied)}
             >
               {t.kpi.my.load}
-            </Button>
+            </UiButton>
           </Group>
 
           {!applied ? (
@@ -107,49 +102,49 @@ export function MyKpiPage(): React.ReactNode {
           ) : rows.length === 0 ? (
             <EmptyState title={t.kpi.my.empty} description={t.kpi.my.emptyHint} />
           ) : (
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t.kpi.my.col.node}</Table.Th>
-                  <Table.Th>{t.kpi.my.col.tree}</Table.Th>
-                  <Table.Th>{t.kpi.my.col.weight}</Table.Th>
-                  <Table.Th>{t.kpi.my.col.target}</Table.Th>
-                  <Table.Th>{t.kpi.my.col.latestActual}</Table.Th>
-                  <Table.Th>{t.kpi.my.col.achievementRate}</Table.Th>
-                  <Table.Th />
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            <UiTable striped highlightOnHover>
+              <UiTable.Thead>
+                <UiTable.Tr>
+                  <UiTable.Th>{t.kpi.my.col.node}</UiTable.Th>
+                  <UiTable.Th>{t.kpi.my.col.tree}</UiTable.Th>
+                  <UiTable.Th>{t.kpi.my.col.weight}</UiTable.Th>
+                  <UiTable.Th>{t.kpi.my.col.target}</UiTable.Th>
+                  <UiTable.Th>{t.kpi.my.col.latestActual}</UiTable.Th>
+                  <UiTable.Th>{t.kpi.my.col.achievementRate}</UiTable.Th>
+                  <UiTable.Th />
+                </UiTable.Tr>
+              </UiTable.Thead>
+              <UiTable.Tbody>
                 {rows.map((row) => (
-                  <Table.Tr key={row.id}>
-                    <Table.Td>
+                  <UiTable.Tr key={row.id}>
+                    <UiTable.Td>
                       <Group gap={6}>
                         <Text size="sm" fw={500}>
                           {row.nodeLabel}
                         </Text>
                         {row.bscPerspective && (
-                          <Badge size="xs" variant="outline" color="grape">
+                          <UiBadge size="xs" variant="outline" color="grape">
                             {t.kpi.bscPerspective[row.bscPerspective]}
-                          </Badge>
+                          </UiBadge>
                         )}
                       </Group>
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       <Text size="sm" c="dimmed">
                         {row.treeName}
                       </Text>
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       <Text size="sm">{formatWeight(row.weight)}</Text>
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       <Text size="sm">
                         {row.target != null
                           ? `${row.target}${row.unit ? ` ${row.unit}` : ''}`
                           : '—'}
                       </Text>
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       {row.latestActualValue != null ? (
                         <Group gap={6}>
                           <Text size="sm">{row.latestActualValue}</Text>
@@ -164,32 +159,32 @@ export function MyKpiPage(): React.ReactNode {
                           —
                         </Text>
                       )}
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       <AchievementBadge rate={row.achievementRate} />
-                    </Table.Td>
-                    <Table.Td>
+                    </UiTable.Td>
+                    <UiTable.Td>
                       <Group gap={6} justify="flex-end">
-                        <Button
+                        <UiButton
                           size="xs"
                           variant="light"
                           onClick={() => setReportTarget(row)}
                         >
                           {t.kpi.my.reportActual}
-                        </Button>
-                        <Button
+                        </UiButton>
+                        <UiButton
                           size="xs"
                           variant="subtle"
                           onClick={() => setHistoryTarget(row)}
                         >
                           {t.kpi.my.actualHistory}
-                        </Button>
+                        </UiButton>
                       </Group>
-                    </Table.Td>
-                  </Table.Tr>
+                    </UiTable.Td>
+                  </UiTable.Tr>
                 ))}
-              </Table.Tbody>
-            </Table>
+              </UiTable.Tbody>
+            </UiTable>
           )}
         </Stack>
       </SectionCard>
@@ -225,8 +220,8 @@ function AchievementBadge({ rate }: { rate: number | null }): React.ReactNode {
   }
   const color = rate >= 1 ? 'green' : rate >= 0.7 ? 'yellow' : 'red';
   return (
-    <Badge color={color} variant="light">
+    <UiBadge color={color} variant="light">
       {formatAchievementRate(rate)}
-    </Badge>
+    </UiBadge>
   );
 }

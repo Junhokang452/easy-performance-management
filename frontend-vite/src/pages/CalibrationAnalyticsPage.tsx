@@ -5,15 +5,7 @@
  * 등급/분포 계산은 BE 응답만 렌더하며 FE는 표시용 집계만 수행한다.
  */
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Badge,
-  Group,
-  Select,
-  SimpleGrid,
-  Stack,
-  Table,
-  Text,
-} from '@easy/ui-components/mantine';
+import { Group, Select, SimpleGrid, Stack, Text } from '@easy/ui-components/mantine';
 import {
   IconChartBar,
   IconChecklist,
@@ -21,6 +13,8 @@ import {
   IconUsers,
 } from '@tabler/icons-react';
 import {
+  UiBadge,
+  UiTable,
   EmptyState,
   ErrorBoundary,
   LoadingState,
@@ -215,36 +209,36 @@ function SessionsTable({
   }
 
   return (
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t.calibration.page.col.status}</Table.Th>
-          <Table.Th>{t.calibration.page.col.scheduledAt}</Table.Th>
-          <Table.Th>{t.calibration.page.col.participants}</Table.Th>
-          <Table.Th>{t.calibration.page.col.adjustments}</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
+    <UiTable striped highlightOnHover>
+      <UiTable.Thead>
+        <UiTable.Tr>
+          <UiTable.Th>{t.calibration.page.col.status}</UiTable.Th>
+          <UiTable.Th>{t.calibration.page.col.scheduledAt}</UiTable.Th>
+          <UiTable.Th>{t.calibration.page.col.participants}</UiTable.Th>
+          <UiTable.Th>{t.calibration.page.col.adjustments}</UiTable.Th>
+        </UiTable.Tr>
+      </UiTable.Thead>
+      <UiTable.Tbody>
         {sessions.map((session) => (
-          <Table.Tr key={session.id}>
-            <Table.Td>
+          <UiTable.Tr key={session.id}>
+            <UiTable.Td>
               <SessionStatusBadge status={session.status} />
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm">{formatDateTime(session.scheduledAt)}</Text>
-            </Table.Td>
-            <Table.Td>
+            </UiTable.Td>
+            <UiTable.Td>
               <Text size="sm">{session.participantIds?.length ?? 0}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Badge variant="light">
+            </UiTable.Td>
+            <UiTable.Td>
+              <UiBadge variant="light">
                 {session.adjustmentLog?.length ?? 0}
-              </Badge>
-            </Table.Td>
-          </Table.Tr>
+              </UiBadge>
+            </UiTable.Td>
+          </UiTable.Tr>
         ))}
-      </Table.Tbody>
-    </Table>
+      </UiTable.Tbody>
+    </UiTable>
   );
 }
 
@@ -268,36 +262,36 @@ function AdjustmentTimeline({
   }
 
   return (
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t.calibration.analytics.timelineCol.when}</Table.Th>
-          <Table.Th>{t.calibration.analytics.timelineCol.employee}</Table.Th>
-          <Table.Th>{t.calibration.analytics.timelineCol.grade}</Table.Th>
-          <Table.Th>{t.calibration.analytics.timelineCol.reason}</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
+    <UiTable striped highlightOnHover>
+      <UiTable.Thead>
+        <UiTable.Tr>
+          <UiTable.Th>{t.calibration.analytics.timelineCol.when}</UiTable.Th>
+          <UiTable.Th>{t.calibration.analytics.timelineCol.employee}</UiTable.Th>
+          <UiTable.Th>{t.calibration.analytics.timelineCol.grade}</UiTable.Th>
+          <UiTable.Th>{t.calibration.analytics.timelineCol.reason}</UiTable.Th>
+        </UiTable.Tr>
+      </UiTable.Thead>
+      <UiTable.Tbody>
         {entries.map((entry, index) => (
           <AdjustmentRow key={`${entry.reviewId}-${entry.at}-${index}`} entry={entry} />
         ))}
-      </Table.Tbody>
-    </Table>
+      </UiTable.Tbody>
+    </UiTable>
   );
 }
 
 function AdjustmentRow({ entry }: { entry: AdjustmentEntry }): React.ReactNode {
   return (
-    <Table.Tr>
-      <Table.Td>
+    <UiTable.Tr>
+      <UiTable.Td>
         <Text size="sm">{formatDateTime(entry.at)}</Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Text size="sm" ff="monospace">
           {entry.employeeId}
         </Text>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         <Group gap="xs" wrap="nowrap">
           <GradeBadge grade={entry.fromGrade} />
           <Text size="sm" c="dimmed">
@@ -305,8 +299,8 @@ function AdjustmentRow({ entry }: { entry: AdjustmentEntry }): React.ReactNode {
           </Text>
           <GradeBadge grade={entry.toGrade} />
         </Group>
-      </Table.Td>
-      <Table.Td>
+      </UiTable.Td>
+      <UiTable.Td>
         {entry.reason ? (
           <PerformancePreWrapText>{entry.reason}</PerformancePreWrapText>
         ) : (
@@ -314,8 +308,8 @@ function AdjustmentRow({ entry }: { entry: AdjustmentEntry }): React.ReactNode {
             —
           </Text>
         )}
-      </Table.Td>
-    </Table.Tr>
+      </UiTable.Td>
+    </UiTable.Tr>
   );
 }
 

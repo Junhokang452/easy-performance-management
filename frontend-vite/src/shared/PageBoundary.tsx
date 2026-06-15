@@ -10,9 +10,10 @@
  */
 import { Suspense, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Loader, Center } from '@easy/ui-components/mantine';
+import { Center } from '@easy/ui-components/mantine';
 
 import { RouteErrorBoundary } from './RouteErrorBoundary';
+import { UiLoader } from '@easy/ui-components';
 
 interface Props {
   children: ReactNode;
@@ -25,7 +26,7 @@ export function PageBoundary({ children }: Props): React.ReactNode {
       <Suspense
         fallback={
           <Center mih={200}>
-            <Loader />
+            <UiLoader />
           </Center>
         }
       >

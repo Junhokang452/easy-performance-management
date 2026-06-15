@@ -31,7 +31,7 @@ export type ReviewStatus =
   | 'APPEAL_RESOLVED'
   | 'ARCHIVED';
 
-/** 10 상태 전체 (Badge·표시용). */
+/** 10 상태 전체 (UiBadge·표시용). */
 export const ALL_REVIEW_STATUSES: ReviewStatus[] = [
   'DRAFT',
   'SELF_PENDING',

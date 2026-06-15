@@ -28,7 +28,7 @@ export type CalibrationStatus =
   | 'CONFIRMED'
   | 'CLOSED';
 
-/** 5 상태 전체 (Badge·표시용). */
+/** 5 상태 전체 (UiBadge·표시용). */
 export const ALL_CALIBRATION_STATUSES: CalibrationStatus[] = [
   'PLANNED',
   'IN_SESSION',
@@ -37,7 +37,7 @@ export const ALL_CALIBRATION_STATUSES: CalibrationStatus[] = [
   'CLOSED',
 ];
 
-/** S~D + UNRATED 등급 버킷 (분포·Badge). */
+/** S~D + UNRATED 등급 버킷 (분포·UiBadge). */
 export type GradeBucket = 'S' | 'A' | 'B' | 'C' | 'D' | 'UNRATED';
 
 /** 조정 가능 등급 (S~D — UNRATED 는 조정 대상 아님). */

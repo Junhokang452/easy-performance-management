@@ -4,8 +4,9 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/mentor-feedbacks` (Page envelope).
  * Category: GROWTH / RECOGNITION / COACHING / CONVERSATION.
  */
-import { Badge, Stack, Text } from '@easy/ui-components/mantine';
+import { Stack, Text } from '@easy/ui-components/mantine';
 import {
+  UiBadge,
   PageHeader,
   SectionCard,
   EmptyState,
@@ -85,16 +86,16 @@ export function MentorFeedbackPage(): React.ReactNode {
                     <Text size="sm" fw={600}>
                       {fb.feedbackDate}
                     </Text>
-                    <Badge color={categoryColor(fb.category)} variant="light">
+                    <UiBadge color={categoryColor(fb.category)} variant="light">
                       {categoryLabel(fb.category)}
-                    </Badge>
+                    </UiBadge>
                   </>
                 }
                 badges={
                   fb.acknowledged ? (
-                    <Badge color="green" variant="outline">
+                    <UiBadge color="green" variant="outline">
                       {t.domain.mentorFeedback.acknowledged}
-                    </Badge>
+                    </UiBadge>
                   ) : null
                 }
               >
