@@ -7,6 +7,7 @@ package com.easyperformance.platform;
 import com.easyware.platform.TenantProductDbStore;
 import com.easyware.platform.tenant.AbstractTenantSelfBootstrapScheduler;
 import com.easyware.platform.tenant.TenantBootstrap;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,8 +33,9 @@ public class PerformanceTenantSelfBootstrapScheduler extends AbstractTenantSelfB
     public PerformanceTenantSelfBootstrapScheduler(
             ObjectProvider<TenantProductDbStore> productDbStore,
             ObjectProvider<TenantBootstrap> tenantBootstrap,
+            ObjectProvider<MeterRegistry> meterRegistry,
             PerformanceInitialAdminSeeder adminSeeder) {
-        super(productDbStore, tenantBootstrap);
+        super(productDbStore, tenantBootstrap, meterRegistry);
         this.adminSeeder = adminSeeder;
     }
 
