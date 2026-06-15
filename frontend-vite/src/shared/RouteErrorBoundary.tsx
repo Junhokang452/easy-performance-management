@@ -9,7 +9,7 @@
  * jobeval 단계 4 cutover `cc1bc03` 패턴 정합.
  */
 import { Component, type ReactNode } from 'react';
-import { Alert, Button, Stack, Text } from '@mantine/core';
+import { Alert, Button, Stack, Text } from '@easy/ui-components/mantine';
 
 interface Props {
   children: ReactNode;

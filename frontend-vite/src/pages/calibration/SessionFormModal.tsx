@@ -19,7 +19,7 @@ import {
   TagsInput,
   Text,
   TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { DateTimePicker } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
 

@@ -8,7 +8,7 @@
  * 계약 §6 ReviewKpiItemResponse / §5 산식. 점수는 BE 응답 표시가 원칙 —
  * score-input 의 입력값(overrides)은 매니저 폼 로컬 상태로 상위가 관리(프리뷰·제출에 사용).
  */
-import { NumberInput, Table, Text } from '@mantine/core';
+import { NumberInput, Table, Text } from '@easy/ui-components/mantine';
 
 import {
   formatReviewAchievementRate,

@@ -18,7 +18,7 @@ import {
   Table,
   Text,
   TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { IconSearch } from '@tabler/icons-react';
 import {
   PageHeader,

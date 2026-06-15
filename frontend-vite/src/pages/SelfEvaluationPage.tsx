@@ -4,7 +4,7 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/self-evaluations` (Page envelope).
  * Status 상태 머신: DRAFT → SUBMITTED → REVIEWED → FINALIZED.
  */
-import { Badge, Group, Stack, Table, Text } from '@mantine/core';
+import { Badge, Group, Stack, Table, Text } from '@easy/ui-components/mantine';
 import {
   PageHeader,
   SectionCard,

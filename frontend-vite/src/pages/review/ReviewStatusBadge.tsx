@@ -6,7 +6,7 @@
  *   MANAGER_PENDING=violet / MANAGER_SUBMITTED=grape / CALIBRATION=orange
  *   FINALIZED=green / APPEAL_REQUESTED=red / APPEAL_RESOLVED=teal / ARCHIVED=dark
  */
-import { Badge } from '@mantine/core';
+import { Badge } from '@easy/ui-components/mantine';
 
 import type { ReviewStatus } from '../../api/reviews';
 import { useT } from '../../i18n';

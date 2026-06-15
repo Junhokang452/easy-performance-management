@@ -10,7 +10,7 @@
  */
 import { Suspense, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Loader, Center } from '@mantine/core';
+import { Loader, Center } from '@easy/ui-components/mantine';
 
 import { RouteErrorBoundary } from './RouteErrorBoundary';
 

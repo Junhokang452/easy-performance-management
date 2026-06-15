@@ -10,11 +10,11 @@
 import {
   Group,
   NumberInput,
-  Select,
   Stack,
   Switch,
   Text,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
+import { FormSelect } from '@easy/ui-components';
 
 import {
   ALL_DISTRIBUTION_MODES,
@@ -93,7 +93,7 @@ export function PolicyForm({ value, onChange }: Props): React.ReactNode {
 
   return (
     <Stack gap="sm">
-      <Select
+      <FormSelect
         label={t.policy.field.distributionMode}
         data={ALL_DISTRIBUTION_MODES.map((m) => ({
           value: m,
@@ -104,7 +104,7 @@ export function PolicyForm({ value, onChange }: Props): React.ReactNode {
         allowDeselect={false}
         withAsterisk
       />
-      <Select
+      <FormSelect
         label={t.policy.field.ratingScale}
         data={ALL_RATING_SCALES.map((s) => ({
           value: s,

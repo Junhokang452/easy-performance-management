@@ -7,14 +7,13 @@
 import { useEffect, useState } from 'react';
 import {
   Alert,
-  Button,
   Center,
-  Group,
   Loader,
   Modal,
   Stack,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
+import { FormActions, PrimaryButton, SecondaryButton } from '@easy/ui-components';
 
 import {
   isDistributionSumValid,
@@ -119,18 +118,18 @@ export function PolicyEditModal({
             </Alert>
           )}
 
-          <Group justify="flex-end" mt="sm">
-            <Button
-              variant="default"
-              onClick={handleClose}
-              disabled={upsertMut.isPending}
-            >
-              {t.common.action.cancel}
-            </Button>
-            <Button onClick={handleSubmit} loading={upsertMut.isPending}>
-              {t.common.action.save}
-            </Button>
-          </Group>
+          <FormActions
+            secondary={
+              <SecondaryButton onClick={handleClose} disabled={upsertMut.isPending}>
+                {t.common.action.cancel}
+              </SecondaryButton>
+            }
+            primary={
+              <PrimaryButton onClick={handleSubmit} loading={upsertMut.isPending}>
+                {t.common.action.save}
+              </PrimaryButton>
+            }
+          />
         </Stack>
       )}
     </Modal>

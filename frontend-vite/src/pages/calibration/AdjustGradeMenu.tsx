@@ -16,7 +16,7 @@ import {
   Stack,
   Text,
   Textarea,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import { IconChevronDown } from '@tabler/icons-react';
 

@@ -15,8 +15,6 @@ import { useState } from 'react';
 import {
   Alert,
   Badge,
-  Button,
-  Card,
   Code,
   Group,
   Loader,
@@ -24,10 +22,18 @@ import {
   Stack,
   Table,
   Text,
-  TextInput,
   Title,
-  Tooltip,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
+import {
+  DangerButton,
+  EasyTooltip,
+  FormActions,
+  FormTextInput,
+  PrimaryButton,
+  SecondaryButton,
+  SubtleButton,
+  SurfaceCard,
+} from '@easy/ui-components';
 
 import {
   useCreateTenant,
@@ -66,41 +72,35 @@ function TenantRowActions({ tenant }: { tenant: PlatformTenant }): React.ReactNo
 
   if (tenant.status === 'FAILED') {
     return (
-      <Button
+      <DangerButton
         size="compact-xs"
-        variant="light"
-        color="red"
         loading={retry.isPending}
         onClick={() => retry.mutate(tenant.id)}
       >
         {t.adminTenants.action.retry}
-      </Button>
+      </DangerButton>
     );
   }
   if (tenant.status === 'ACTIVE') {
     return (
-      <Button
+      <SubtleButton
         size="compact-xs"
-        variant="light"
-        color="gray"
         loading={suspend.isPending}
         onClick={() => suspend.mutate(tenant.id)}
       >
         {t.adminTenants.action.suspend}
-      </Button>
+      </SubtleButton>
     );
   }
   if (tenant.status === 'SUSPENDED') {
     return (
-      <Button
+      <PrimaryButton
         size="compact-xs"
-        variant="light"
-        color="green"
         loading={resume.isPending}
         onClick={() => resume.mutate(tenant.id)}
       >
         {t.adminTenants.action.resume}
-      </Button>
+      </PrimaryButton>
     );
   }
   return null; // PROVISIONING — 폴링이 상태 전이를 추적
@@ -156,34 +156,34 @@ function CreateTenantModal({
         <Text size="xs" c="dimmed">
           {t.adminTenants.createHint}
         </Text>
-        <TextInput
+        <FormTextInput
           label={t.adminTenants.field.code}
           placeholder="ACME"
           required
           value={code}
           onChange={(e) => setCode(e.currentTarget.value.toUpperCase())}
         />
-        <TextInput
+        <FormTextInput
           label={t.adminTenants.field.name}
           placeholder="acme-company"
           required
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
         />
-        <TextInput
+        <FormTextInput
           label={t.adminTenants.field.region}
           required
           value={region}
           onChange={(e) => setRegion(e.currentTarget.value)}
         />
-        <TextInput
+        <FormTextInput
           label={t.adminTenants.field.adminUsername}
           placeholder="admin"
           required
           value={adminUsername}
           onChange={(e) => setAdminUsername(e.currentTarget.value)}
         />
-        <TextInput
+        <FormTextInput
           label={t.adminTenants.field.adminEmail}
           placeholder="admin@acme.com"
           required
@@ -195,14 +195,14 @@ function CreateTenantModal({
             {t.adminTenants.createFailed}
           </Alert>
         )}
-        <Group justify="flex-end" mt="xs">
-          <Button variant="default" onClick={onClose}>
-            {t.adminTenants.action.cancel}
-          </Button>
-          <Button onClick={submit} disabled={!valid} loading={create.isPending}>
-            {t.adminTenants.action.create}
-          </Button>
-        </Group>
+        <FormActions
+          secondary={<SecondaryButton onClick={onClose}>{t.adminTenants.action.cancel}</SecondaryButton>}
+          primary={
+            <PrimaryButton onClick={submit} disabled={!valid} loading={create.isPending}>
+              {t.adminTenants.action.create}
+            </PrimaryButton>
+          }
+        />
       </Stack>
     </Modal>
   );
@@ -223,7 +223,7 @@ export function AdminTenantsPage(): React.ReactNode {
       </Stack>
 
       {isError && (
-        <Card withBorder p="md" radius="md">
+        <SurfaceCard p="md">
           <Stack gap="xs">
             <Text fw={500} size="sm">
               {t.adminTenants.gateOffTitle}
@@ -233,14 +233,14 @@ export function AdminTenantsPage(): React.ReactNode {
             </Text>
             <Code fz="xs">APP_NEON_MULTITENANCY_ENABLED=true</Code>
           </Stack>
-        </Card>
+        </SurfaceCard>
       )}
 
       {!isError && (
         <Group justify="flex-end">
-          <Button size="xs" onClick={() => setCreateOpened(true)}>
+          <PrimaryButton size="xs" onClick={() => setCreateOpened(true)}>
             {t.adminTenants.create}
-          </Button>
+          </PrimaryButton>
         </Group>
       )}
 
@@ -251,18 +251,18 @@ export function AdminTenantsPage(): React.ReactNode {
       )}
 
       {!isLoading && !isError && (tenants?.length ?? 0) === 0 && (
-        <Card withBorder p="xl" radius="md">
+        <SurfaceCard p="xl">
           <Stack gap="xs" align="center">
             <Text fw={500}>{t.adminTenants.empty}</Text>
             <Text size="xs" c="dimmed">
               {t.adminTenants.emptyHint}
             </Text>
           </Stack>
-        </Card>
+        </SurfaceCard>
       )}
 
       {!isLoading && !isError && (tenants?.length ?? 0) > 0 && (
-        <Card withBorder p={0} radius="md">
+        <SurfaceCard p={0}>
           <Table striped highlightOnHover>
             <Table.Thead>
               <Table.Tr>
@@ -289,11 +289,11 @@ export function AdminTenantsPage(): React.ReactNode {
                   </Table.Td>
                   <Table.Td>
                     {tenant.status === 'FAILED' && tenant.lastError ? (
-                      <Tooltip label={tenant.lastError} multiline maw={360} withArrow>
+                      <EasyTooltip label={tenant.lastError} multiline maw={360}>
                         <span>
                           <StatusBadge status={tenant.status} />
                         </span>
-                      </Tooltip>
+                      </EasyTooltip>
                     ) : (
                       <StatusBadge status={tenant.status} />
                     )}
@@ -324,7 +324,7 @@ export function AdminTenantsPage(): React.ReactNode {
               ))}
             </Table.Tbody>
           </Table>
-        </Card>
+        </SurfaceCard>
       )}
 
       <CreateTenantModal opened={createOpened} onClose={() => setCreateOpened(false)} />

@@ -7,7 +7,7 @@
  * 기존 calibration/DistributionBars 는 current=건수 / target=비율 듀얼 표기라 키 단위가 달라 그대로 재사용 불가
  * (본 슬라이스는 distribution 이 비율 단일 + 본인 강조 + UNRATED 없음) → 비율 전용 경량 변형 (P0_S5_FRONTEND 박제).
  */
-import { Text } from '@mantine/core';
+import { Text } from '@easy/ui-components/mantine';
 import { PerformanceDistributionBars } from '@easy/ui-components/performance';
 
 import { formatReportRatio, type ReportDistribution } from '../../api/reports';

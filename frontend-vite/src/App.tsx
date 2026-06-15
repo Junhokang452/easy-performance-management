@@ -27,7 +27,7 @@ import {
   Group,
   Burger,
   Button,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { useDisclosure } from '@mantine/hooks';
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
 import { LoginBrandMark } from '@easy/ui-components';

@@ -8,7 +8,7 @@
  * `@mantine/modals` 미설치 → core Modal 인라인.
  */
 import { useEffect, useState } from 'react';
-import { Alert, Button, Group, Modal, Stack, Switch, Text } from '@mantine/core';
+import { Alert, Button, Group, Modal, Stack, Switch, Text } from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 
 import {

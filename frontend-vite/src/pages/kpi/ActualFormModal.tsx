@@ -17,7 +17,7 @@ import {
   Stack,
   Textarea,
   TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
 

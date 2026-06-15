@@ -16,7 +16,7 @@ import {
   Stack,
   Switch,
   Text,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import {
   IconChartBar,
   IconGitBranch,

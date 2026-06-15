@@ -4,7 +4,7 @@
  * 색상 매핑 (Mantine v9): S=red(최상위 강조) / A=orange / B=yellow / C=gray / D=dark / UNRATED=gray light.
  * 등급 라벨은 그대로 노출(S/A/B/C/D), UNRATED 는 i18n 라벨.
  */
-import { Badge } from '@mantine/core';
+import { Badge } from '@easy/ui-components/mantine';
 
 import type { GradeBucket } from '../../api/calibration';
 import { useT } from '../../i18n';

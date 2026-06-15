@@ -3,7 +3,7 @@
  *
  * 3 KPI 화면(My/매니저/본부)이 공유. 빈 목록·로딩 상태 처리.
  */
-import { Select, Text } from '@mantine/core';
+import { Select, Text } from '@easy/ui-components/mantine';
 
 import { useCyclesQuery } from '../../api/cycles';
 import { useT } from '../../i18n';

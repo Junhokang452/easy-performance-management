@@ -17,7 +17,7 @@ import {
   Stack,
   Table,
   Text,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import { IconDotsVertical, IconPlus } from '@tabler/icons-react';
 import {

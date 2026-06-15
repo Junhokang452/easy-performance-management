@@ -7,7 +7,7 @@
  *
  * kpi-items 는 매니저 폼과 동일 소스(live 계산 + 저장 managerScore merge). 점수는 BE 표시값 — 입력 폼 아님.
  */
-import { SimpleGrid, Stack, Table, Text } from '@mantine/core';
+import { SimpleGrid, Stack, Table, Text } from '@easy/ui-components/mantine';
 import {
   PerformanceCommentPanel,
   PerformanceScoreGrid,

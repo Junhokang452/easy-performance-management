@@ -4,7 +4,7 @@
  * 기존 cycle/review/calibration/report API 조합만 사용한다. 집계값은 화면
  * 진행률 표시용이며, 점수·등급·분포 계산의 SoT는 각 BE 응답이다.
  */
-import { Badge, Group, Progress, SimpleGrid, Stack, Table, Text } from '@mantine/core';
+import { Badge, Group, Progress, SimpleGrid, Stack, Table, Text } from '@easy/ui-components/mantine';
 import {
   IconChartBar,
   IconChecklist,

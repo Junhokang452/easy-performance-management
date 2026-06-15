@@ -20,9 +20,7 @@ import {
   Stack,
   Table,
   Text,
-  ThemeIcon,
-  Tooltip,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 import {
   IconAlertTriangle,
@@ -43,6 +41,7 @@ import {
 import {
   PerformanceMetricGrid,
   PerformanceProgressSummary,
+  PerformanceStatusIconGroup,
   formatPerformanceRatioPercent,
   formatPerformanceRatioText,
 } from '@easy/ui-components/performance';
@@ -476,47 +475,37 @@ function ReportsTable({
                 <Text size="sm">{formatReportDateTime(report.publishedAt)}</Text>
               </Table.Td>
               <Table.Td>
-                <Group gap={6} wrap="nowrap">
-                  <Tooltip
-                    label={
-                      report.viewedAt
+                <PerformanceStatusIconGroup
+                  items={[
+                    {
+                      key: 'viewed',
+                      label: report.viewedAt
                         ? t.report.hr.viewed
-                        : t.report.hr.notViewed
-                    }
-                  >
-                    <ThemeIcon
-                      size="sm"
-                      variant="light"
-                      color={report.viewedAt ? 'blue' : 'gray'}
-                    >
-                      {report.viewedAt ? (
+                        : t.report.hr.notViewed,
+                      color: report.viewedAt ? 'blue' : 'gray',
+                      icon: report.viewedAt ? (
                         <IconEye size={14} />
                       ) : (
                         <IconEyeOff size={14} />
-                      )}
-                    </ThemeIcon>
-                  </Tooltip>
-                  <Tooltip
-                    label={
-                      report.acknowledged
+                      ),
+                    },
+                    {
+                      key: 'acknowledged',
+                      label: report.acknowledged
                         ? t.report.hr.acknowledged
-                        : t.report.hr.notAcknowledged
-                    }
-                  >
-                    <ThemeIcon
-                      size="sm"
-                      variant="light"
-                      color={report.acknowledged ? 'green' : 'gray'}
-                    >
-                      <IconCircleCheck size={14} />
-                    </ThemeIcon>
-                  </Tooltip>
-                  {report.superseded && (
+                        : t.report.hr.notAcknowledged,
+                      color: report.acknowledged ? 'green' : 'gray',
+                      icon: <IconCircleCheck size={14} />,
+                    },
+                  ]}
+                  trailing={
+                    report.superseded ? (
                     <Badge size="xs" variant="outline" color="gray">
                       {t.report.hr.superseded}
                     </Badge>
-                  )}
-                </Group>
+                    ) : null
+                  }
+                />
               </Table.Td>
               <Table.Td>
                 <Group justify="flex-end" wrap="nowrap">

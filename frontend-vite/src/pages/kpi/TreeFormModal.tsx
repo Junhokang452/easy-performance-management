@@ -17,7 +17,7 @@ import {
   Stack,
   Switch,
   TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 
 import {

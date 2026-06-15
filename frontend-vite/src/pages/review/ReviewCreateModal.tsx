@@ -19,7 +19,7 @@ import {
   Text,
   Textarea,
   TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { notifications } from '@mantine/notifications';
 
 import {

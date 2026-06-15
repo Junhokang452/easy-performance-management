@@ -6,7 +6,7 @@
  *   SELF_REVIEW=violet / MANAGER_REVIEW=grape / CALIBRATION=orange
  *   FINALIZED=green / CANCELLED=red
  */
-import { Badge } from '@mantine/core';
+import { Badge } from '@easy/ui-components/mantine';
 
 import type { CycleStatus } from '../../api/cycles';
 import { useT } from '../../i18n';

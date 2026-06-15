@@ -5,7 +5,7 @@
  * `useI18n()` 로 ko/en 전환.
  * jobeval 단계 4 cutover `cc1bc03` 패턴 정합.
  */
-import { ActionIcon, Group, SegmentedControl, useMantineColorScheme, Tooltip } from '@mantine/core';
+import { ActionIcon, Group, SegmentedControl, useMantineColorScheme, Tooltip } from '@easy/ui-components/mantine';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 
 import { useI18n } from '../i18n';

@@ -12,7 +12,7 @@ import {
   ActionIcon,
   Badge,
   Menu,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import {
   IconDotsVertical,
   IconPlus,

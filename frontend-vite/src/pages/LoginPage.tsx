@@ -7,21 +7,16 @@
  */
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  Group,
-  PasswordInput,
-  SegmentedControl,
-  Stack,
-  TextInput,
-  Title,
-  Text,
-  Alert,
-} from '@mantine/core';
+import { Stack, Text, Alert } from '@easy/ui-components/mantine';
 import { useForm } from '@mantine/form';
 import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
-import { LoginBrandMark, LoginVisualShell } from '@easy/ui-components';
+import {
+  FormPasswordInput,
+  FormSegmentedControl,
+  FormTextInput,
+  PrimaryButton,
+  ProductLoginShell,
+} from '@easy/ui-components';
 
 import { useAuth } from '../auth/AuthProvider';
 import { useT } from '../i18n';
@@ -82,70 +77,60 @@ export function LoginPage(): React.ReactNode {
   });
 
   return (
-    <LoginVisualShell image={loginVisual.image}>
-      <Card shadow="md" padding="xl" bg="color-mix(in srgb, var(--easy-color-surface) 90%, transparent)">
-        <Stack gap="lg">
-          <Group gap="sm" align="flex-start">
-            <LoginBrandMark size={32} radius={8}>
-              <IconChartBar size={18} />
-            </LoginBrandMark>
-            <Stack gap={0}>
-              <Title order={3}>{t.domain.app.title}</Title>
-              <Text size="xs" c="dimmed">
-                {t.domain.app.subtitle}
-              </Text>
-            </Stack>
-          </Group>
-          <Stack gap={4}>
-            <Text size="xs" c="dimmed">
-              {t.login.personaLabel}
-            </Text>
-            <SegmentedControl
-              fullWidth
-              size="xs"
-              value={persona ?? ''}
-              onChange={applyPersona}
-              data={[
-                { label: t.login.persona.superAdmin, value: 'SUPER_ADMIN' },
-                { label: t.login.persona.hrAdmin, value: 'HR_ADMIN' },
-                { label: t.login.persona.director, value: 'DIRECTOR' },
-                { label: t.login.persona.manager, value: 'MANAGER' },
-                { label: t.login.persona.employee, value: 'EMPLOYEE' },
-              ]}
-            />
-            <Text size="xs" c="dimmed">
-              {t.login.personaHint}
-            </Text>
-          </Stack>
-          {error && (
-            <Alert color="red" title={t.error.boundary}>
-              {error}
-            </Alert>
-          )}
-          <form onSubmit={onSubmit}>
-            <Stack>
-              <TextInput
-                label={t.login.emailLabel}
-                placeholder="user@example.com"
-                required
-                leftSection={<IconMail size={16} />}
-                autoComplete="username"
-                {...form.getInputProps('email')}
-              />
-              <PasswordInput
-                label={t.login.passwordLabel}
-                required
-                leftSection={<IconLock size={16} />}
-                autoComplete="current-password"
-                {...form.getInputProps('password')}
-              />
-              <Button type="submit" color="brand" loading={submitting} leftSection={<IconLogin2 size={16} />}>
-                {t.login.submit}
-              </Button>
-            </Stack>
-          </form>
+    <ProductLoginShell
+      productName={t.domain.app.title}
+      subtitle={t.domain.app.subtitle}
+      visualImage={loginVisual.image}
+      brandInitial={<IconChartBar size={18} />}
+    >
+      <Stack gap={4}>
+        <Text size="xs" c="dimmed">
+          {t.login.personaLabel}
+        </Text>
+        <FormSegmentedControl
+          fullWidth
+          size="xs"
+          value={persona ?? ''}
+          onChange={applyPersona}
+          data={[
+            { label: t.login.persona.superAdmin, value: 'SUPER_ADMIN' },
+            { label: t.login.persona.hrAdmin, value: 'HR_ADMIN' },
+            { label: t.login.persona.director, value: 'DIRECTOR' },
+            { label: t.login.persona.manager, value: 'MANAGER' },
+            { label: t.login.persona.employee, value: 'EMPLOYEE' },
+          ]}
+        />
+        <Text size="xs" c="dimmed">
+          {t.login.personaHint}
+        </Text>
+      </Stack>
+      {error && (
+        <Alert color="red" title={t.error.boundary}>
+          {error}
+        </Alert>
+      )}
+      <form onSubmit={onSubmit}>
+        <Stack>
+          <FormTextInput
+            label={t.login.emailLabel}
+            placeholder="user@example.com"
+            required
+            leftSection={<IconMail size={16} />}
+            autoComplete="username"
+            {...form.getInputProps('email')}
+          />
+          <FormPasswordInput
+            label={t.login.passwordLabel}
+            required
+            leftSection={<IconLock size={16} />}
+            autoComplete="current-password"
+            {...form.getInputProps('password')}
+          />
+          <PrimaryButton type="submit" loading={submitting} leftSection={<IconLogin2 size={16} />}>
+            {t.login.submit}
+          </PrimaryButton>
         </Stack>
-      </Card>
-    </LoginVisualShell>
+      </form>
+    </ProductLoginShell>
   );
 }

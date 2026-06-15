@@ -13,7 +13,7 @@ import {
   Stack,
   Table,
   Text,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import {
   IconChartBar,
   IconChecklist,

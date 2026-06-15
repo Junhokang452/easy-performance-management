@@ -17,7 +17,7 @@ import {
   Modal,
   Table,
   Text,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 
 import {
   useAssignmentActualsQuery,

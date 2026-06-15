@@ -4,16 +4,20 @@
 import { useState } from 'react';
 import {
   Alert,
-  Button,
   Group,
   Modal,
-  Select,
   Stack,
   Switch,
-  TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
+import {
+  FormActions,
+  FormSelect,
+  FormTextInput,
+  PrimaryButton,
+  SecondaryButton,
+} from '@easy/ui-components';
 
 import {
   ALL_CYCLE_TYPES,
@@ -114,7 +118,7 @@ export function CycleCreateModal({ opened, onClose }: Props): React.ReactNode {
       centered
     >
       <Stack>
-        <TextInput
+        <FormTextInput
           label={t.cycles.field.name}
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
@@ -135,7 +139,7 @@ export function CycleCreateModal({ opened, onClose }: Props): React.ReactNode {
             withAsterisk
           />
         </Group>
-        <Select
+        <FormSelect
           label={t.cycles.field.cycleType}
           data={ALL_CYCLE_TYPES.map((c) => ({
             value: c,
@@ -159,18 +163,18 @@ export function CycleCreateModal({ opened, onClose }: Props): React.ReactNode {
           </Alert>
         )}
 
-        <Group justify="flex-end" mt="sm">
-          <Button
-            variant="default"
-            onClick={handleClose}
-            disabled={createMut.isPending}
-          >
-            {t.common.action.cancel}
-          </Button>
-          <Button onClick={handleSubmit} loading={createMut.isPending}>
-            {t.common.action.create}
-          </Button>
-        </Group>
+        <FormActions
+          secondary={
+            <SecondaryButton onClick={handleClose} disabled={createMut.isPending}>
+              {t.common.action.cancel}
+            </SecondaryButton>
+          }
+          primary={
+            <PrimaryButton onClick={handleSubmit} loading={createMut.isPending}>
+              {t.common.action.create}
+            </PrimaryButton>
+          }
+        />
       </Stack>
     </Modal>
   );

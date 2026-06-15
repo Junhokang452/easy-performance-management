@@ -33,6 +33,10 @@ export default defineConfig({
         __dirname,
         '../lib/easy-platform/easy-platform-core/packages/ui-components/src/performance/index.ts',
       ),
+      '@easy/ui-components/mantine': resolve(
+        __dirname,
+        '../lib/easy-platform/easy-platform-core/packages/ui-components/src/mantine.ts',
+      ),
       '@easy/ui-components': resolve(
         __dirname,
         '../lib/easy-platform/easy-platform-core/packages/ui-components/src/index.ts',

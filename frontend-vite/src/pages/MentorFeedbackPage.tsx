@@ -4,7 +4,7 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/mentor-feedbacks` (Page envelope).
  * Category: GROWTH / RECOGNITION / COACHING / CONVERSATION.
  */
-import { Badge, Stack, Text } from '@mantine/core';
+import { Badge, Stack, Text } from '@easy/ui-components/mantine';
 import {
   PageHeader,
   SectionCard,

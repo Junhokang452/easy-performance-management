@@ -4,7 +4,7 @@
  * 색상 매핑 (Mantine v9, ReviewStatusBadge 패턴 정합):
  *   PLANNED=gray / IN_SESSION=blue / ADJUSTED=violet / CONFIRMED=teal / CLOSED=green
  */
-import { Badge } from '@mantine/core';
+import { Badge } from '@easy/ui-components/mantine';
 
 import type { CalibrationStatus } from '../../api/calibration';
 import { useT } from '../../i18n';

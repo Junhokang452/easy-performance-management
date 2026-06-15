@@ -4,7 +4,7 @@
  * BE 정합: GET/POST/PUT/DELETE `/api/internal/personal-okrs` (Page envelope).
  * Status 상태 머신: ACTIVE / AT_RISK / COMPLETED / ARCHIVED.
  */
-import { Badge, Stack, Text } from '@mantine/core';
+import { Badge, Stack, Text } from '@easy/ui-components/mantine';
 import {
   PageHeader,
   SectionCard,

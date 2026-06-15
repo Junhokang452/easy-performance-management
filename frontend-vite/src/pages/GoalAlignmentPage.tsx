@@ -16,7 +16,7 @@ import {
   Table,
   Text,
   TextInput,
-} from '@mantine/core';
+} from '@easy/ui-components/mantine';
 import { IconSearch, IconTargetArrow } from '@tabler/icons-react';
 import {
   EmptyState,
