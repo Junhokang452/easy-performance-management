@@ -76,14 +76,21 @@ public class DevAccountSeeder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        if (defaultTenantIdStr != null && !defaultTenantIdStr.isBlank()) {
-            // 게이트 ON — 부팅 시점 요청 컨텍스트 부재 = control DB 라우팅 함정 → 테넌트 DB 명시 라우팅.
-            routingContext.within(UUID.fromString(defaultTenantIdStr.trim()), defaultTenantCode, () -> {
+        // G6(표준): dev 시더는 best-effort — default-tenant 가 control plane 에서 삭제됐거나
+        // 라우팅/시드가 실패해도 부팅을 중단시키지 않는다(테넌트 자유 생성·삭제 정책 정합).
+        try {
+            if (defaultTenantIdStr != null && !defaultTenantIdStr.isBlank()) {
+                // 게이트 ON — 부팅 시점 요청 컨텍스트 부재 = control DB 라우팅 함정 → 테넌트 DB 명시 라우팅.
+                routingContext.within(UUID.fromString(defaultTenantIdStr.trim()), defaultTenantCode, () -> {
+                    seed(resolvedTenantId);
+                    return null;
+                });
+            } else {
                 seed(resolvedTenantId);
-                return null;
-            });
-        } else {
-            seed(resolvedTenantId);
+            }
+        } catch (RuntimeException ex) {
+            log.warn("[dev-account-seeder] default-tenant({}) 시드 SKIP — 부팅 계속. 사유: {}",
+                    defaultTenantIdStr, ex.getMessage());
         }
     }
 
