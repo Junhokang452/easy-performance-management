@@ -7,7 +7,7 @@ package com.easyperformance.platform;
 import com.easyware.platform.tenant.TenantBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,16 +28,17 @@ import java.util.UUID;
 @RestController("performanceTenantBootstrapController")
 @RequestMapping("/api/internal/admin")
 @ConditionalOnProperty(name = "easyplatform.performance.stage2.enabled", havingValue = "true")
-@ConditionalOnBean(TenantBootstrap.class)
 public class PerformanceTenantBootstrapController {
 
     private static final Logger log = LoggerFactory.getLogger(PerformanceTenantBootstrapController.class);
     private static final String PERFORMANCE_APP_CODE = "PERFORMANCE";
 
-    private final TenantBootstrap tenantBootstrap;
+    // G3(표준): lib TenantBootstrap 직접 주입 금지 — easyplatform.tenantbootstrap.enabled 로 별도 게이트.
+    // stage2 만 켜고 tenantbootstrap 을 안 켜면 UnsatisfiedDependency 로 부팅이 깨진다(2026-06-16 time 사고).
+    private final ObjectProvider<TenantBootstrap> tenantBootstrap;
     private final PerformanceInitialAdminSeeder adminSeeder;
 
-    public PerformanceTenantBootstrapController(TenantBootstrap tenantBootstrap,
+    public PerformanceTenantBootstrapController(ObjectProvider<TenantBootstrap> tenantBootstrap,
                                                 PerformanceInitialAdminSeeder adminSeeder) {
         this.tenantBootstrap = tenantBootstrap;
         this.adminSeeder = adminSeeder;
@@ -47,7 +48,13 @@ public class PerformanceTenantBootstrapController {
     public ResponseEntity<?> bootstrap(@RequestParam("tenantId") UUID tenantId) {
         log.info("[perf/bootstrap-controller] 수동 트리거 — tenantId={}", tenantId);
         try {
-            var outcome = tenantBootstrap.bootstrap(PERFORMANCE_APP_CODE, tenantId);
+            TenantBootstrap bootstrap = tenantBootstrap.getIfAvailable();
+            if (bootstrap == null) {
+                return ResponseEntity.status(503).body(Map.of(
+                        "success", false,
+                        "message", "TenantBootstrap 빈 부재 — easyplatform.tenantbootstrap.enabled=true 필요"));
+            }
+            var outcome = bootstrap.bootstrap(PERFORMANCE_APP_CODE, tenantId);
             boolean seeded = adminSeeder.seedIfAbsent(tenantId);
             return ResponseEntity.accepted().body(Map.of(
                     "success", true,

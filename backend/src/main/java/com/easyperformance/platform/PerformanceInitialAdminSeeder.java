@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.easyware.platform.tenant.TenantAdminSeedSupport;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -65,11 +65,11 @@ public class PerformanceInitialAdminSeeder {
                     tenantId, ex.getMessage());
             return false;
         }
-        JdbcTemplate jdbc = new JdbcTemplate(ds);
         String email = String.format(DEFAULT_ADMIN_EMAIL_TEMPLATE, tenant.code().toLowerCase());
         String hash = encoder.encode(DEFAULT_ADMIN_PASSWORD);
         UUID adminId = UUID.randomUUID();
-        int inserted = jdbc.update("""
+        // G5(표준): 명시 커밋 — raw JdbcTemplate 은 autoCommit=false DS 에서 커밋 안 돼 롤백(admin 미저장).
+        int inserted = TenantAdminSeedSupport.executeWithCommit(ds, """
                 INSERT INTO user_account (id, tenant_id, email, password_hash, display_name, role,
                                           active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, true, now(), now())
