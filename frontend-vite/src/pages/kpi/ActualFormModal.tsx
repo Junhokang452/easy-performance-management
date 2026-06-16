@@ -17,7 +17,7 @@ import {
   TextInput,
 } from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 
 import {
   useCreateActualMutation,
@@ -97,7 +97,7 @@ export function ActualFormModal({
     }
 
     const onSuccess = (): void => {
-      notifications.show({ color: 'green', message: t.common.message.created });
+      showToast({ tone: 'success', message: t.common.message.created });
       onClose();
     };
     const onError = (err: unknown): void => {

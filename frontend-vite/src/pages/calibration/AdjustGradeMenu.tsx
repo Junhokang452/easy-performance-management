@@ -16,7 +16,7 @@ import {
   Text,
   Textarea,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 import { IconChevronDown } from '@tabler/icons-react';
 
 import {
@@ -68,16 +68,16 @@ export function AdjustGradeMenu({
       { reviewId, toGrade: target, reason: reason.trim() || null },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.calibration.adjust.done,
           });
           setTarget(null);
           setReason('');
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapCalibrationErrorToMessage(err, t),
           });
         },

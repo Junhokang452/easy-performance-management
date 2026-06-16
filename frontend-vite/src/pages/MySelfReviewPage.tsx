@@ -19,7 +19,7 @@ import {
   Textarea,
   TextInput,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../shared/toast';
 import { IconLock, IconSearch } from '@tabler/icons-react';
 import {
   UiBadge,
@@ -151,14 +151,14 @@ function SelfReviewForm({ review }: SelfReviewFormProps): React.ReactNode {
       { selfComment: selfComment.trim() || null },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.updated,
           });
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReviewErrorToMessage(err, t),
           });
         },
@@ -172,15 +172,15 @@ function SelfReviewForm({ review }: SelfReviewFormProps): React.ReactNode {
       {
         onSuccess: () => {
           setConfirmSubmit(false);
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.review.self.submitted,
           });
         },
         onError: (err) => {
           setConfirmSubmit(false);
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReviewErrorToMessage(err, t),
           });
         },

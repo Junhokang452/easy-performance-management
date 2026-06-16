@@ -9,7 +9,7 @@
  * 전이 실패(잘못된 cycle 단계 등)는 ApiError 코드 → mapCalibrationErrorToMessage 로 표면.
  */
 import { Menu } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 import { IconChevronDown } from '@tabler/icons-react';
 
 import {
@@ -45,14 +45,14 @@ export function SessionTransitionMenu({
       { targetStatus: next },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.updated,
           });
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapCalibrationErrorToMessage(err, t),
           });
         },

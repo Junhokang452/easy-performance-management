@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { Group, Modal, Stack, Switch } from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 import {
   UiAlert,
   FormActions,
@@ -91,8 +91,8 @@ export function CycleCreateModal({ opened, onClose }: Props): React.ReactNode {
 
     createMut.mutate(req, {
       onSuccess: () => {
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.created,
         });
         reset();

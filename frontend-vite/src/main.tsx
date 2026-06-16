@@ -15,8 +15,7 @@
  */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { MantineProvider } from '@easy/ui-components/mantine';
-import { Notifications } from '@mantine/notifications';
+import { EasyMantineProvider, EasyNotifications } from '@easy/ui-components';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createEasyQueryClient } from '@easy/query-client';
@@ -40,12 +39,12 @@ if (!rootElement) throw new Error('#root not found');
 
 createRoot(rootElement).render(
   <StrictMode>
-    <MantineProvider
+    <EasyMantineProvider
       theme={theme}
       cssVariablesResolver={easyCssVariablesResolver}
       defaultColorScheme="light"
     >
-      <Notifications position="top-right" />
+      <EasyNotifications position="top-right" />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <I18nProvider>
@@ -55,6 +54,6 @@ createRoot(rootElement).render(
           </I18nProvider>
         </BrowserRouter>
       </QueryClientProvider>
-    </MantineProvider>
+    </EasyMantineProvider>
   </StrictMode>,
 );

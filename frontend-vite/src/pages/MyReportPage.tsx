@@ -15,7 +15,6 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { Group, Stack, Text, TextInput } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
 import {
   IconChartBar,
   IconChecklist,
@@ -32,6 +31,7 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import { showToast } from '../shared/toast';
 import {
   PerformanceMetricGrid,
   PerformancePreWrapText,
@@ -146,14 +146,14 @@ function MyReportContent({ cycleId, employeeId }: ContentProps): React.ReactNode
       { reportId: report.id, req: { actorEmployeeId: null } },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.report.my.acknowledgeDone,
           });
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReportErrorToMessage(err, t),
           });
         },

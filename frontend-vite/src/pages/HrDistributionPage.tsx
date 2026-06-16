@@ -10,7 +10,6 @@
  */
 import { useEffect, useState } from 'react';
 import { Group, Modal, Stack, Text } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
 import { IconPlayerPlay, IconAlertTriangle } from '@tabler/icons-react';
 import {
   PerformanceChangedTableRow,
@@ -26,6 +25,7 @@ import {
   LoadingState,
   ErrorBoundary,
 } from '@easy/ui-components';
+import { showToast } from '../shared/toast';
 
 import {
   formatRatio,
@@ -100,8 +100,8 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
           setSimResult(res);
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapCalibrationErrorToMessage(err, t),
           });
         },
@@ -116,8 +116,8 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
         onSuccess: (res) => {
           setApplyOpen(false);
           setSimResult(null);
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.distribution.apply.result
               .replace('{applied}', String(res.appliedCount))
               .replace('{skipped}', String(res.skippedCount)),
@@ -125,8 +125,8 @@ function DistributionPanel({ cycleId }: PanelProps): React.ReactNode {
         },
         onError: (err) => {
           setApplyOpen(false);
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapCalibrationErrorToMessage(err, t),
           });
         },

@@ -6,7 +6,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Center, Modal, Stack } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 import { UiAlert, UiLoader, FormActions, PrimaryButton, SecondaryButton } from '@easy/ui-components';
 
 import {
@@ -76,8 +76,8 @@ export function PolicyEditModal({
 
     upsertMut.mutate(form, {
       onSuccess: () => {
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.updated,
         });
         onClose();

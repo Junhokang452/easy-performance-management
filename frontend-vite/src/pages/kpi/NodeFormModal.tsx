@@ -17,7 +17,7 @@ import {
   Text,
   TextInput,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 
 import {
   ALL_BSC_PERSPECTIVES,
@@ -110,8 +110,8 @@ export function NodeFormModal({
         : (bscPerspective as BscPerspective);
 
     const onSuccess = (): void => {
-      notifications.show({
-        color: 'green',
+      showToast({
+        tone: 'success',
         message:
           mode.kind === 'edit'
             ? t.common.message.updated

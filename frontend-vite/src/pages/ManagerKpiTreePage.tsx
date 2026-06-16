@@ -16,7 +16,7 @@ import {
   Stack,
   Text,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../shared/toast';
 import {
   IconDotsVertical,
   IconPlus,
@@ -178,15 +178,15 @@ function TreeChip({
       onSuccess: () => {
         setConfirmDelete(false);
         onDeleted();
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.deleted,
         });
       },
       onError: (err) => {
         setConfirmDelete(false);
-        notifications.show({
-          color: 'red',
+        showToast({
+          tone: 'danger',
           message: mapKpiErrorToMessage(err, t),
         });
       },
@@ -287,15 +287,15 @@ function TreeDetail({ treeId }: TreeDetailProps): React.ReactNode {
     deleteNodeMut.mutate(deleteNode.id, {
       onSuccess: () => {
         setDeleteNode(null);
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.deleted,
         });
       },
       onError: (err) => {
         setDeleteNode(null);
-        notifications.show({
-          color: 'red',
+        showToast({
+          tone: 'danger',
           message: mapKpiErrorToMessage(err, t),
         });
       },

@@ -18,7 +18,7 @@ import {
   Text,
   TextInput,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 import { IconTrash } from '@tabler/icons-react';
 
 import {
@@ -101,8 +101,8 @@ export function AssignmentModal({
       },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.created,
           });
           setEmployeeId('');
@@ -119,15 +119,15 @@ export function AssignmentModal({
     deleteMut.mutate(deleteId, {
       onSuccess: () => {
         setDeleteId(null);
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.deleted,
         });
       },
       onError: (err) => {
         setDeleteId(null);
-        notifications.show({
-          color: 'red',
+        showToast({
+          tone: 'danger',
           message: mapKpiErrorToMessage(err, t),
         });
       },

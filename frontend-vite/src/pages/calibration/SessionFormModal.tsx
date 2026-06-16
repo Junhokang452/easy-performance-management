@@ -19,7 +19,7 @@ import {
   TextInput,
 } from '@easy/ui-components/mantine';
 import { DateTimePicker } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 
 import {
   useCreateCalibrationSessionMutation,
@@ -89,8 +89,8 @@ export function SessionFormModal({
     if (isEdit && session) {
       updateMut.mutate(payload, {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.updated,
           });
           onClose();
@@ -100,8 +100,8 @@ export function SessionFormModal({
     } else {
       createMut.mutate(payload, {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.created,
           });
           onClose();

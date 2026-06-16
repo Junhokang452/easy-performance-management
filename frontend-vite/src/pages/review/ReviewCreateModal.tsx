@@ -18,7 +18,7 @@ import {
   Textarea,
   TextInput,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 
 import {
   useBulkCreateReviewMutation,
@@ -88,8 +88,8 @@ export function ReviewCreateModal({
         { employeeId: id },
         {
           onSuccess: () => {
-            notifications.show({
-              color: 'green',
+            showToast({
+              tone: 'success',
               message: t.common.message.created,
             });
             onClose();
@@ -107,8 +107,8 @@ export function ReviewCreateModal({
         { employeeIds: ids },
         {
           onSuccess: (res) => {
-            notifications.show({
-              color: 'green',
+            showToast({
+              tone: 'success',
               message: t.review.create.bulkResult
                 .replace('{created}', String(res.createdCount))
                 .replace('{skipped}', String(res.skippedCount)),

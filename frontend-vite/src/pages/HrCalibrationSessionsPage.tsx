@@ -9,7 +9,7 @@
  */
 import { useState } from 'react';
 import { Group, Menu, Modal, Stack, Text } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../shared/toast';
 import { IconDotsVertical, IconPlus } from '@tabler/icons-react';
 import {
   UiActionIcon,
@@ -143,15 +143,15 @@ function SessionRow({ cycleId, session }: RowProps): React.ReactNode {
     deleteMut.mutate(session.id, {
       onSuccess: () => {
         setDeleteOpen(false);
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.deleted,
         });
       },
       onError: (err) => {
         setDeleteOpen(false);
-        notifications.show({
-          color: 'red',
+        showToast({
+          tone: 'danger',
           message: mapCalibrationErrorToMessage(err, t),
         });
       },

@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Group, Modal, Stack } from '@easy/ui-components/mantine';
 import { DateInput } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 import {
   UiAlert,
   FormActions,
@@ -81,8 +81,8 @@ export function CycleEditModal({
 
     updateMut.mutate(req, {
       onSuccess: () => {
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.updated,
         });
         onClose();

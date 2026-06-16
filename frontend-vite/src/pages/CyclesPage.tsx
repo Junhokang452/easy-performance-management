@@ -21,7 +21,6 @@ import {
   Stack,
   Text,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
 import {
   IconCalendarStats,
   IconChevronDown,
@@ -49,6 +48,7 @@ import {
   formatPerformanceRatioPercent,
   formatPerformanceRatioText,
 } from '@easy/ui-components/performance';
+import { showToast } from '../shared/toast';
 
 import {
   getAllowedNextStatuses,
@@ -280,14 +280,14 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
       { toStatus: next },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.updated,
           });
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapApiErrorToMessage(err, t),
           });
         },
@@ -299,15 +299,15 @@ function CycleRow({ row, onEdit, onPolicy }: CycleRowProps): React.ReactNode {
     deleteMut.mutate(row.id, {
       onSuccess: () => {
         setConfirmDeleteOpen(false);
-        notifications.show({
-          color: 'green',
+        showToast({
+          tone: 'success',
           message: t.common.message.deleted,
         });
       },
       onError: (err) => {
         setConfirmDeleteOpen(false);
-        notifications.show({
-          color: 'red',
+        showToast({
+          tone: 'danger',
           message: mapApiErrorToMessage(err, t),
         });
       },

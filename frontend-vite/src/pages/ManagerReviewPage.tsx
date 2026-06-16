@@ -18,7 +18,7 @@ import {
   Text,
   Textarea,
 } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../shared/toast';
 import {
   IconCircleCheck,
   IconClock,
@@ -408,14 +408,14 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
       },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.common.message.updated,
           });
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReviewErrorToMessage(err, t),
           });
         },
@@ -431,14 +431,14 @@ function ManagerScoreTab({ review, items }: ScoreTabProps): React.ReactNode {
       },
       {
         onSuccess: () => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.review.manager.submitted,
           });
         },
         onError: (err) => {
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReviewErrorToMessage(err, t),
           });
         },

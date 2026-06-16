@@ -11,7 +11,7 @@
  */
 import { useState } from 'react';
 import { Group, Modal, ScrollArea, Stack, Text } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../shared/toast';
 import {
   IconAlertTriangle,
   IconCircleCheck,
@@ -132,8 +132,8 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
       {
         onSuccess: (res) => {
           setPublishOpen(false);
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.report.hr.publishResult
               .replace('{published}', String(res.publishedCount))
               .replace('{skipped}', String(res.skippedCount)),
@@ -141,8 +141,8 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
         },
         onError: (err) => {
           setPublishOpen(false);
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReportErrorToMessage(err, t),
           });
         },
@@ -157,15 +157,15 @@ function ReportsPanel({ cycleId }: PanelProps): React.ReactNode {
       {
         onSuccess: () => {
           setSupersedeTarget(null);
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: t.report.hr.supersedeDone,
           });
         },
         onError: (err) => {
           setSupersedeTarget(null);
-          notifications.show({
-            color: 'red',
+          showToast({
+            tone: 'danger',
             message: mapReportErrorToMessage(err, t),
           });
         },

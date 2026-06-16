@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Group, Modal, Stack, Switch, Text } from '@easy/ui-components/mantine';
-import { notifications } from '@mantine/notifications';
+import { showToast } from '../../shared/toast';
 
 import {
   useConfirmCalibrationSessionMutation,
@@ -56,8 +56,8 @@ export function ConfirmSessionModal({
       { finalizeReviews },
       {
         onSuccess: (res) => {
-          notifications.show({
-            color: 'green',
+          showToast({
+            tone: 'success',
             message: finalizeReviews
               ? t.calibration.confirm.resultFinalized
                   .replace('{finalized}', String(res.finalizedCount))
