@@ -33,7 +33,7 @@ public class PerformanceInitialAdminSeeder {
 
     private static final Logger log = LoggerFactory.getLogger(PerformanceInitialAdminSeeder.class);
 
-    public static final String DEFAULT_ADMIN_EMAIL_TEMPLATE = "admin@%s.local";
+    public static final String DEFAULT_ADMIN_EMAIL_TEMPLATE = "admin@%s.setup";
     public static final String DEFAULT_ADMIN_PASSWORD = "Admin1234!";
     public static final String DEFAULT_ADMIN_ROLE = "HR_ADMIN";
 
