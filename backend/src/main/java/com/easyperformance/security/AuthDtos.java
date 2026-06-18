@@ -38,10 +38,22 @@ public final class AuthDtos {
 
     private AuthDtos() {}
 
-    /** B2B Login 요청 (이메일 + 비밀번호) — dev stub 단계는 비밀번호 검증 생략. */
+    /**
+     * B2B Login 요청 — 회사 코드(tenantCode) + 이메일 + 비밀번호 (자매품 통일, talent 정합).
+     *
+     * <p>{@code tenantCode} 는 선택 — 있으면 컨트롤러가 control plane 에서 ACTIVE 테넌트로 해석해 해당
+     * 테넌트 DB 로 라우팅 후 인증, 빈 값/게이트 OFF 면 기본 테넌트(단일 DB)로 진행한다(가산적·LIVE-safe).
+     */
     public record LoginRequest(
             @NotBlank @Email String email,
-            @NotBlank @Size(min = 1, max = 128) String password) {}
+            @NotBlank @Size(min = 1, max = 128) String password,
+            String tenantCode) {
+
+        /** 2-arg 편의 — 회사 코드 없는 호출(단일 테넌트/기존 테스트 호환). */
+        public LoginRequest(String email, String password) {
+            this(email, password, null);
+        }
+    }
 
     /**
      * Login 응답 — accessToken + refreshToken + 사용자 메타 (sub=userId / tid=tenantId / roles).

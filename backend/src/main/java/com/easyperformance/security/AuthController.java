@@ -4,11 +4,18 @@
  */
 package com.easyperformance.security;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.easyperformance.error.PerformanceErrorCode;
+import com.easyware.platform.PlatformTenant;
+import com.easyware.platform.PlatformTenantStore;
+import com.easyware.platform.TenantRoutingContext;
+import com.easyware.platform.error.ApiException;
 
 import jakarta.validation.Valid;
 
@@ -52,14 +59,44 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+    private final ObjectProvider<PlatformTenantStore> tenantStore;
+    private final TenantRoutingContext routingContext;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService,
+                          ObjectProvider<PlatformTenantStore> tenantStore,
+                          TenantRoutingContext routingContext) {
         this.authService = authService;
+        this.tenantStore = tenantStore;
+        this.routingContext = routingContext;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthDtos.TokenResponse> login(@RequestBody @Valid AuthDtos.LoginRequest req) {
-        return ResponseEntity.ok(authService.login(req));
+        return ResponseEntity.ok(authenticateWithTenant(req));
+    }
+
+    /**
+     * 표준 로그인 — 회사 코드(tenantCode) 가 있으면 control plane 에서 ACTIVE 테넌트로 해석해 해당 테넌트
+     * DB 로 라우팅({@link TenantRoutingContext#within}) 후 인증한다 (게이트 ON Model B). 빈 값/게이트
+     * OFF(스토어 빈 부재) 면 기본 테넌트로 진행 — 기존 동작 보존(가산적·LIVE-safe). 미상/비활성 회사
+     * 코드는 계정 존재 노출 차단을 위해 동일 로그인 실패(E9804101)로 환원.
+     */
+    private AuthDtos.TokenResponse authenticateWithTenant(AuthDtos.LoginRequest req) {
+        String code = req.tenantCode();
+        if (code == null || code.isBlank()) {
+            return authService.login(req);
+        }
+        PlatformTenantStore store = tenantStore.getIfAvailable();
+        if (store == null) {
+            return authService.login(req); // control plane 미연결(게이트 OFF) — 회사 코드 무시, 기본 테넌트
+        }
+        PlatformTenant tenant;
+        try {
+            tenant = store.requireActiveByCode(code.trim());
+        } catch (RuntimeException ex) {
+            throw new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED);
+        }
+        return routingContext.within(tenant.id(), tenant.code(), () -> authService.login(req));
     }
 
     @PostMapping("/refresh")

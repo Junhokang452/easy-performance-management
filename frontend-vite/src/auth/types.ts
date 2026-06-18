@@ -18,6 +18,8 @@ export interface TokenResponse {
 export interface LoginRequest {
   email: string;
   password: string;
+  /** 회사 코드(선택) — 있으면 BE 가 control plane 에서 ACTIVE 테넌트로 해석해 라우팅, 빈 값이면 기본 테넌트. */
+  tenantCode?: string;
 }
 
 export interface AuthSession {

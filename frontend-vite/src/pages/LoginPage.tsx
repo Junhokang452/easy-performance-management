@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Stack, Text } from '@easy/ui-components/mantine';
 import { useForm } from '@mantine/form';
-import { IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
+import { IconBuilding, IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
 import {
   UiAlert,
   FormPasswordInput,
@@ -47,7 +47,7 @@ export function LoginPage(): React.ReactNode {
   const [persona, setPersona] = useState<string | null>(null);
 
   const form = useForm({
-    initialValues: { email: '', password: '' },
+    initialValues: { tenantCode: '', email: '', password: '' },
     validate: {
       email: (v) => (!v.includes('@') ? '유효한 이메일이 필요합니다' : null),
       password: (v) => (!v ? '비밀번호는 필수입니다' : null),
@@ -112,6 +112,13 @@ export function LoginPage(): React.ReactNode {
       )}
       <form onSubmit={onSubmit}>
         <Stack>
+          <FormTextInput
+            label={t.login.tenantCode}
+            placeholder={t.login.tenantCodePlaceholder}
+            leftSection={<IconBuilding size={16} />}
+            autoComplete="organization"
+            {...form.getInputProps('tenantCode')}
+          />
           <FormTextInput
             label={t.login.emailLabel}
             placeholder="user@example.com"

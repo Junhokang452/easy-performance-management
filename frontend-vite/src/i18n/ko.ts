@@ -102,6 +102,8 @@ interface I18nShape {
   login: {
     personaLabel: string;
     personaHint: string;
+    tenantCode: string;
+    tenantCodePlaceholder: string;
     emailLabel: string;
     passwordLabel: string;
     submit: string;
@@ -987,6 +989,8 @@ export const ko: I18nShape = {
   login: {
     personaLabel: '데모 계정 체험',
     personaHint: '페르소나 선택 시 dev 시드 계정이 자동 입력됩니다 (시더 게이트 ON 환경)',
+    tenantCode: '회사 코드',
+    tenantCodePlaceholder: '회사 코드 (선택)',
     emailLabel: '이메일',
     passwordLabel: '비밀번호',
     submit: '로그인',

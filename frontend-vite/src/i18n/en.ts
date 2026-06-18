@@ -97,6 +97,8 @@ export const en: I18nDict = {
   login: {
     personaLabel: 'Try a demo account',
     personaHint: 'Selecting a persona auto-fills the dev seed account (seeder gate ON environments)',
+    tenantCode: 'Company code',
+    tenantCodePlaceholder: 'Company code (optional)',
     emailLabel: 'Email',
     passwordLabel: 'Password',
     submit: 'Sign in',
