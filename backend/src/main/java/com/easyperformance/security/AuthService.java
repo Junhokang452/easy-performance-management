@@ -104,7 +104,11 @@ public class AuthService {
             throw new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED,
                 Map.of("reason", "credentials-required"));
         }
-        PerformanceUser account = users.findByTenantIdAndEmail(defaultTenantId, req.email().trim())
+        // ADR-054: prefer the company-code within() routed tenant (lib TenantContext); fall back to default.
+        var routedCtx = com.easyware.platform.tenantctx.TenantContext.get();
+        java.util.UUID loginTenantId = (routedCtx != null && routedCtx.getTenantId() != null)
+            ? routedCtx.getTenantId() : defaultTenantId;
+        PerformanceUser account = users.findByTenantIdAndEmail(loginTenantId, req.email().trim())
             .orElseThrow(() -> new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED));
         if (!account.isActive() || !passwordEncoder.matches(req.password(), account.getPasswordHash())) {
             throw new ApiException(PerformanceErrorCode.AUTH_LOGIN_FAILED);
