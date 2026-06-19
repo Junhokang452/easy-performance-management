@@ -73,18 +73,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws ServletException, IOException {
         boolean routingSet = false;
-        if (defaultTenantId != null && routingContext != null) {
-            // G6(표준): default-tenant 가 control plane 에 ACTIVE 일 때만 라우팅. 삭제됐으면 skip →
-            // health/unauth 요청이 삭제된 테넌트로 라우팅돼 500 나는 것을 막는다(테넌트 자유 삭제 정합).
-            routingSet = routingContext.setIfActive(defaultTenantId, defaultTenantCode);
-            if (routingSet) {
-                // (talent 82b4335 동형) default-tenant 모드: 비인증 요청에도 TenantContext 보장 —
-                // TenantSupport 폴백(0…01) 이탈 방지 (S2S 수신 등 비인증 쓰기 경로의 게이트 ON 정합).
-                // 유효 토큰이 있으면 아래 토큰 경로가 실제 사용자 컨텍스트로 덮어쓴다 (finally 일괄 clear).
-                TenantContext.set(TenantContext.b2b(defaultTenantId, null));
-            }
-        }
         try {
+            UUID tokenTenantId = null;
             String token = resolveToken(request);
             if (token != null) {
                 try {
@@ -92,6 +82,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     UUID userId = parsed.subjectAsUuid().orElse(null);
                     if (userId != null) {
                         UUID tenantId = parsed.tenantId().orElse(null);
+                        tokenTenantId = tenantId;
                         List<String> roles = extractRoles(parsed);
 
                         // lib TenantContext (BE 17 v2 cutover 자연 결합) — B2B 흐름만 (performance B2C 부재).
@@ -106,9 +97,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     // 무효/만료 토큰 → 인증 미설정 상태로 통과 (보호 경로는 EntryPoint 가 401)
                 }
             }
+            // default-free: 인증 요청은 JWT tid 의 테넌트 DB 로 라우팅(code 는 control plane 해석),
+            // 비인증/공개 요청은 default-tenant 폴백(설정 시). default-tenant 모드 비인증엔 TenantContext 보강.
+            if (routingContext != null) {
+                if (tokenTenantId != null) {
+                    routingSet = routingContext.setByActiveId(tokenTenantId);
+                } else if (defaultTenantId != null) {
+                    routingSet = routingContext.setIfActive(defaultTenantId, defaultTenantCode);
+                    if (routingSet && TenantContext.get() == null) {
+                        TenantContext.set(TenantContext.b2b(defaultTenantId, null));
+                    }
+                }
+            }
             chain.doFilter(request, response);
         } finally {
-            // default-tenant 라우팅 해제 (ThreadLocal 누수 방지).
             if (routingSet) {
                 routingContext.clear();
             }
