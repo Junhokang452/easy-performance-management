@@ -40,7 +40,7 @@ export interface PersonalOkrUpdateRequest {
   status?: PersonalOkrStatus;
 }
 
-const BASE = '/api/internal/personal-okrs';
+const BASE = '/internal/personal-okrs';
 
 export const personalOkrQueryKeys = {
   all: () => buildQueryKey('performance', 'personalOkr'),

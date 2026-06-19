@@ -103,7 +103,7 @@ export interface CycleStatusTransitionRequest {
   toStatus: CycleStatus;
 }
 
-const BASE = '/api/v1/cycles';
+const BASE = '/v1/cycles';
 
 export const cyclesQueryKeys = {
   all: () => buildQueryKey('performance', 'cycles'),

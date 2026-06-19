@@ -40,7 +40,7 @@ export interface MentorFeedbackUpdateRequest {
   acknowledged?: boolean;
 }
 
-const BASE = '/api/internal/mentor-feedbacks';
+const BASE = '/internal/mentor-feedbacks';
 
 export const mentorFeedbackQueryKeys = {
   all: () => buildQueryKey('performance', 'mentorFeedback'),

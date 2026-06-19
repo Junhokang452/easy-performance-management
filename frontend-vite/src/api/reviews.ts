@@ -123,7 +123,7 @@ export interface ReviewTransitionRequest {
   actorEmployeeId?: string | null;
 }
 
-const BASE = '/api/v1';
+const BASE = '/v1';
 
 // ---------- Query keys (ADR-026 / kpi.ts 정합) ----------
 

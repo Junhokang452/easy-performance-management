@@ -51,7 +51,7 @@ export interface PageEnvelope<T> {
   size: number;
 }
 
-const BASE = '/api/internal/self-evaluations';
+const BASE = '/internal/self-evaluations';
 
 export const selfEvaluationQueryKeys = {
   all: () => buildQueryKey('performance', 'selfEvaluation'),

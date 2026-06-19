@@ -39,7 +39,7 @@ export interface ReflectionJournalUpdateRequest {
   isPrivate?: boolean;
 }
 
-const BASE = '/api/internal/reflection-journals';
+const BASE = '/internal/reflection-journals';
 
 export const reflectionJournalQueryKeys = {
   all: () => buildQueryKey('performance', 'reflectionJournal'),
