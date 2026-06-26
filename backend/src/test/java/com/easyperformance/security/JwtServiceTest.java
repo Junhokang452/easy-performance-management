@@ -75,8 +75,13 @@ class JwtServiceTest {
     @Test
     void parse_tamperedSignature_throws() {
         String token = jwtService.issueAccessToken(UUID.randomUUID(), UUID.randomUUID(), List.of("USER"));
-        // 마지막 한 글자 변조 → 서명 불일치
-        String tampered = token.substring(0, token.length() - 1) + (token.endsWith("A") ? "B" : "A");
+        // base64url 마지막 문자는 패딩 비트 때문에 바뀌어도 같은 바이트가 될 수 있다. 서명 첫 글자를 바꿔
+        // 실제 서명 바이트가 달라지게 만든다.
+        String[] parts = token.split("\\.");
+        assertThat(parts).hasSize(3);
+        String signature = parts[2];
+        String tamperedSignature = (signature.charAt(0) == 'A' ? "B" : "A") + signature.substring(1);
+        String tampered = parts[0] + "." + parts[1] + "." + tamperedSignature;
         assertThatThrownBy(() -> jwtService.parse(tampered))
             .isInstanceOf(Exception.class);
     }
