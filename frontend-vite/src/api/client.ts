@@ -8,7 +8,7 @@
  * - 401/403 CustomEvent dispatch (easyperformance:unauthorized / easyperformance:forbidden)
  *
  * BE prefix:
- * - `/api/internal/{domain}` (단계 1 ~ 단계 3 진입까지 임시. 단계 3 이후 `/api/v1/`)
+ * - `/api/v1/{domain}` (단계 3 JWT cutover 완료 — 인증 필요. `/api/internal/` 은 S2S 수신 전용)
  *
  * jobeval `cc1bc03` 패턴 정합.
  */

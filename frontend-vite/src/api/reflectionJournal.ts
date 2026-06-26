@@ -2,7 +2,7 @@
  * ReflectionJournal API — React Query 기반 (FE-CC-5 QK + 헬퍼 패턴).
  *
  * BE 정합:
- * - prefix: `/api/internal/reflection-journals`
+ * - prefix: `/api/v1/reflection-journals`
  * - list: `Page<ReflectionJournalResponse>` envelope
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -39,7 +39,7 @@ export interface ReflectionJournalUpdateRequest {
   isPrivate?: boolean;
 }
 
-const BASE = '/internal/reflection-journals';
+const BASE = '/v1/reflection-journals';
 
 export const reflectionJournalQueryKeys = {
   all: () => buildQueryKey('performance', 'reflectionJournal'),

@@ -27,11 +27,12 @@ import java.util.UUID;
 /**
  * SelfEvaluation REST Controller.
  *
- * <p>단계 1 = {@code /api/internal/} prefix (BE-CC-2 JWT 단계 3 진입까지 임시). 단계 3 이후 인증/인가
- * 적용 + {@code /api/v1/} prefix 전환.
+ * <p>{@code /api/v1/} prefix (BE-CC-2 JWT 단계 3 cutover 완료). {@code /api/**} 는 SecurityConfig
+ * 의 {@code API_AUTHENTICATED} 매처로 인증 필요. (구 {@code /api/internal/} prefix 는 permitAll
+ * INTERNAL_S2S 영역이라 S2S 수신 전용으로 환원.)
  */
 @RestController
-@RequestMapping("/api/internal/self-evaluations")
+@RequestMapping("/api/v1/self-evaluations")
 public class SelfEvaluationController {
 
     private final SelfEvaluationService service;

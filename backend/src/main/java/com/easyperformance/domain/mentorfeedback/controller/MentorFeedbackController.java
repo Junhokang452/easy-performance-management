@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/internal/mentor-feedbacks")
+@RequestMapping("/api/v1/mentor-feedbacks")
 public class MentorFeedbackController {
 
     private final MentorFeedbackService service;

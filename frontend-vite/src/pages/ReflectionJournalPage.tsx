@@ -1,7 +1,7 @@
 /**
  * ReflectionJournalPage — 회고 저널 페이지 (단계 4 EC-FE 진입).
  *
- * BE 정합: GET/POST/PUT/DELETE `/api/internal/reflection-journals` (Page envelope).
+ * BE 정합: GET/POST/PUT/DELETE `/api/v1/reflection-journals` (Page envelope).
  * 방법론: KPT / 4Ls / SSC.
  */
 import { Stack, Text } from '@easy/ui-components/mantine';

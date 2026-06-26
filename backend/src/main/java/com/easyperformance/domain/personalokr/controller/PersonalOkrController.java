@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/internal/personal-okrs")
+@RequestMapping("/api/v1/personal-okrs")
 public class PersonalOkrController {
 
     private final PersonalOkrService service;

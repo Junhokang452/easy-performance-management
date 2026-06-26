@@ -1,7 +1,7 @@
 /**
  * MentorFeedbackPage — 멘토 피드백 페이지 (단계 4 EC-FE 진입, 매니저-팀원 1:1).
  *
- * BE 정합: GET/POST/PUT/DELETE `/api/internal/mentor-feedbacks` (Page envelope).
+ * BE 정합: GET/POST/PUT/DELETE `/api/v1/mentor-feedbacks` (Page envelope).
  * Category: GROWTH / RECOGNITION / COACHING / CONVERSATION.
  */
 import { Stack, Text } from '@easy/ui-components/mantine';

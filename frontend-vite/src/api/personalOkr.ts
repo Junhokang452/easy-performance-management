@@ -2,7 +2,7 @@
  * PersonalOkr API — React Query 기반 (FE-CC-5 QK + 헬퍼 패턴).
  *
  * BE 정합:
- * - prefix: `/api/internal/personal-okrs`
+ * - prefix: `/api/v1/personal-okrs`
  * - list: `Page<PersonalOkrResponse>` envelope
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -40,7 +40,7 @@ export interface PersonalOkrUpdateRequest {
   status?: PersonalOkrStatus;
 }
 
-const BASE = '/internal/personal-okrs';
+const BASE = '/v1/personal-okrs';
 
 export const personalOkrQueryKeys = {
   all: () => buildQueryKey('performance', 'personalOkr'),

@@ -2,7 +2,7 @@
  * MentorFeedback API — React Query 기반 (FE-CC-5 QK + 헬퍼 패턴).
  *
  * BE 정합:
- * - prefix: `/api/internal/mentor-feedbacks`
+ * - prefix: `/api/v1/mentor-feedbacks`
  * - list: `Page<MentorFeedbackResponse>` envelope
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -40,7 +40,7 @@ export interface MentorFeedbackUpdateRequest {
   acknowledged?: boolean;
 }
 
-const BASE = '/internal/mentor-feedbacks';
+const BASE = '/v1/mentor-feedbacks';
 
 export const mentorFeedbackQueryKeys = {
   all: () => buildQueryKey('performance', 'mentorFeedback'),

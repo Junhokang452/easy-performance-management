@@ -2,7 +2,7 @@
  * SelfEvaluation API — React Query 기반 (FE-CC-5 QK + 헬퍼 패턴).
  *
  * BE 정합:
- * - prefix: `/api/internal/self-evaluations` (단계 1 ~ 단계 3 진입까지 임시)
+ * - prefix: `/api/v1/self-evaluations` (단계 3 JWT cutover 완료 — 인증 필요)
  * - list: `Page<SelfEvaluationResponse>` (Spring Data envelope: `{ content, totalElements, ... }`)
  *
  * jobeval `cc1bc03` 패턴 정합.
@@ -51,7 +51,7 @@ export interface PageEnvelope<T> {
   size: number;
 }
 
-const BASE = '/internal/self-evaluations';
+const BASE = '/v1/self-evaluations';
 
 export const selfEvaluationQueryKeys = {
   all: () => buildQueryKey('performance', 'selfEvaluation'),

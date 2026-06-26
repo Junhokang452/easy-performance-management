@@ -1,7 +1,7 @@
 /**
  * PersonalOkrPage — 개인 OKR 페이지 (단계 4 EC-FE 진입, B2B 분기 평가 본질).
  *
- * BE 정합: GET/POST/PUT/DELETE `/api/internal/personal-okrs` (Page envelope).
+ * BE 정합: GET/POST/PUT/DELETE `/api/v1/personal-okrs` (Page envelope).
  * Status 상태 머신: ACTIVE / AT_RISK / COMPLETED / ARCHIVED.
  */
 import { Stack, Text } from '@easy/ui-components/mantine';

@@ -1,7 +1,7 @@
 /**
  * SelfEvaluationPage — 자기평가 페이지 (단계 4 EC-FE 진입, B2B 분기/연간 평가 본질).
  *
- * BE 정합: GET/POST/PUT/DELETE `/api/internal/self-evaluations` (Page envelope).
+ * BE 정합: GET/POST/PUT/DELETE `/api/v1/self-evaluations` (Page envelope).
  * Status 상태 머신: DRAFT → SUBMITTED → REVIEWED → FINALIZED.
  */
 import { Group, Stack, Text } from '@easy/ui-components/mantine';
