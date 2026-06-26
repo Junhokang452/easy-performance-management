@@ -12,6 +12,8 @@
       "@easy/ui-components/performance": ["../lib/easy-platform/easy-platform-core/packages/ui-components/src/performance/index.ts"],
       "@easy/auth-hooks": ["../lib/easy-platform/easy-platform-core/packages/auth-hooks/src/index.ts"],
       "@easy/query-client": ["../lib/easy-platform/easy-platform-core/packages/query-client/src/index.ts"],
+      "@tanstack/react-query": ["./node_modules/@tanstack/react-query"],
+      "@tanstack/query-core": ["./node_modules/@tanstack/query-core"],
       "@mantine/core": ["./node_modules/@mantine/core"],
       "@mantine/hooks": ["./node_modules/@mantine/hooks"],
       "@mantine/modals": ["./node_modules/@mantine/modals"],

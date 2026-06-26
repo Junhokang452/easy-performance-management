@@ -58,6 +58,10 @@ export default defineConfig({
       '@tabler/icons-react': resolve(__dirname, 'node_modules/@tabler/icons-react'),
       react: resolve(__dirname, 'node_modules/react'),
       'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+      // @easy/query-client(lib) 와 frontend-vite 가 서로 다른 물리 @tanstack/query-core 사본을 봐
+      // QueryClient private field 타입 충돌(main.tsx QueryClientProvider client=) → 단일 사본 강제.
+      '@tanstack/react-query': resolve(__dirname, 'node_modules/@tanstack/react-query'),
+      '@tanstack/query-core': resolve(__dirname, 'node_modules/@tanstack/query-core'),
     },
     dedupe: [
       'react',
@@ -71,6 +75,7 @@ export default defineConfig({
       '@mantine/charts',
       '@mantine/form',
       '@tanstack/react-query',
+      '@tanstack/query-core',
     ],
   },
   server: {
