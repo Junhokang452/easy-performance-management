@@ -10,8 +10,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import com.easyware.platform.NeonProvisioningService;
@@ -73,10 +73,7 @@ import com.easyware.platform.tenant.TenantBootstrap;
  * @since stage 2 (Task #100, 2026-06-08)
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(
-        name = "easyplatform.performance.stage2.enabled",
-        havingValue = "true",
-        matchIfMissing = false)
+@Conditional(PerformanceLegacyBootstrapCondition.class)   // ADR-055 b2.2: self-migrate ON 시 미등록(legacy 3-SPI 경로)
 public class PerformanceTenantBootstrapConfig {
 
     private static final Logger log = LoggerFactory.getLogger(PerformanceTenantBootstrapConfig.class);

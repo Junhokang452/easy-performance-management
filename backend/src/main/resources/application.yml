@@ -146,6 +146,10 @@ easyplatform:
   performance:
     stage2:
       enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ENABLED:false}
+      # ADR-055 b2.2 Option B (self-migrate) canary 토글 — 기본 false(legacy 3-SPI 경로 유지).
+      # true 면 PerformanceTenantSelfBootstrapScheduler 가 TenantSchemaMigrator 로 db/migration Flyway 자체 적용 +
+      # legacy PerformanceTenantBootstrapConfig/Controller 미등록(이중 경로 차단). 실 canary 활성은 env 로 결정.
+      self-migrate-enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_SELF_MIGRATE_ENABLED:false}
     smb:
       enabled: ${EASYPLATFORM_PERFORMANCE_SMB_ENABLED:false}
   # 단계 2 진입 — lib TenantBootstrap autoconfig 게이트 (NeonProvisioningService dev 검증).

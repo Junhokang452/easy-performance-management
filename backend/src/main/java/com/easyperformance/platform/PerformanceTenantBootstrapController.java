@@ -8,7 +8,7 @@ import com.easyware.platform.tenant.TenantBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ import java.util.UUID;
  */
 @RestController("performanceTenantBootstrapController")
 @RequestMapping("/api/internal/admin")
-@ConditionalOnProperty(name = "easyplatform.performance.stage2.enabled", havingValue = "true")
+@Conditional(PerformanceLegacyBootstrapCondition.class)   // ADR-055 b2.2: self-migrate ON 시 미등록(legacy 수동 경로)
 public class PerformanceTenantBootstrapController {
 
     private static final Logger log = LoggerFactory.getLogger(PerformanceTenantBootstrapController.class);
