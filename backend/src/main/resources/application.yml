@@ -108,6 +108,13 @@ easyplatform:
   tenantctx:
     enabled: ${EASYPLATFORM_TENANTCTX_ENABLED:false}
     header-name: ${EASYPLATFORM_TENANTCTX_HEADER:X-Tenant-Id}
+    # P1c (2026-06-27): lib LibThreadLocalTenantContextResolver(passthrough 전용) opt-in.
+    # 로컬 PerformanceTenantContextResolver(본문 = return TenantContext.get())를 제거하고 lib default 로 수렴.
+    # performance JwtAuthFilter 가 인증(b2b(tenantId,userId)) + default-tenant(b2b(defaultTenantId,null)) 양 경로에서
+    # lib TenantContext.set 을 직접 호출하므로 passthrough resolver 결과는 동일(행위 동치). claim/header/code/
+    # default-tenant 해석은 기존 JwtAuthFilter 에 잔류. resolver 는 passthrough 만 한다.
+    default-resolver:
+      enabled: true
   # 단계 2 진입 시 ON (Model B + RLS 정책 SQL 박제 후) — ADR-031 정합 (B2B-Enterprise per-tenant 본질)
   rls:
     tenant:
