@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * EvaluationCycle Repository — ADR-026 명명 표준 정합:
@@ -36,4 +38,22 @@ public interface EvaluationCycleRepository extends JpaRepository<EvaluationCycle
     boolean existsByIdAndTenantId(UUID id, UUID tenantId);
 
     long countByTenantId(UUID tenantId);
+
+    @Query("""
+        select c from EvaluationCycle c
+        where c.tenantId = :tenantId and (
+          :operator = true
+          or exists (select p.id from EvaluationParticipant p
+                     where p.tenantId = :tenantId and p.cycleId = c.id
+                       and p.employeeId = :employeeId and p.status = com.easyperformance.workflow.ParticipantStatus.ACTIVE)
+          or exists (select a.id from EvaluationReviewerAssignment a
+                     where a.tenantId = :tenantId and a.cycleId = c.id
+                       and a.reviewerEmployeeId = :employeeId
+                       and a.status <> com.easyperformance.workflow.ReviewerAssignmentStatus.REVOKED)
+        )
+        """)
+    Page<EvaluationCycle> findVisible(@Param("tenantId") UUID tenantId,
+                                      @Param("employeeId") UUID employeeId,
+                                      @Param("operator") boolean operator,
+                                      Pageable pageable);
 }

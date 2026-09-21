@@ -1,0 +1,324 @@
+{
+  "passed": true,
+  "count": 68,
+  "fixtures": {
+    "programId": "01a07b2b-1e80-75bb-ae5a-de1682420859",
+    "copyProgramId": "01a07b2b-22ed-7f7a-8d76-b0d1fe1ef6dc",
+    "participantIds": [
+      "01a07b2b-1f62-782e-997e-b0a3b5f4959f",
+      "01a07b2b-214b-7148-a36a-26afcf972da0"
+    ]
+  },
+  "checks": [
+    {
+      "case": "hr-admin POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=ORG_UNIT",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "ORG_UNIT condition search returns 1..50 tenant options",
+      "passed": true
+    },
+    {
+      "case": "ORG_UNIT options have stable values and human labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=ORG_UNIT&q=impossible-query&values=019ed001-0000-7000-8000-000000000001",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "ORG_UNIT selected value is restored independently from search query",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=POSITION",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "POSITION condition search returns 1..50 tenant options",
+      "passed": true
+    },
+    {
+      "case": "POSITION options have stable values and human labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=POSITION&q=impossible-query&values=DIRECTOR",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "POSITION selected value is restored independently from search query",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=GRADE",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "GRADE condition search returns 1..50 tenant options",
+      "passed": true
+    },
+    {
+      "case": "GRADE options have stable values and human labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=GRADE&q=impossible-query&values=G2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "GRADE selected value is restored independently from search query",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=JOB",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "JOB condition search returns 1..50 tenant options",
+      "passed": true
+    },
+    {
+      "case": "JOB options have stable values and human labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=JOB&q=impossible-query&values=PEOPLE_OPS",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "JOB selected value is restored independently from search query",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=EMPLOYMENT_TYPE",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "EMPLOYMENT_TYPE condition search returns 1..50 tenant options",
+      "passed": true
+    },
+    {
+      "case": "EMPLOYMENT_TYPE options have stable values and human labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=EMPLOYMENT_TYPE&q=impossible-query&values=REGULAR",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "EMPLOYMENT_TYPE selected value is restored independently from search query",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=EMPLOYEE",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "EMPLOYEE condition search returns 1..50 tenant options",
+      "passed": true
+    },
+    {
+      "case": "EMPLOYEE options have stable values and human labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=EMPLOYEE&q=impossible-query&values=019ed002-0000-7000-8000-000000000001",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "EMPLOYEE selected value is restored independently from search query",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=GRADE&values=G2,G2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Comma-separated selected values are de-duplicated",
+      "passed": true
+    },
+    {
+      "case": "Unsupported condition field is rejected",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin POST /api/auth/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/condition-values?field=EMPLOYEE&values=019ed002-0000-7000-8000-000000000001",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Tenant B cannot restore a tenant A selected employee",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/employees/019ed002-0000-7000-8000-000000000001/assignments",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Synthetic employee exposes at least two selectable assignments",
+      "passed": true
+    },
+    {
+      "case": "Assignment options never fall back to raw UUID labels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "Participant weights above 100 are rejected transactionally",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/participants",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Rejected second assignment insert leaves no partial participant",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "Overweight update of an existing assignment is rolled back",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/participants",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Rejected existing participant update preserves prior 40/60 weights",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/participants.xlsx",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Participant export is a real XLSX attachment",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/copy",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b2b-22ed-7f7a-8d76-b0d1fe1ef6dc/participants:import",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Participant XLSX roundtrip recreates both assignment rows",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b2b-22ed-7f7a-8d76-b0d1fe1ef6dc/participants",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Roundtripped roster preserves assignment IDs and total weight",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/me/participants",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Employee can enumerate both of their own active participation contexts",
+      "passed": true
+    },
+    {
+      "case": "Ambiguous member workspace requires participantId",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/me?participantId=01a07b2b-1f62-782e-997e-b0a3b5f4959f",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Explicit participantId restores the intended member workspace",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/01a07b2b-1e80-75bb-ae5a-de1682420859/me?participantId=01a07b2b-214b-7148-a36a-26afcf972da0",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Explicit participantId restores the intended member workspace",
+      "passed": true
+    }
+  ]
+}

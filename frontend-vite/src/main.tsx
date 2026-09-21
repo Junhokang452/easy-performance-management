@@ -7,7 +7,7 @@
  * - Notifications
  * - QueryClientProvider (lib `@easy/query-client`)
  * - BrowserRouter
- * - I18nProvider (ko/en)
+ * - I18nProvider (ko/en/ja/zh-CN/vi)
  * - AuthProvider (단계 3 JWT 미진입 — stub. BE 단계 3 진입 시 silent refresh 정합)
  * - App
  *

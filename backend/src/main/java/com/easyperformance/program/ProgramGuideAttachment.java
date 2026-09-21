@@ -1,0 +1,7 @@
+package com.easyperformance.program;
+import com.easyware.platform.UuidV7;import com.easyware.platform.audit.TenantAwareAuditEntity;import jakarta.persistence.*;import java.util.UUID;
+@Entity @Table(name="program_guide_attachment",indexes=@Index(name="ix_program_guide_tenant_program",columnList="tenant_id, program_id"))
+public class ProgramGuideAttachment extends TenantAwareAuditEntity{
+ @Id@Column(columnDefinition="uuid",nullable=false,updatable=false)private UUID id;@Column(name="program_id",columnDefinition="uuid",nullable=false)private UUID programId;@Column(nullable=false,length=255)private String filename;@Column(name="content_type",nullable=false,length=120)private String contentType;@Column(nullable=false)private long size;@Column(name="uploaded_by",columnDefinition="uuid")private UUID uploadedBy;@Column(nullable=false,columnDefinition="bytea")private byte[] content;
+ @PrePersist void prePersist(){if(id==null)id=UuidV7.generate();}public UUID getId(){return id;}public void setId(UUID v){id=v;}public UUID getProgramId(){return programId;}public void setProgramId(UUID v){programId=v;}public String getFilename(){return filename;}public void setFilename(String v){filename=v;}public String getContentType(){return contentType;}public void setContentType(String v){contentType=v;}public long getSize(){return size;}public void setSize(long v){size=v;}public UUID getUploadedBy(){return uploadedBy;}public void setUploadedBy(UUID v){uploadedBy=v;}public byte[] getContent(){return content;}public void setContent(byte[] v){content=v;}
+}

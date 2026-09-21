@@ -1,3 +1,4 @@
+import { readSavedLocale } from '../i18n/locales';
 /**
  * DirectorCalibrationPage (#19) — 본부 Calibration grid (`/director/calibration`).
  *
@@ -313,5 +314,5 @@ function formatDateTime(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString();
+  return d.toLocaleString(readSavedLocale());
 }

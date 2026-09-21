@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "programId": "01a07b72-5e5f-7b92-b585-8ba3d07ab4de",
+  "checks": [
+    "GRADE choice 4 saves as converted score 80",
+    "Saved grade submits without ambiguous numeric input"
+  ]
+}

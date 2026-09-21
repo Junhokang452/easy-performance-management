@@ -36,6 +36,15 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     AUTH_REFRESH_TOKEN_EXPIRED(      "E9804103", 401),
     AUTH_REFRESH_TOKEN_INVALID(      "E9804104", 401),
     AUTH_USER_NOT_FOUND(             "E9804415", 404),
+    ACTOR_EMPLOYEE_BINDING_REQUIRED( "E9804253", 422),
+    WORKFLOW_FORBIDDEN(               "E9804301", 403),
+    PARTICIPANT_NOT_FOUND(            "E9804450", 404),
+    REVIEWER_ASSIGNMENT_NOT_FOUND(    "E9804451", 404),
+    FEEDBACK_NOT_FOUND(               "E9804452", 404),
+    PARTICIPANT_EMPLOYEE_INVALID(     "E9804254", 422),
+    FEEDBACK_RESOLUTION_UNSUPPORTED(  "E9804255", 422),
+    WORKFLOW_PHASE_BLOCKED(           "E9804935", 409),
+    FEEDBACK_LOCKED(                  "E9804936", 409),
 
     // Cycle / Policy — P0-S1 EvaluationCycle + EvaluationPolicy (decisions_2026-06-11.md SoT).
     // EvaluationCycle 8단계 상태기계 + Policy 1:1 결합 + 분포/등급 검증 + 단계별 lock.
@@ -111,6 +120,7 @@ public enum PerformanceErrorCode implements ErrorCodeContract {
     //   401 영역은 101~104(auth login/refresh) 사용 중 → 105 빈자리 / 400 영역 0xx 미사용 → 005 / 5xx 첫 진입 → 5301.
     SYNC_NOT_CONFIGURED(                     "E9805301", 503),
     SYNC_AUTH_FAILED(                        "E9804105", 401),
+    SYNC_TENANT_MISMATCH(                    "E9804303", 403),
     SYNC_INVALID_PAYLOAD(                    "E9804005", 400),
     ;
 

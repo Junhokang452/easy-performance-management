@@ -16,10 +16,14 @@ import com.easyperformance.sync.dto.SyncDtos.CoreMasterBatchRequest;
 import com.easyperformance.sync.dto.SyncDtos.CoreMasterBatchResponse;
 import com.easyperformance.sync.dto.SyncDtos.EmployeeUpsert;
 import com.easyperformance.sync.dto.SyncDtos.OrgUnitUpsert;
+import com.easyperformance.error.PerformanceErrorCode;
+import com.easyware.platform.error.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
+import jakarta.persistence.EntityManager;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -45,23 +49,31 @@ public class ReadModelSyncService {
     private final RmEmployeeRepository employees;
     private final RmOrgUnitRepository orgUnits;
     private final RmAssignmentRepository assignments;
+    private final EntityManager entityManager;
 
     public ReadModelSyncService(
             RmEmployeeRepository employees,
             RmOrgUnitRepository orgUnits,
-            RmAssignmentRepository assignments) {
+            RmAssignmentRepository assignments,
+            EntityManager entityManager) {
         this.employees = employees;
         this.orgUnits = orgUnits;
         this.assignments = assignments;
+        this.entityManager = entityManager;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public CoreMasterBatchResponse applyCoreMaster(CoreMasterBatchRequest batch) {
+        return applyCoreMaster(batch, false);
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public CoreMasterBatchResponse applyCoreMaster(CoreMasterBatchRequest batch, boolean extendedAssignmentCapability) {
         UUID tenantId = TenantSupport.currentTenantId();
         OffsetDateTime now = OffsetDateTime.now();
         int[] emp = applyEmployees(batch.employees(), tenantId, now);
         int[] org = applyOrgUnits(batch.orgUnits(), tenantId, now);
-        int[] asg = applyAssignments(batch.assignments(), tenantId, now);
+        int[] asg = applyAssignments(batch.assignments(), tenantId, now, extendedAssignmentCapability);
         CoreMasterBatchResponse result = new CoreMasterBatchResponse(
             emp[0], emp[1], org[0], org[1], asg[0], asg[1]);
         log.info("[performance-sync:core-master] employees {}/{} orgUnits {}/{} assignments {}/{} (applied/skipped)",
@@ -73,12 +85,13 @@ public class ReadModelSyncService {
         int applied = 0;
         int skipped = 0;
         for (EmployeeUpsert row : rows == null ? List.<EmployeeUpsert>of() : rows) {
-            if (row.id() == null || row.sourceVersion() == null) {
+            if (row.id() == null || row.sourceVersion() == null || row.sourceVersion() <= 0) {
                 skipped++;
                 continue;
             }
-            RmEmployee existing = employees.findById(row.id()).orElse(null);
+            RmEmployee existing = employees.findByIdAndTenantId(row.id(), tenantId).orElse(null);
             if (existing == null) {
+                rejectCrossTenantId(employees.existsById(row.id()), "employee", row.id());
                 RmEmployee created = new RmEmployee();
                 created.setId(row.id());
                 created.setTenantId(tenantId);
@@ -89,7 +102,7 @@ public class ReadModelSyncService {
                 created.setEmploymentType(row.employmentType());
                 created.setSourceVersion(row.sourceVersion());
                 created.setSyncedAt(now);
-                employees.save(created);
+                entityManager.persist(created);
                 applied++;
             } else if (row.sourceVersion() > existing.getSourceVersion()) {
                 existing.setEmployeeNo(row.employeeNo());
@@ -112,12 +125,13 @@ public class ReadModelSyncService {
         int applied = 0;
         int skipped = 0;
         for (OrgUnitUpsert row : rows == null ? List.<OrgUnitUpsert>of() : rows) {
-            if (row.id() == null || row.sourceVersion() == null) {
+            if (row.id() == null || row.sourceVersion() == null || row.sourceVersion() <= 0) {
                 skipped++;
                 continue;
             }
-            RmOrgUnit existing = orgUnits.findById(row.id()).orElse(null);
+            RmOrgUnit existing = orgUnits.findByIdAndTenantId(row.id(), tenantId).orElse(null);
             if (existing == null) {
+                rejectCrossTenantId(orgUnits.existsById(row.id()), "orgUnit", row.id());
                 RmOrgUnit created = new RmOrgUnit();
                 created.setId(row.id());
                 created.setTenantId(tenantId);
@@ -127,7 +141,7 @@ public class ReadModelSyncService {
                 created.setOrgType(row.orgType());
                 created.setSourceVersion(row.sourceVersion());
                 created.setSyncedAt(now);
-                orgUnits.save(created);
+                entityManager.persist(created);
                 applied++;
             } else if (row.sourceVersion() > existing.getSourceVersion()) {
                 existing.setCode(row.code());
@@ -145,16 +159,25 @@ public class ReadModelSyncService {
         return new int[] {applied, skipped};
     }
 
-    private int[] applyAssignments(List<AssignmentUpsert> rows, UUID tenantId, OffsetDateTime now) {
+    private int[] applyAssignments(List<AssignmentUpsert> rows, UUID tenantId, OffsetDateTime now,
+                                   boolean extendedAssignmentCapability) {
         int applied = 0;
         int skipped = 0;
         for (AssignmentUpsert row : rows == null ? List.<AssignmentUpsert>of() : rows) {
-            if (row.id() == null || row.sourceVersion() == null) {
+            if (row.id() == null || row.sourceVersion() == null || row.sourceVersion() <= 0
+                    || (extendedAssignmentCapability && (row.effectiveFrom() == null
+                        || (row.effectiveTo() != null && row.effectiveTo().isBefore(row.effectiveFrom()))))) {
                 skipped++;
                 continue;
             }
-            RmAssignment existing = assignments.findById(row.id()).orElse(null);
+            RmAssignment existing = assignments.findByIdAndTenantId(row.id(), tenantId).orElse(null);
+            if (existing != null && !extendedAssignmentCapability
+                    && "HCM".equals(existing.getSourceSystem())) {
+                skipped++;
+                continue;
+            }
             if (existing == null) {
+                rejectCrossTenantId(assignments.existsById(row.id()), "assignment", row.id());
                 RmAssignment created = new RmAssignment();
                 created.setId(row.id());
                 created.setTenantId(tenantId);
@@ -163,11 +186,14 @@ public class ReadModelSyncService {
                 created.setPositionCode(row.positionCode());
                 created.setGradeCode(row.gradeCode());
                 created.setJobCode(row.jobCode());
+                created.setManagerEmployeeId(extendedAssignmentCapability ? row.managerEmployeeId() : null);
                 created.setEffectiveFrom(row.effectiveFrom());
                 created.setEffectiveTo(row.effectiveTo());
+                created.setDeleted(extendedAssignmentCapability ? row.deleted() : null);
+                created.setSourceSystem(extendedAssignmentCapability ? "HCM" : "LEGACY");
                 created.setSourceVersion(row.sourceVersion());
                 created.setSyncedAt(now);
-                assignments.save(created);
+                entityManager.persist(created);
                 applied++;
             } else if (row.sourceVersion() > existing.getSourceVersion()) {
                 existing.setEmployeeId(row.employeeId());
@@ -175,8 +201,11 @@ public class ReadModelSyncService {
                 existing.setPositionCode(row.positionCode());
                 existing.setGradeCode(row.gradeCode());
                 existing.setJobCode(row.jobCode());
+                existing.setManagerEmployeeId(extendedAssignmentCapability ? row.managerEmployeeId() : null);
                 existing.setEffectiveFrom(row.effectiveFrom());
                 existing.setEffectiveTo(row.effectiveTo());
+                existing.setDeleted(extendedAssignmentCapability ? row.deleted() : null);
+                existing.setSourceSystem(extendedAssignmentCapability ? "HCM" : "LEGACY");
                 existing.setSourceVersion(row.sourceVersion());
                 existing.setSyncedAt(now);
                 assignments.save(existing);
@@ -186,5 +215,12 @@ public class ReadModelSyncService {
             }
         }
         return new int[] {applied, skipped};
+    }
+
+    private static void rejectCrossTenantId(boolean existsOutsideTenant, String type, UUID id) {
+        if (existsOutsideTenant) {
+            throw new ApiException(PerformanceErrorCode.SYNC_TENANT_MISMATCH,
+                java.util.Map.of("reason", "ROW_ID_OWNED_BY_OTHER_TENANT", "type", type, "id", id));
+        }
     }
 }

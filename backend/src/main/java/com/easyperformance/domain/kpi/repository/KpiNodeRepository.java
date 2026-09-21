@@ -7,7 +7,9 @@ package com.easyperformance.domain.kpi.repository;
 import com.easyperformance.domain.kpi.entity.KpiNode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,6 +25,12 @@ import java.util.UUID;
 public interface KpiNodeRepository extends JpaRepository<KpiNode, UUID> {
 
     Optional<KpiNode> findByIdAndTenantId(UUID id, UUID tenantId);
+
+    List<KpiNode> findAllByTenantIdAndIdIn(UUID tenantId, List<UUID> ids);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select n from KpiNode n where n.id = :id and n.tenantId = :tenantId")
+    Optional<KpiNode> findLocked(@Param("id") UUID id, @Param("tenantId") UUID tenantId);
 
     /** 트리 전체 노드 (flat) — 생성순. */
     List<KpiNode> findAllByTenantIdAndTreeIdOrderByCreatedAtAsc(UUID tenantId, UUID treeId);

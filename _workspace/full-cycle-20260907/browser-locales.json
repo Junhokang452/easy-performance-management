@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "locale": "ko",
+      "heading": "받은 알림",
+      "overflow": false
+    },
+    {
+      "locale": "en",
+      "heading": "Inbox",
+      "overflow": false
+    },
+    {
+      "locale": "ja",
+      "heading": "受信通知",
+      "overflow": false
+    },
+    {
+      "locale": "zh-CN",
+      "heading": "收到的通知",
+      "overflow": false
+    },
+    {
+      "locale": "vi",
+      "heading": "Thông báo đã nhận",
+      "overflow": false
+    },
+    {
+      "persistedAfterReload": true
+    }
+  ]
+}

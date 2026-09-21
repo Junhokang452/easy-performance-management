@@ -1,0 +1,16 @@
+{
+  "sha256": "1e83919664e3ec9eee5923292d45f7fb0424278413c6f609f1ce0306f3ee3a8b",
+  "size": 71234877,
+  "libraries": 120,
+  "selected": [
+    "BOOT-INF/lib/springdoc-openapi-starter-webmvc-ui-3.1.1.jar",
+    "BOOT-INF/lib/spring-boot-4.1.1.jar",
+    "BOOT-INF/lib/hibernate-core-7.4.5.Final.jar",
+    "BOOT-INF/lib/flyway-core-12.4.0.jar",
+    "BOOT-INF/lib/jackson-databind-2.21.5.jar",
+    "BOOT-INF/lib/jackson-databind-3.1.5.jar",
+    "BOOT-INF/lib/tomcat-embed-el-11.0.25.jar",
+    "BOOT-INF/lib/tomcat-embed-websocket-11.0.25.jar",
+    "BOOT-INF/lib/tomcat-embed-core-11.0.25.jar"
+  ]
+}

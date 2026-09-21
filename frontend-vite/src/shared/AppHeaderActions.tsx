@@ -1,14 +1,11 @@
 /**
- * AppHeaderActions — 다크모드 토글 + 언어 토글 (단계 4 강화).
- *
- * Mantine v9 `useMantineColorScheme()` 으로 light/dark 전환.
- * `useI18n()` 로 ko/en 전환.
- * jobeval 단계 4 cutover `cc1bc03` 패턴 정합.
+ * Suite header actions: compact language menu, matching ware/hcm chrome.
  */
-import { Group, SegmentedControl, useMantineColorScheme } from '@easy/ui-components/mantine';
-import { IconMoon, IconSun } from '@tabler/icons-react';
+import { Group, Menu, useMantineColorScheme } from '@easy/ui-components/mantine';
+import { IconCheck, IconLanguage, IconMoon, IconSun } from '@tabler/icons-react';
 
 import { useI18n } from '../i18n';
+import { LOCALE_LABELS, SUPPORTED_LOCALES } from '../i18n/locales';
 import { UiActionIcon, UiTooltip } from '@easy/ui-components';
 
 export function AppHeaderActions(): React.ReactNode {
@@ -17,19 +14,27 @@ export function AppHeaderActions(): React.ReactNode {
   const isDark = colorScheme === 'dark';
 
   return (
-    <Group gap="xs">
-      <SegmentedControl
-        size="xs"
-        value={locale}
-        onChange={(v) => setLocale(v as 'ko' | 'en')}
-        data={[
-          { label: 'KO', value: 'ko' },
-          { label: 'EN', value: 'en' },
-        ]}
-      />
+    <Group gap="xs" wrap="nowrap">
+      <Menu position="bottom-end" shadow="md" width={180}>
+        <Menu.Target>
+          <UiActionIcon variant="subtle" aria-label={t.common.label.language} title={LOCALE_LABELS[locale]}>
+            <IconLanguage size={18} />
+          </UiActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Label>{t.common.label.language}</Menu.Label>
+          {SUPPORTED_LOCALES.map((language) => (
+            <Menu.Item key={language} onClick={() => setLocale(language)}
+              rightSection={language === locale ? <IconCheck size={14} aria-hidden /> : undefined}>
+              {LOCALE_LABELS[language]}
+            </Menu.Item>
+          ))}
+        </Menu.Dropdown>
+      </Menu>
       <UiTooltip label={t.common.label.darkMode}>
         <UiActionIcon
           variant="subtle"
+          visibleFrom="sm"
           aria-label={t.common.label.darkMode}
           onClick={() => toggleColorScheme()}
         >

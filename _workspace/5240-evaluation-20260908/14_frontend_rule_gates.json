@@ -1,0 +1,68 @@
+{
+  "node": "v24.19.0",
+  "date": "2026-09-08",
+  "parity": [
+    {
+      "file": "src/features/evaluation-programs/api/audit.ts",
+      "match": true,
+      "sha256": "bc20ee9dad10806c9ef3909e589fd6c7497d9224e8dbd0e8b2d5f420b02e2247"
+    },
+    {
+      "file": "src/features/evaluation-programs/components/ProgramAuditTimeline.tsx",
+      "match": true,
+      "sha256": "daba588a4cab623358a3994352a971982ee009394ebf890fd9b237cb19010dae"
+    },
+    {
+      "file": "src/features/evaluation-programs/pages/ProgramOperationsPage.tsx",
+      "match": true,
+      "sha256": "180fccec9008695137b31173e9f12fe6974bf001be9d34b3adfcad1b585304ba"
+    },
+    {
+      "file": "src/features/evaluation-programs/auditI18n.ts",
+      "match": true,
+      "sha256": "74b6783debf6c46d4c1c2aae50c77c50c7689a3bf500919fa6d8fb72af1eee6b"
+    },
+    {
+      "file": "src/features/evaluation-programs/programI18n.ts",
+      "match": true,
+      "sha256": "13e8864ff7a9740d5e401c261b419ae80587ae31d5c4713d13d1b80722bf382e"
+    },
+    {
+      "file": "src/api/client.ts",
+      "match": true,
+      "sha256": "e970b77b83f2ae2a6d06aa94673afd542665a4162a9ac6362c21d0e2b538edd5"
+    },
+    {
+      "file": "src/api/generated/schema.d.ts",
+      "match": true,
+      "sha256": "e8f06328bcd3c310ef488c64d0b36475c8d3c05f8a4f8011679944f56646858e"
+    },
+    {
+      "file": "src/App.tsx",
+      "match": true,
+      "sha256": "0168e5e5a73c23dcb1320f27c73ad06b1be2ec65c329a9a0d8f09d490be544b7"
+    }
+  ],
+  "gateResults": [
+    {
+      "name": "i18n",
+      "code": 0,
+      "output": "✔ ko: all Korean-schema keys and interpolation variables are translated (1043.7942ms)\n✔ en: all Korean-schema keys and interpolation variables are translated (21.8564ms)\n✔ ja: all Korean-schema keys and interpolation variables are translated (24.4185ms)\n✔ zh-CN: all Korean-schema keys and interpolation variables are translated (18.0333ms)\n✔ vi: all Korean-schema keys and interpolation variables are translated (719.3446ms)\n✔ five suite locales normalize persisted and BCP 47 identifiers without changing the Chinese script (1.0824ms)\n✔ errors use the selected language and never expose raw server messages (1.7992ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 9356.1895\n"
+    },
+    {
+      "name": "workspace",
+      "code": 0,
+      "output": "✔ keeps calibration as an explicit confirm/publish/close stage (241.8193ms)\n✔ validates a meaningful goal title and percentage weight (0.8983ms)\n✔ requires the calibration target distribution to total exactly 100 percent (376.8898ms)\n✔ maps an active cycle to an actionable setup phase and explains the next gate (4.0465ms)\n✔ keeps future workflow stages locked until their cycle status is reached (0.7903ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 6383.901\n"
+    },
+    {
+      "name": "design",
+      "code": 0,
+      "output": "design-system audit: hex=0/0, inline-style=0/0\n"
+    },
+    {
+      "name": "local-ui",
+      "code": 0,
+      "output": "local-ui audit: tags=0/0, blocked-imports=0/0\n"
+    }
+  ]
+}

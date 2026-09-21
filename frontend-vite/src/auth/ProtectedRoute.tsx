@@ -8,11 +8,13 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
+import { LoadingState } from '@easy/ui-components';
 import { useAuth } from './AuthProvider';
 
 export function ProtectedRoute({ children }: { children: ReactNode }): React.ReactNode {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
+  if (isLoading) return <LoadingState />;
   if (!isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }

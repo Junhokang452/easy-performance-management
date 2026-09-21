@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "checks": 0,
+  "results": [],
+  "error": "URLError: local runtime unavailable",
+  "baseUrl": "http://127.0.0.1:8087",
+  "fixtureCoverage": {}
+}

@@ -1,0 +1,2 @@
+package com.easyperformance.program;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;
+public interface ProgramFeedbackRepository extends JpaRepository<ProgramFeedback,UUID>{Optional<ProgramFeedback> findByIdAndTenantId(UUID id,UUID tenantId);Optional<ProgramFeedback> findByTenantIdAndParticipantId(UUID tenantId,UUID participantId);List<ProgramFeedback> findAllByTenantIdAndProgramId(UUID tenantId,UUID programId);List<ProgramFeedback> findAllByTenantIdAndProgramIdAndParticipantIdIn(UUID tenantId,UUID programId,Collection<UUID> participantIds);}

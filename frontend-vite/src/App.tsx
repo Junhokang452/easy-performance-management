@@ -12,7 +12,7 @@
  * - LAZY (4 도메인 페이지 + LoginPage)
  * - RouteErrorBoundary + key={pathname} 리셋
  * - AuthProvider + ProtectedRoute (단계 3 JWT 미진입 — stub fallback)
- * - i18n ko/en + 다크모드 토글
+ * - i18n ko/en/ja/zh-CN/vi + 다크모드 토글
  * - ApiError SoT (BE-CC-5 ApiException 정합)
  *
  * 누적 정합 — 단계 0 `58bf09d` + 단계 1 `b83acac` + 단계 2 `6895ba9` + 단계 5 SMB `27108e3`.
@@ -20,16 +20,25 @@
  */
 import { lazy } from 'react';
 import {
-  AppShell,
-  NavLink,
-  Title,
   Text,
   Group,
   Burger,
 } from '@easy/ui-components/mantine';
 import { useDisclosure } from '@mantine/hooks';
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
-import { UiButton, LoginBrandMark } from '@easy/ui-components';
+import {
+  LoginBrandMark,
+  SuiteShellBrandGroup,
+  SuiteShellBrandTitle,
+  SuiteShellHeader,
+  SuiteShellHeaderActions,
+  SuiteShellMain,
+  SuiteShellNavbar,
+  SuiteShellNavLink,
+  SuiteShellRoot,
+  SuiteShellSectionTitle,
+  UiButton,
+} from '@easy/ui-components';
 
 import { PageBoundary } from './shared/PageBoundary';
 import { AppHeaderActions } from './shared/AppHeaderActions';
@@ -38,9 +47,6 @@ import { useAuth } from './auth/AuthProvider';
 import { useT } from './i18n';
 
 // STD-FE-LAZY — 모든 페이지 lazy import
-const CockpitPage = lazy(() =>
-  import('./pages/CockpitPage').then((m) => ({ default: m.CockpitPage })),
-);
 const SelfEvaluationPage = lazy(() =>
   import('./pages/SelfEvaluationPage').then((m) => ({ default: m.SelfEvaluationPage })),
 );
@@ -122,6 +128,51 @@ const AdminTenantsPage = lazy(() =>
 const LoginPage = lazy(() =>
   import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
+const EvaluationWorkspacePage = lazy(() =>
+  import('./features/evaluation-workspace/EvaluationWorkspacePage').then((m) => ({ default: m.EvaluationWorkspacePage })),
+);
+const ProgramListPage = lazy(() =>
+  import('./features/evaluation-programs/pages/ProgramListPage').then((m) => ({ default: m.ProgramListPage })),
+);
+const ProgramSetupPage = lazy(() =>
+  import('./features/evaluation-programs/pages/ProgramSetupPage').then((m) => ({ default: m.ProgramSetupPage })),
+);
+const ProgramOperationsPage = lazy(() =>
+  import('./features/evaluation-programs/pages/ProgramOperationsPage').then((m) => ({ default: m.ProgramOperationsPage })),
+);
+const EvaluationWorkPage = lazy(() =>
+  import('./features/evaluation-programs/pages/EvaluationWorkPage').then((m) => ({ default: m.EvaluationWorkPage })),
+);
+const EmployeePreviewPage = lazy(() =>
+  import('./features/evaluation-programs/pages/EmployeePreviewPage').then((m) => ({ default: m.EmployeePreviewPage })),
+);
+const CatalogLibraryPage = lazy(() =>
+  import('./features/evaluation-programs/pages/CatalogLibraryPage').then((m) => ({ default: m.CatalogLibraryPage })),
+);
+const DepartmentGoalsPage = lazy(() =>
+  import('./features/evaluation-programs/pages/DepartmentGoalsPage').then((m) => ({ default: m.DepartmentGoalsPage })),
+);
+const TaskBoardPage = lazy(() =>
+  import('./features/evaluation-programs/pages/TaskBoardPage').then((m) => ({ default: m.TaskBoardPage })),
+);
+const InterviewWorkspacePage = lazy(() =>
+  import('./features/evaluation-programs/pages/InterviewWorkspacePage').then((m) => ({ default: m.InterviewWorkspacePage })),
+);
+const AnalyticsPage = lazy(() =>
+  import('./features/evaluation-programs/pages/AnalyticsPage').then((m) => ({ default: m.AnalyticsPage })),
+);
+const PersonalReportPage = lazy(() =>
+  import('./features/evaluation-programs/pages/PersonalReportPage').then((m) => ({ default: m.PersonalReportPage })),
+);
+const ReviewerWorkPage = lazy(() =>
+  import('./features/evaluation-programs/pages/ReviewerWorkPage').then((m) => ({ default: m.ReviewerWorkPage })),
+);
+const ReviewerQueuePage = lazy(() =>
+  import('./features/evaluation-programs/pages/ReviewerQueuePage').then((m) => ({ default: m.ReviewerQueuePage })),
+);
+const NotificationInboxPage = lazy(() =>
+  import('./features/evaluation-programs/pages/NotificationInboxPage').then((m) => ({ default: m.NotificationInboxPage })),
+);
 
 export default function App(): React.ReactNode {
   const location = useLocation();
@@ -130,6 +181,15 @@ export default function App(): React.ReactNode {
   const t = useT();
   // SUPER_ADMIN 전용 내비 노출 — JwtAuthFilter 가 roles claim 을 prefix 없이 발급 (BE 정합).
   const isSuperAdmin = session?.roles.includes('SUPER_ADMIN') ?? false;
+  const isEvaluationAdmin = session?.roles.some((role) =>
+    ['HR_ADMIN', 'SUPER_ADMIN'].includes(role),
+  ) ?? false;
+  const canOperateEvaluation = session?.roles.some((role) =>
+    ['HR_ADMIN', 'SUPER_ADMIN', 'DIRECTOR', 'MANAGER'].includes(role),
+  ) ?? false;
+  const canViewAnalytics = session?.roles.some((role) =>
+    ['HR_ADMIN', 'SUPER_ADMIN', 'DIRECTOR'].includes(role),
+  ) ?? false;
 
   // 로그인 페이지는 AppShell 외부에서 직접 렌더 (Auth 요구 없음)
   if (location.pathname === '/login') {
@@ -143,166 +203,112 @@ export default function App(): React.ReactNode {
   }
 
   return (
-    <AppShell
+    <SuiteShellRoot
       header={{ height: 56 }}
-      navbar={{ width: 240, breakpoint: 'sm', collapsed: { mobile: !navOpened } }}
+      navbar={{ width: 220, breakpoint: 'sm', collapsed: { mobile: !navOpened } }}
       padding="md"
-      bg="var(--easy-color-canvas)"
     >
-      <AppShell.Header p="md" bg="var(--easy-color-surface)" bd="0 0 1px 0 solid var(--easy-color-border)">
+      <SuiteShellHeader px="sm">
         <Group justify="space-between" h="100%" wrap="nowrap">
-          <Group gap="md" wrap="nowrap" miw={0}>
+          <Group gap="sm" wrap="nowrap" miw={0}>
             <Burger opened={navOpened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <LoginBrandMark size={30} radius={8}>
-              <Text fw={800} c="var(--easy-color-text-inverse)">P</Text>
-            </LoginBrandMark>
-            <Title order={4} c="var(--easy-color-text)" textWrap="nowrap">{t.domain.app.title}</Title>
-            <Text size="xs" c="dimmed" visibleFrom="sm" truncate>
-              {t.domain.app.subtitle}
-            </Text>
+            <LoginBrandMark size={30} mobileSize={26} radius={8}>P</LoginBrandMark>
+            <SuiteShellBrandGroup gap="sm">
+              <SuiteShellBrandTitle textWrap="nowrap" visibleFrom="sm">{t.workspace.appTitle}</SuiteShellBrandTitle>
+              <Text size="sm" fw={700} hiddenFrom="sm">{t.workspace.copy.mobileAppTitle}</Text>
+              <Text size="xs" c="dimmed" visibleFrom="md" truncate>
+                {t.workspace.appSubtitle}
+              </Text>
+            </SuiteShellBrandGroup>
           </Group>
-          <Group gap="xs" wrap="nowrap">
+          <SuiteShellHeaderActions>
             <AppHeaderActions />
             {isAuthenticated && session && (
               <UiButton variant="subtle" size="xs" radius="md" onClick={() => void logout()}>
                 {t.common.label.logout}
               </UiButton>
             )}
-          </Group>
+          </SuiteShellHeaderActions>
         </Group>
-      </AppShell.Header>
-      <AppShell.Navbar p="xs" bg="var(--easy-color-surface)" bd="0 1px 0 0 solid var(--easy-color-border)">
-        <Text size="xs" c="dimmed" mt="xs" mb={4} px="xs" fw={700}>
+      </SuiteShellHeader>
+      <SuiteShellNavbar p="xs">
+        <SuiteShellSectionTitle mt="xs" mb={4}>
+          {t.program.nav.section}
+        </SuiteShellSectionTitle>
+        <SuiteShellNavLink component={Link} to="/evaluations" label={t.program.nav.myEvaluations} active={location.pathname === '/' || location.pathname === '/evaluations' || location.pathname.startsWith('/evaluations/')} />
+        {canOperateEvaluation && <SuiteShellNavLink component={Link} to="/review-queue" label={t.program.nav.reviewQueue} active={location.pathname.startsWith('/review-queue')} />}
+        {isEvaluationAdmin && <SuiteShellNavLink component={Link} to="/admin/evaluation-programs" label={t.program.nav.programs} active={location.pathname.startsWith('/admin/evaluation-programs')} />}
+        {isEvaluationAdmin && <SuiteShellNavLink component={Link} to="/evaluation-resources/catalogs" label={t.program.nav.catalogs} active={location.pathname.startsWith('/evaluation-resources/catalogs')} />}
+        <SuiteShellNavLink component={Link} to="/department-goals" label={t.program.nav.departmentGoals} active={location.pathname.startsWith('/department-goals')} />
+        <SuiteShellNavLink component={Link} to="/performance-tasks" label={t.program.nav.tasks} active={location.pathname.startsWith('/performance-tasks')} />
+        <SuiteShellNavLink component={Link} to="/interviews" label={t.program.nav.interviews} active={location.pathname.startsWith('/interviews')} />
+        <SuiteShellNavLink component={Link} to="/evaluation-reports" label={t.program.nav.reports} active={location.pathname.startsWith('/evaluation-reports')} />
+        <SuiteShellNavLink component={Link} to="/evaluation-notifications" label={t.program.notifications.nav} active={location.pathname.startsWith('/evaluation-notifications')} />
+        {canViewAnalytics && <SuiteShellNavLink component={Link} to="/evaluation-analytics" label={t.program.nav.analytics} active={location.pathname.startsWith('/evaluation-analytics')} />}
+        <SuiteShellSectionTitle mt="xs" mb={4}>
           {t.domain.nav.section}
-        </Text>
-        <NavLink
-          component={Link}
-          to="/"
-          label={t.nav.cockpit}
-          active={location.pathname === '/'}
-        />
-        <NavLink
-          component={Link}
-          to="/self-evaluations"
-          label={t.domain.nav.selfEvaluation}
-          active={location.pathname.startsWith('/self-evaluations')}
-        />
-        <NavLink
-          component={Link}
-          to="/personal-okrs"
-          label={t.domain.nav.personalOkr}
-          active={location.pathname.startsWith('/personal-okrs')}
-        />
-        <NavLink
-          component={Link}
-          to="/reflection-journals"
-          label={t.domain.nav.reflectionJournal}
-          active={location.pathname.startsWith('/reflection-journals')}
-        />
-        <NavLink
-          component={Link}
-          to="/mentor-feedbacks"
-          label={t.domain.nav.mentorFeedback}
-          active={location.pathname.startsWith('/mentor-feedbacks')}
-        />
-        <NavLink
-          component={Link}
-          to="/hr/cycles"
-          label={t.nav.hr.cycles}
-          active={location.pathname.startsWith('/hr/cycles')}
-        />
-        <NavLink
-          component={Link}
-          to="/my/kpi"
-          label={t.nav.kpi.my}
-          active={location.pathname.startsWith('/my/kpi')}
-        />
-        <NavLink
-          component={Link}
-          to="/kpi/alignment"
-          label={t.nav.kpi.alignment}
-          active={location.pathname.startsWith('/kpi/alignment')}
-        />
-        <NavLink
-          component={Link}
-          to="/manager/kpi-tree"
-          label={t.nav.kpi.managerTree}
-          active={location.pathname.startsWith('/manager/kpi-tree')}
-        />
-        <NavLink
-          component={Link}
-          to="/director/kpi-tree"
-          label={t.nav.kpi.directorTree}
-          active={location.pathname.startsWith('/director/kpi-tree')}
-        />
-        <NavLink
-          component={Link}
-          to="/my/self-review"
-          label={t.nav.review.self}
-          active={location.pathname.startsWith('/my/self-review')}
-        />
-        <NavLink
-          component={Link}
-          to="/manager/review"
-          label={t.nav.review.manager}
-          active={location.pathname.startsWith('/manager/review')}
-        />
-        <NavLink
-          component={Link}
-          to="/hr/calibration-sessions"
-          label={t.nav.calibration.sessions}
-          active={location.pathname.startsWith('/hr/calibration-sessions')}
-        />
-        <NavLink
-          component={Link}
-          to="/director/calibration"
-          label={t.nav.calibration.director}
-          active={location.pathname.startsWith('/director/calibration')}
-        />
-        <NavLink
-          component={Link}
-          to="/hr/calibration-analytics"
-          label={t.nav.calibration.analytics}
-          active={location.pathname.startsWith('/hr/calibration-analytics')}
-        />
-        <NavLink
-          component={Link}
-          to="/hr/distribution"
-          label={t.nav.calibration.distribution}
-          active={location.pathname.startsWith('/hr/distribution')}
-        />
-        <NavLink
-          component={Link}
-          to="/hr/reports"
-          label={t.nav.report.hr}
-          active={location.pathname.startsWith('/hr/reports')}
-        />
-        <NavLink
-          component={Link}
-          to="/my/report"
-          label={t.nav.report.my}
-          active={location.pathname.startsWith('/my/report')}
-        />
+        </SuiteShellSectionTitle>
+        <SuiteShellNavLink component={Link} to="/legacy-evaluations" label={canOperateEvaluation ? t.workspace.navOperate : t.workspace.navMy} active={location.pathname.startsWith('/legacy-evaluations') || location.pathname.startsWith('/workspace')} />
+        {isEvaluationAdmin && (
+          <SuiteShellNavLink
+            component={Link}
+            to="/hr/cycles"
+            label={t.nav.hr.cycles}
+            active={location.pathname.startsWith('/hr/cycles')}
+          />
+        )}
         {isSuperAdmin && (
-          <NavLink
+          <SuiteShellNavLink
             component={Link}
             to="/admin/tenants"
             label={t.nav.admin.tenants}
             active={location.pathname.startsWith('/admin/tenants')}
           />
         )}
-      </AppShell.Navbar>
-      <AppShell.Main bg="var(--easy-color-canvas)">
+      </SuiteShellNavbar>
+      <SuiteShellMain bg="var(--easy-color-canvas)">
         <PageBoundary>
           <Routes>
             <Route
               path="/"
               element={
                 <ProtectedRoute>
-                  <CockpitPage />
+                  <ProgramListPage />
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/legacy-evaluations"
+              element={
+                <ProtectedRoute>
+                  <EvaluationWorkspacePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/workspace/:cycleId"
+              element={
+                <ProtectedRoute>
+                  <EvaluationWorkspacePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/evaluations" element={<ProtectedRoute><ProgramListPage /></ProtectedRoute>} />
+            <Route path="/evaluations/:programId" element={<ProtectedRoute><EvaluationWorkPage /></ProtectedRoute>} />
+            <Route path="/review-queue" element={<ProtectedRoute><ReviewerQueuePage /></ProtectedRoute>} />
+            <Route path="/admin/evaluation-programs" element={<ProtectedRoute><ProgramListPage /></ProtectedRoute>} />
+            <Route path="/admin/evaluation-programs/:programId/setup" element={<ProtectedRoute><ProgramSetupPage /></ProtectedRoute>} />
+            <Route path="/admin/evaluation-programs/:programId/setup/:tab" element={<ProtectedRoute><ProgramSetupPage /></ProtectedRoute>} />
+            <Route path="/admin/evaluation-programs/:programId/operations" element={<ProtectedRoute><ProgramOperationsPage /></ProtectedRoute>} />
+            <Route path="/admin/evaluation-programs/:programId/participants/:participantId/preview" element={<ProtectedRoute><EmployeePreviewPage /></ProtectedRoute>} />
+            <Route path="/admin/evaluation-programs/:programId/participants/:participantId/review/:round" element={<ProtectedRoute><ReviewerWorkPage /></ProtectedRoute>} />
+            <Route path="/evaluation-resources/catalogs" element={<ProtectedRoute><CatalogLibraryPage /></ProtectedRoute>} />
+            <Route path="/department-goals" element={<ProtectedRoute><DepartmentGoalsPage /></ProtectedRoute>} />
+            <Route path="/performance-tasks" element={<ProtectedRoute><TaskBoardPage /></ProtectedRoute>} />
+            <Route path="/interviews" element={<ProtectedRoute><InterviewWorkspacePage /></ProtectedRoute>} />
+            <Route path="/evaluation-reports" element={<ProtectedRoute><PersonalReportPage /></ProtectedRoute>} />
+            <Route path="/evaluation-notifications" element={<ProtectedRoute><NotificationInboxPage /></ProtectedRoute>} />
+            <Route path="/evaluation-analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
             <Route
               path="/self-evaluations"
               element={
@@ -449,7 +455,7 @@ export default function App(): React.ReactNode {
             />
           </Routes>
         </PageBoundary>
-      </AppShell.Main>
-    </AppShell>
+      </SuiteShellMain>
+    </SuiteShellRoot>
   );
 }

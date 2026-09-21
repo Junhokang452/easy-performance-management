@@ -11,10 +11,12 @@
 import { Component, type ReactNode } from 'react';
 import { Stack, Text } from '@easy/ui-components/mantine';
 import { UiAlert, UiButton } from '@easy/ui-components';
+import type { I18nDict } from '../i18n/ko';
 
 interface Props {
   children: ReactNode;
   resetKey?: string;
+  t: I18nDict;
 }
 
 interface State {
@@ -50,13 +52,13 @@ export class RouteErrorBoundary extends Component<Props, State> {
   override render(): ReactNode {
     if (this.state.hasError) {
       return (
-        <UiAlert color="red" title="페이지 렌더링 오류" m="md">
+        <UiAlert color="red" title={this.props.t.error.boundary} m="md">
           <Stack gap="xs">
             <Text size="sm">
-              {this.state.error?.message ?? '알 수 없는 오류가 발생했습니다.'}
+              {this.props.t.error.unknown}
             </Text>
             <UiButton variant="light" size="xs" onClick={this.reset}>
-              다시 시도
+              {this.props.t.common.action.retry}
             </UiButton>
           </Stack>
         </UiAlert>

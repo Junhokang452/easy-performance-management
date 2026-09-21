@@ -1,0 +1,153 @@
+{
+  "synthetic": true,
+  "baseUrl": "http://127.0.0.1:8089",
+  "cases": [
+    {
+      "case": "authenticated UTF-8 source applied",
+      "passed": true
+    },
+    {
+      "case": "source replay skips duplicates",
+      "passed": true
+    },
+    {
+      "case": "signed tenant mismatch rejected",
+      "passed": true
+    },
+    {
+      "case": "header tenant mismatch rejected",
+      "passed": true
+    },
+    {
+      "case": "legacy body cannot establish a tenant context",
+      "passed": true
+    },
+    {
+      "case": "preview ready plus legacy blocker",
+      "passed": true
+    },
+    {
+      "case": "inclusive as-of start date",
+      "passed": true
+    },
+    {
+      "case": "existing manual participant skipped",
+      "passed": true
+    },
+    {
+      "case": "concurrent apply shares one persisted run",
+      "passed": true
+    },
+    {
+      "case": "only ready participants applied",
+      "passed": true
+    },
+    {
+      "case": "same run replay is idempotent",
+      "passed": true
+    },
+    {
+      "case": "manual reviewer unchanged",
+      "passed": true
+    },
+    {
+      "case": "concurrent apply creates one reviewer for participant 0",
+      "passed": true
+    },
+    {
+      "case": "concurrent apply creates one reviewer for participant 2",
+      "passed": true
+    },
+    {
+      "case": "employee preview forbidden",
+      "passed": true
+    },
+    {
+      "case": "employee apply forbidden",
+      "passed": true
+    },
+    {
+      "case": "HR adjuster is not inferred",
+      "passed": true
+    },
+    {
+      "case": "apply rejects oversized selection",
+      "passed": true
+    },
+    {
+      "case": "duplicate participant IDs rejected",
+      "passed": true
+    },
+    {
+      "case": "source tombstone invalidates preview",
+      "passed": true
+    },
+    {
+      "case": "cross-program participant rejected",
+      "passed": true
+    },
+    {
+      "case": "reviewer Excel export preserved",
+      "passed": true
+    }
+  ],
+  "programId": "01a07f9e-af93-764e-ba7d-6d9ae445bab4",
+  "browserProgramId": "01a07f9e-b258-79ad-aec5-92e9a0ba64ae",
+  "browserParticipants": [
+    {
+      "id": "01a07f9e-b27a-733a-b8c1-3b427ce21e4b",
+      "programId": "01a07f9e-b258-79ad-aec5-92e9a0ba64ae",
+      "employee": {
+        "employeeId": "b9fc666e-299a-4946-9fd3-874171556589",
+        "employeeNo": "S1-b9fc666e",
+        "name": "자동배정 시연",
+        "assignmentId": "cbea73ac-ed12-4567-b46d-4ea54cefb8f1",
+        "orgUnitId": null,
+        "orgUnitName": null,
+        "positionCode": "MEMBER",
+        "gradeCode": null,
+        "jobCode": null,
+        "employmentType": "REGULAR"
+      },
+      "groupId": "01a07f9e-b258-79ad-aec4-56f658cc266e",
+      "groupName": "전체 구성원",
+      "status": "ACTIVE",
+      "weightPercent": 100,
+      "currentStage": "GOAL",
+      "stageStatus": "NOT_STARTED",
+      "currentRound": 0,
+      "resultPublished": false,
+      "exclusionReason": null,
+      "rowVersion": 0,
+      "updatedAt": "2026-09-08T06:05:01.946201800Z"
+    },
+    {
+      "id": "01a07f9e-b27c-733d-959d-9adf6d27e3e5",
+      "programId": "01a07f9e-b258-79ad-aec5-92e9a0ba64ae",
+      "employee": {
+        "employeeId": "aceb455a-78cd-4182-93c6-fed939565747",
+        "employeeNo": "S1-aceb455a",
+        "name": "구계약 시연",
+        "assignmentId": "28d0106a-70f2-4ea3-ab06-a68438867992",
+        "orgUnitId": null,
+        "orgUnitName": null,
+        "positionCode": "MEMBER",
+        "gradeCode": null,
+        "jobCode": null,
+        "employmentType": "REGULAR"
+      },
+      "groupId": "01a07f9e-b258-79ad-aec4-56f658cc266e",
+      "groupName": "전체 구성원",
+      "status": "ACTIVE",
+      "weightPercent": 100,
+      "currentStage": "GOAL",
+      "stageStatus": "NOT_STARTED",
+      "currentRound": 0,
+      "resultPublished": false,
+      "exclusionReason": null,
+      "rowVersion": 0,
+      "updatedAt": "2026-09-08T06:05:01.948202600Z"
+    }
+  ],
+  "completed": true
+}

@@ -1,0 +1,13 @@
+// Focused verification only. Full HCM test compilation is independently reported.
+gradle.projectsEvaluated {
+    rootProject.tasks.named('compileTestJava') {
+        setSource(rootProject.fileTree('src/test/java') {
+            include '**/EasyPerformance*Test.java'
+        })
+    }
+    rootProject.tasks.named('test') {
+        binaryResultsDirectory.set(rootProject.layout.buildDirectory.dir('s1-test-binary'))
+        reports.junitXml.outputLocation.set(rootProject.layout.buildDirectory.dir('s1-test-results'))
+        reports.html.outputLocation.set(rootProject.layout.buildDirectory.dir('s1-test-report'))
+    }
+}

@@ -4,7 +4,7 @@
  */
 package com.easyperformance.domain.evaluationpolicy.entity;
 
-import com.easyperformance.common.UuidV7;
+import com.easyware.platform.UuidV7;
 import com.easyware.platform.audit.TenantAwareAuditEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

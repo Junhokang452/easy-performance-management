@@ -1,0 +1,87 @@
+{
+  "verifiedAt": "2026-09-07T06:50:28.464Z",
+  "checks": [
+    {
+      "locale": "ko",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "en",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "ja",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "zh-CN",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "vi",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "ko",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "en",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "ja",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "zh-CN",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "vi",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "ko",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "en",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "ja",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "zh-CN",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "vi",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    }
+  ],
+  "pageErrors": [],
+  "passed": 15
+}

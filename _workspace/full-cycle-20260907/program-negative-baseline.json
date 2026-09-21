@@ -1,0 +1,159 @@
+{
+  "passed": false,
+  "error": "Administrator preview cannot alter reviewer-authored content: expected (403,), got 200: b'{\"id\":\"01a07b16-2f1e-7bf4-af66-75ec472ac1ac\",\"participantId\":\"01a07b16-2774-70bf-a07b-af2f52224972\",\"catalogItemId\":null,\"departmentGoalId\":null,\"title\":\"\\xea\\xb3\\xa0\\xea\\xb0\\x9d \\xeb\\xac\\xb8\\xec\\x9d\\x98 \\xec\\x9d\\x91\\xeb\\x8b\\xb5 \\xea\\xb0\\x9c\\xec\\x84\\xa0\",\"definition\":\"\\xea\\xb3\\xa0\\xea\\xb0\\x9d \\xeb\\xac\\xb8\\xec\\x9d\\x98 100\\xea\\xb1\\xb4 \\xec\\xb2\\x98\\xeb\\xa6\\xac\",\"weightPercent\":100.0000,\"targetValue\":100.0000,\"unit\":\"\\xea\\xb1\\xb4\",\"achievementLevels\":[{\"code\":\"A\",\"label\":\"\\xeb\\xaa\\xa9\\xed\\x91\\x9c \\xeb\\x8b\\xac\\xec\\x84\\xb1\",\"thresholdValue\":100}],\"status\":\"AGREEMENT_REQUESTED\",\"draftOpinion\":\"\\xea\\xb4\\x80\\xeb\\xa6\\xac\\xec\\x9e\\x90 \\xeb\\x8c\\x80\\xeb\\xa6\\xac \\xeb\\x82\\xb4\\xec\\x9a\\xa9 \\xec\\x88\\x98\\xec\\xa0\\x95\",\"decisionOpinion\":null,\"achievedLevelCode\":null,\"achie'",
+  "checks": [
+    {
+      "case": "hr-admin POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Member cannot create evaluation programs",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/auth/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Tenant B operator cannot read tenant A program",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "Reviewer weights must total exactly 100",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Definition revision advances on actual edit",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b16-2774-70bf-a07b-af2f52224972/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Draft definition is hidden from assigned employee",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Program opening is distinct from participant stage execution",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Same program participant cannot read another employee goals",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b16-205f-7892-b90e-c09e92ef6a9c/stages/GOAL:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/participants/01a07b16-2774-70bf-a07b-af2f52224972/goals",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/goals/01a07b16-2f1e-7bf4-af66-75ec472ac1ac:request-agreement",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Goal author cannot approve own agreement",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Administrator preview cannot alter reviewer-authored content",
+      "passed": false,
+      "status": 200
+    }
+  ]
+}

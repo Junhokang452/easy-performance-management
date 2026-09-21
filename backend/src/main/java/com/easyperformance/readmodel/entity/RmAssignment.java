@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.PrePersist;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -50,17 +51,32 @@ public class RmAssignment extends TenantAwareAuditEntity {
     @Column(name = "job_code", length = 50)
     private String jobCode;
 
+    @Column(name = "manager_employee_id", columnDefinition = "uuid")
+    private UUID managerEmployeeId;
+
     @Column(name = "effective_from")
     private LocalDate effectiveFrom;
 
     @Column(name = "effective_to")
     private LocalDate effectiveTo;
 
+    /** Null marks a legacy payload that cannot be used for reviewer-line automation. */
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @Column(name = "source_system", nullable = false, length = 20)
+    private String sourceSystem;
+
     @Column(name = "source_version", nullable = false)
     private Long sourceVersion;
 
     @Column(name = "synced_at", nullable = false)
     private OffsetDateTime syncedAt;
+
+    @PrePersist
+    void prePersist() {
+        if (sourceSystem == null) sourceSystem = "LEGACY";
+    }
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
@@ -80,11 +96,20 @@ public class RmAssignment extends TenantAwareAuditEntity {
     public String getJobCode() { return jobCode; }
     public void setJobCode(String jobCode) { this.jobCode = jobCode; }
 
+    public UUID getManagerEmployeeId() { return managerEmployeeId; }
+    public void setManagerEmployeeId(UUID managerEmployeeId) { this.managerEmployeeId = managerEmployeeId; }
+
     public LocalDate getEffectiveFrom() { return effectiveFrom; }
     public void setEffectiveFrom(LocalDate effectiveFrom) { this.effectiveFrom = effectiveFrom; }
 
     public LocalDate getEffectiveTo() { return effectiveTo; }
     public void setEffectiveTo(LocalDate effectiveTo) { this.effectiveTo = effectiveTo; }
+
+    public Boolean getDeleted() { return deleted; }
+    public void setDeleted(Boolean deleted) { this.deleted = deleted; }
+
+    public String getSourceSystem() { return sourceSystem; }
+    public void setSourceSystem(String sourceSystem) { this.sourceSystem = sourceSystem; }
 
     public Long getSourceVersion() { return sourceVersion; }
     public void setSourceVersion(Long sourceVersion) { this.sourceVersion = sourceVersion; }

@@ -1,0 +1,20 @@
+{
+  "synthetic": true,
+  "cases": [
+    {
+      "case": "employees cross-tenant PK collision preserves B and rolls back A",
+      "httpStatus": 403,
+      "passed": true
+    },
+    {
+      "case": "orgUnits cross-tenant PK collision preserves B and rolls back A",
+      "httpStatus": 403,
+      "passed": true
+    },
+    {
+      "case": "assignments cross-tenant PK collision preserves B and rolls back A",
+      "httpStatus": 403,
+      "passed": true
+    }
+  ]
+}

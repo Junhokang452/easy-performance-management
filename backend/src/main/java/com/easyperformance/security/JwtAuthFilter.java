@@ -75,34 +75,55 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         boolean routingSet = false;
         try {
             UUID tokenTenantId = null;
+            UUID tokenUserId = null;
+            List<String> tokenRoles = List.of();
             String token = resolveToken(request);
+            if (BrowserSessionController.cookie(request, BrowserSessionController.ACCESS_COOKIE) != null
+                    && request.getHeader("Authorization") == null
+                    && !List.of("GET", "HEAD", "OPTIONS").contains(request.getMethod())) {
+                try {
+                    BrowserSessionController.requireBrowserMutation(request);
+                } catch (RuntimeException ex) {
+                    response.sendError(403, "Cross-origin session mutation rejected");
+                    return;
+                }
+            }
             if (token != null) {
                 try {
                     ParsedToken parsed = jwtService.parse(token);
                     UUID userId = parsed.subjectAsUuid().orElse(null);
-                    if (userId != null) {
-                        UUID tenantId = parsed.tenantId().orElse(null);
-                        tokenTenantId = tenantId;
-                        List<String> roles = extractRoles(parsed);
-
-                        // lib TenantContext (BE 17 v2 cutover 자연 결합) — B2B 흐름만 (performance B2C 부재).
-                        TenantContext.set(TenantContext.b2b(tenantId, userId));
-
-                        List<SimpleGrantedAuthority> authorities = roles.isEmpty() ? List.of()
-                            : roles.stream().map(SimpleGrantedAuthority::new).toList();
-                        SecurityContextHolder.getContext().setAuthentication(
-                            new UsernamePasswordAuthenticationToken(userId, null, authorities));
+                    if (userId != null && parsed.tenantId().isPresent()
+                            && parsed.type().filter("access"::equals).isPresent()) {
+                        tokenTenantId = parsed.tenantId().orElseThrow();
+                        tokenUserId = userId;
+                        tokenRoles = extractRoles(parsed);
                     }
                 } catch (Exception ignored) {
                     // 무효/만료 토큰 → 인증 미설정 상태로 통과 (보호 경로는 EntryPoint 가 401)
                 }
             }
+            if (tokenTenantId != null && routingContext != null) {
+                try {
+                    routingSet = routingContext.setByActiveId(tokenTenantId);
+                } catch (RuntimeException ignored) {
+                    routingSet = false;
+                }
+                if (!routingSet) {
+                    response.sendError(401, "Tenant session is unavailable");
+                    return;
+                }
+            }
+            if (tokenUserId != null) {
+                TenantContext.set(TenantContext.b2b(tokenTenantId, tokenUserId));
+                List<SimpleGrantedAuthority> authorities = tokenRoles.isEmpty() ? List.of()
+                    : tokenRoles.stream().map(SimpleGrantedAuthority::new).toList();
+                SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(tokenUserId, null, authorities));
+            }
             // default-free: 인증 요청은 JWT tid 의 테넌트 DB 로 라우팅(code 는 control plane 해석),
             // 비인증/공개 요청은 default-tenant 폴백(설정 시). default-tenant 모드 비인증엔 TenantContext 보강.
-            if (routingContext != null) {
-                if (tokenTenantId != null) {
-                    routingSet = routingContext.setByActiveId(tokenTenantId);
-                } else if (defaultTenantId != null) {
+            if (routingContext != null && tokenTenantId == null) {
+                if (defaultTenantId != null) {
                     routingSet = routingContext.setIfActive(defaultTenantId, defaultTenantCode);
                     if (routingSet && TenantContext.get() == null) {
                         TenantContext.set(TenantContext.b2b(defaultTenantId, null));
@@ -141,7 +162,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         if (request.getCookies() != null) {
             for (var cookie : request.getCookies()) {
-                if ("access_token".equals(cookie.getName())) {
+                if (BrowserSessionController.ACCESS_COOKIE.equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }

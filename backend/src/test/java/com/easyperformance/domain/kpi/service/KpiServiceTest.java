@@ -344,9 +344,8 @@ class KpiServiceTest {
         when(treeRepository.findByIdAndTenantId(eq(treeId), any())).thenReturn(Optional.of(tree));
 
         KpiActual live = actual(actualId, assignmentId, new BigDecimal("150"), null);
-        when(actualRepository.findAllByTenantIdAndKpiAssignmentIdAndSupersedesIdIsNullOrderByAsOfDateDescCreatedAtDesc(
+        when(actualRepository.findAllByTenantIdAndKpiAssignmentIdOrderByAsOfDateDescCreatedAtDesc(
                 any(), eq(assignmentId))).thenReturn(List.of(live));
-        when(actualRepository.existsByTenantIdAndSupersedesId(any(), eq(actualId))).thenReturn(false);
 
         List<MyKpiAssignmentResponse> result = service.listMyAssignments(cycleId, employeeId);
 
@@ -358,6 +357,26 @@ class KpiServiceTest {
         assertThat(r.latestActualValue()).isEqualByComparingTo("150");
         // achievementRate = 150 / 200 = 0.75
         assertThat(r.achievementRate()).isEqualByComparingTo("0.75");
+    }
+
+    @Test
+    void listMyAssignments_usesSupersedingLeafAsLatestActual() {
+        UUID employeeId = UUID.randomUUID();
+        when(cycleRepository.findByIdAndTenantId(eq(cycleId), any())).thenReturn(Optional.of(cycle(CycleStatus.ACTIVE)));
+        KpiAssignment assignment = new KpiAssignment();
+        assignment.setId(assignmentId); assignment.setTenantId(tenantId); assignment.setKpiNodeId(nodeId);
+        assignment.setEmployeeId(employeeId);
+        when(assignmentRepository.findMyAssignments(any(), eq(cycleId), eq(employeeId))).thenReturn(List.of(assignment));
+        KpiNode node = node(nodeId, treeId, null, BigDecimal.ONE); node.setTarget(new BigDecimal("100"));
+        when(nodeRepository.findByIdAndTenantId(eq(nodeId), any())).thenReturn(Optional.of(node));
+        when(treeRepository.findByIdAndTenantId(eq(treeId), any())).thenReturn(Optional.of(tree(treeId, cycleId)));
+        KpiActual original = actual(actualId, assignmentId, new BigDecimal("70"), null);
+        KpiActual corrected = actual(UUID.randomUUID(), assignmentId, new BigDecimal("90"), actualId);
+        when(actualRepository.findAllByTenantIdAndKpiAssignmentIdOrderByAsOfDateDescCreatedAtDesc(any(),eq(assignmentId)))
+            .thenReturn(List.of(corrected,original));
+
+        assertThat(service.listMyAssignments(cycleId,employeeId).getFirst().latestActualValue())
+            .isEqualByComparingTo("90");
     }
 
     // ═══════════════════════════ KpiActual (append-only) ═══════════════════════════

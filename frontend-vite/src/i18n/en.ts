@@ -1,31 +1,34 @@
+import { en as sharedLabels } from '@easy/i18n-common/locales/en';
+import { programEn } from '../features/evaluation-programs/programI18n.ts';
 /**
  * English i18n bundle — performance FE 단계 4 진입 기본.
  */
 import type { I18nDict } from './ko';
 
 export const en: I18nDict = {
+  program: programEn,
   common: {
     action: {
-      create: 'Create',
-      save: 'Save',
-      cancel: 'Cancel',
-      edit: 'Edit',
-      delete: 'Delete',
-      submit: 'Submit',
-      close: 'Close',
+      create: sharedLabels['common.action.add'],
+      save: sharedLabels['common.action.save'],
+      cancel: sharedLabels['common.action.cancel'],
+      edit: sharedLabels['common.action.edit'],
+      delete: sharedLabels['common.action.delete'],
+      submit: sharedLabels['common.action.submit'],
+      close: sharedLabels['common.action.close'],
       retry: 'Retry',
     },
     status: {
-      active: 'Active',
-      inactive: 'Inactive',
-      loading: 'Loading...',
-      empty: 'No data',
+      active: sharedLabels['common.status.active'],
+      inactive: sharedLabels['common.status.inactive'],
+      loading: sharedLabels['common.message.loading'],
+      empty: sharedLabels['common.message.no_data'],
     },
     message: {
       created: 'Created successfully.',
-      updated: 'Updated successfully.',
+      updated: sharedLabels['common.message.save_success'],
       deleted: 'Deleted successfully.',
-      loadError: 'Failed to load',
+      loadError: sharedLabels['common.message.load_failed'],
     },
     label: {
       darkMode: 'Dark mode',
@@ -60,6 +63,23 @@ export const en: I18nDict = {
     },
     admin: {
       tenants: 'System > Tenants',
+    },
+  },
+  workspace: {
+    navMy: 'My evaluation', navOperate: 'Evaluation operations', appTitle: 'Easy Performance', appSubtitle: 'Goals through feedback', cycle: 'Evaluation cycle', preparing: 'Preparing evaluation operations.',
+    myEvaluation: 'My evaluation', operations: 'Operations', participants: 'Participants and reviewers', participantSelect: 'Review subjects', reviewerSelect: 'Primary reviewer', assign: 'Save assignments',
+    progress: 'Progress summary', achievements: 'Achievements', blockers: 'Blockers or support needed', supportNeeded: 'Support needed',
+    goal: 'Goal', goalDescription: 'Success criteria or action plan', weight: 'Weight (%)', saveDraft: 'Save draft', submit: 'Submit', open: 'Open evaluation', next: 'Next stage', publish: 'Publish results', close: 'Close evaluation', acknowledge: 'Acknowledge result',
+    setup: 'Setup', participantsPhase: 'Participants', goals: 'Goal agreement', checkIn: 'Check-in', selfReview: 'Self review', teamReview: 'Team review', calibration: 'Calibration', results: 'Results and feedback', closure: 'Closure',
+    copy: {
+      mobileAppTitle: 'Performance', noAssignedCycleTitle: 'No evaluation is assigned', noAssignedCycleDescription: 'Your assigned evaluation will appear here when HR opens it.', setupDescription: 'Confirm the evaluation period and operating policy.', participantsDescription: 'Assign review subjects and their primary reviewer.', goalsDescription: 'Members write goals and managers approve them.', checkInDescription: 'Review progress and required support.', selfReviewPhaseDescription: 'Members organize their achievements and evidence.', teamReviewDescription: 'Reviewers evaluate assigned members.', calibrationDescription: 'Adjust the rating distribution and review results.', resultsDescription: 'Review released results and feedback.', closureDescription: 'Confirm publication and feedback completion before closing.', currentPhase: 'Current phase', noCycleTitle: 'No evaluation cycle is operating', noCycleDescription: 'Create an evaluation cycle, then manage participants and stages here.', createCycle: 'Create evaluation cycle', loadingMyWork: 'Loading my evaluation work.', blockersTitle: 'Resolve these items before advancing', operationDescription: 'The server decides advancement using completion guards and blockers.', calibrationOpen: 'Open individual calibration', employeeNamePlaceholder: 'Search by name or employee number', noParticipantsTitle: 'No subjects are assigned', noParticipantsDescription: 'Assign members and a primary reviewer before opening the evaluation.', member: 'Member', org: 'Organization', reviewStatus: 'Review status', unassigned: 'Unassigned', notSpecified: 'Not specified', noTask: 'No evaluation work is assigned in this cycle.', goalWrite: 'Write goal', checkInDescriptionShort: 'Record goal progress and feedback, not attendance.', selfReviewDescription: 'Achievements and next growth plan', resultsFeedback: 'Results and feedback', notCalculated: 'Not calculated', acknowledged: 'You acknowledged the result.', acknowledgeHint: 'Review the result, then acknowledge receipt.', appeal: 'Appeal', appealPlaceholder: 'Describe the reason that needs review.', teamLoading: 'Loading team review tasks.', noTeamTitle: 'No team reviews are assigned', noTeamDescription: 'Goal agreement, check-in, and final review tasks appear here.', reviewerFeedback: 'Check-in feedback', reviewerFeedbackPlaceholder: 'Leave direction and required support.', completeCheckIn: 'Complete check-in', teamScore: 'Team review scores', loadingItems: 'Loading review items.', reviewComment: 'Review comment', submitTeamReview: 'Submit team review', feedbackSave: 'Save feedback', feedbackSubmitted: 'Feedback saved.',
+      statusEmpty: 'Not started', status_ACTIVE: 'Active', status_EXCLUDED: 'Excluded', status_DRAFT: 'Draft', status_PENDING_APPROVAL: 'Awaiting approval', status_APPROVED: 'Approved', status_REJECTED: 'Revision requested', status_EMPLOYEE_SUBMITTED: 'Member submitted', status_MANAGER_COMPLETED: 'Manager completed', status_SELF_PENDING: 'Self review pending', status_SELF_SUBMITTED: 'Self review submitted', status_MANAGER_PENDING: 'Manager review pending', status_MANAGER_SUBMITTED: 'Manager review submitted', status_CALIBRATION: 'Calibration', status_FINALIZED: 'Finalized', status_PLANNED: 'Planned', status_GOAL_SETTING: 'Goal setting', status_MID_REVIEW: 'Check-in', status_SELF_REVIEW: 'Self review', status_MANAGER_REVIEW: 'Team review', status_IN_SESSION: 'In session', status_CONFIRMED: 'Confirmed', status_COMPLETED: 'Feedback completed', status_ACCEPTED: 'Accepted', status_APPEALED: 'Appealed', status_RESOLVED: 'Resolved',
+      openConfirmTitle: 'Open this evaluation?', openConfirmBody: 'Members will see the evaluation and can begin goal agreement.', opened: 'The evaluation is open.', noEmployeeMatches: 'No employees match your search.', advanced: 'Moved to the next stage.', published: 'Results were published.', closed: 'The evaluation was closed.', assigned: 'Participants and reviewers were saved.', peopleSuffix: ' people', assignmentHint: 'The selected primary reviewer will be applied to the selected members.', reviewerPlaceholder: 'Select a reviewer', loadingParticipants: 'Loading participants.',
+      nextWork: 'Next work', nextWorkReady: 'The next task is ready.', pendingApprovalSuffix: ' awaiting approval', goalCountSuffix: ' goals', reviewPersonSuffix: ' review', loadingGoals: 'Loading goals.', noGoals: 'No goals have been submitted.', target: 'Target', requestRevision: 'Request revision', approve: 'Approve', goalDecisionComment: 'Goal decision comment', goalDecisionPlaceholder: 'A revision request requires a concrete reason.', goalRejected: 'A revision was requested.', goalApproved: 'The goal was approved.', feedbackSaved: 'Feedback was saved.', checkInCompleted: 'The check-in was completed.', noReviewItems: 'No review items are available.', actual: 'Actual', autoScore: 'Automatic score', managerScore: 'Manager score', managerReviewSaved: 'The manager review draft was saved.', managerReviewSubmitted: 'The manager review was submitted.', scoreRequiredHint: 'Enter a score for every item before submitting.',
+      goalEdit: 'Edit goal', targetValue: 'Target value', unit: 'Unit', revisionReason: 'Revision request', goalUpdated: 'The goal was updated.', saveChanges: 'Save changes', goalSubmitted: 'Approval was requested.', requestApproval: 'Request approval', noDescription: 'No description', noCheckIns: 'No progress records yet.', asOfDate: 'As-of date', actualValue: 'Actual value', progressPercent: 'Progress (%)', note: 'Progress note', addCheckIn: 'Add progress record', evidenceUrl: 'Evidence link', checkInAdded: 'Progress was recorded.', saveCheckIn: 'Save progress', goalCreated: 'The goal was saved.', saveGoal: 'Save goal', checkInSaved: 'The check-in draft was saved.', checkInSubmitted: 'The check-in was submitted.', submitToManager: 'Submit to manager', selfReviewSaved: 'The self review draft was saved.', selfReviewSubmitted: 'The self review was submitted.', finalScore: 'Final score', finalGrade: 'Grade', resultAcknowledged: 'Receipt was acknowledged.', feedbackFromManager: 'Manager feedback', feedbackAccepted: 'Feedback was accepted.', acceptFeedback: 'Accept feedback', appealSubmitted: 'The appeal was submitted.', feedbackStatus: 'Feedback status',
+      loadingCalibration: 'Loading calibration work.', distributionTotal: 'Target total', noCalibrationSession: 'No calibration session', noCalibrationSessionHint: 'Create a session for all active participants.', createCalibrationSession: 'Create session', calibrationSessionCreated: 'A calibration session was created.', calibrationSession: 'Calibration session', currentDistribution: 'Current distribution', distributionApplied: 'The target distribution was applied.', applyDistribution: 'Apply distribution', noCalibrationRows: 'No reviews are ready for calibration.', reviewSubject: 'Review subject', adjustedGrade: 'Adjusted grade', adjustmentReason: 'Adjustment reason', adjustmentSaved: 'The adjustment and reason were saved.', saveAdjustment: 'Save adjustment', calibrationConfirmed: 'Calibration confirmed; finalized', countSuffix: ' reviews', confirmCalibration: 'Confirm calibration',
+      loadingResults: 'Loading result analysis.', resultsAnalysis: 'Result analysis', finalized: 'Finalized', averageScore: 'Average score', gradeDistribution: 'Grade distribution', companyWide: 'Company-wide', noResultRows: 'No result data is available.', loadingFeedback: 'Loading feedback tasks.', feedbackOperations: 'Feedback and appeals', appealReason: 'Appeal reason', feedbackComment: 'Feedback comment', feedbackCompleted: 'Feedback was completed.', completeFeedback: 'Complete feedback', resolution: 'Resolution', resolutionUpheld: 'Uphold result', resolutionAdjustment: 'Adjustment required', resolutionComment: 'Resolution note', appealResolved: 'The appeal was resolved.', resolveAppeal: 'Resolve appeal', noFeedbackAction: 'No action is available for this feedback.',
+      error_E9804253: 'Your account is not linked to an employee profile. Ask HR to complete the profile link.', error_E9804301: 'You do not have permission for this evaluation task.', error_E9804450: 'The evaluation participant could not be found.', error_E9804451: 'The assigned reviewer could not be found.', error_E9804452: 'Feedback has not been created yet.', error_E9804254: 'Select an active employee and reviewer.', error_E9804935: 'Complete the listed requirements before moving to the next stage.', error_E9804936: 'This feedback is already complete and can no longer be edited.', error_E9804252: 'Results cannot be published at the current stage.', unknownError: 'The request could not be completed. Please try again.',
     },
   },
   cockpit: {
@@ -99,7 +119,7 @@ export const en: I18nDict = {
     personaHint: 'Selecting a persona auto-fills the dev seed account (seeder gate ON environments)',
     tenantCode: 'Company code',
     tenantCodePlaceholder: 'Company code (optional)',
-    emailLabel: 'Email',
+    emailLabel: sharedLabels['common.label.email'],
     passwordLabel: 'Password',
     submit: 'Sign in',
     persona: {
@@ -889,5 +909,45 @@ export const en: I18nDict = {
     E9804449: 'Report not found',
     E9804252: 'Reports can only be published when the cycle is in FINALIZED status',
     E9804934: 'An already-superseded (previous) report cannot be viewed, acknowledged, or re-published',
+    E9804453: 'The evaluation program could not be found.',
+    E9804454: 'The evaluation participant could not be found.',
+    E9804455: 'The evaluation goal could not be found.',
+    E9804456: 'The review submission could not be found.',
+    E9804457: 'The score adjustment could not be found.',
+    E9804458: 'The evaluation feedback could not be found.',
+    E9804302: 'You do not have permission to use this evaluation program.',
+    E9804256: 'Check the evaluation program settings.',
+    E9804257: 'This action is unavailable at the current evaluation stage.',
+    E9804258: 'This evaluation type is not currently supported.',
+    E9804937: 'An evaluation in progress or already completed cannot be reconfigured.',
+    E9804938: 'Required evaluation work must be completed before continuing.',
+    E9804939: 'The same evaluation program or assignment already exists.',
+    E9804940: 'The evaluation results have not been disclosed yet.',
+    E9804460: 'The requested evaluation resource could not be found.',
+    E9804360: 'You do not have permission to use this evaluation resource.',
+    E9804260: 'Check the values entered for this evaluation resource.',
+    E9804960: 'The same or a conflicting evaluation resource already exists.',
+    E9804961: 'A completed or locked evaluation resource cannot be changed.',
+    E9804261: 'Attachments must be 20 MB or smaller.',
+    E9804262: 'This attachment type is not supported.',
+  },
+  validation: {
+    email: 'Enter a valid email address.', password: 'Enter your password.',
+  },
+  blockers: {
+    MISSING_EMPLOYEE_BINDING: 'Link the account to an employee profile.',
+    NO_ACTIVE_PARTICIPANTS: 'Assign evaluation participants.',
+    PARTICIPANT_NOT_ACTIVE: 'An active evaluation participant is required.',
+    MISSING_MANAGER: 'Assign a primary reviewer.',
+    GOAL_MISSING: 'Create evaluation goals.',
+    GOAL_NOT_APPROVED: 'Check the evaluation policy and goal approval status.',
+    GOAL_ACTUAL_MISSING: 'Record actual results for the goals.',
+    MID_REVIEW_INCOMPLETE: 'Complete the check-in.',
+    SELF_REVIEW_INCOMPLETE: 'Submit the self review.',
+    MANAGER_REVIEW_INCOMPLETE: 'Submit the team review.',
+    CALIBRATION_INCOMPLETE: 'Confirm grade calibration.',
+    REPORT_NOT_PUBLISHED: 'Publish the results.',
+    REPORT_NOT_ACKNOWLEDGED: 'Members must acknowledge their results.',
+    FEEDBACK_INCOMPLETE: 'Complete feedback and resolve appeals.',
   },
 };

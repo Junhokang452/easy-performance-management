@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "independentReader": "openpyxl 3.1.5",
+  "checks": [
+    "Java OOXML export readable",
+    "leading-zero employee number preserved",
+    "formula-looking text remains string",
+    "Korean/Japanese/Chinese/Vietnamese/emoji preserved",
+    "openpyxl saved workbook import matches original rows"
+  ]
+}

@@ -1,0 +1,372 @@
+{
+  "passed": true,
+  "count": 75,
+  "fixtures": {
+    "catalogId": "01a07b75-fa49-7ff2-a5b2-49c825dba153",
+    "departmentGoalId": "01a07b75-fba6-7238-942e-887bf618029a",
+    "taskId": "01a07b75-fc1e-7b12-b955-566a59213030",
+    "interviewId": "01a07b76-0da8-7163-9b90-40556df317f6"
+  },
+  "checks": [
+    {
+      "case": "hr-admin POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Member cannot change shared evaluation definitions",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-resources/catalogs",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-resources/catalogs/01a07b75-fa49-7ff2-a5b2-49c825dba153",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Member sees registered catalog achievement levels",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-resources/catalogs/01a07b75-fa49-7ff2-a5b2-49c825dba153/copy",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Catalog copy preserves source provenance",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/departments",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Department lookup has real local read-model options",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-resources/department-goals",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-resources/department-goals/01a07b75-fba6-7238-942e-887bf618029a/actual",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Department achievement is persisted",
+      "passed": true
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Task update replaces stakeholder list without unique constraint conflict",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unrelated employee cannot read private task",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-resources/tasks",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-resources/tasks",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Private task absent from unrelated employee list",
+      "passed": true
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/status",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/checklist",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/checklist",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee PATCH /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/checklist/01a07b75-fde4-74f1-8cbe-40af27f010d1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "One of two completed checklist entries yields 50 percent",
+      "passed": true
+    },
+    {
+      "case": "Checklist percentage cannot be overwritten manually",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/activities",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/task-labels",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/labels",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/feedback",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Stakeholder feedback is stored as evidence rather than calculated evaluation score",
+      "passed": true
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/attachments",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/attachments",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/attachments/01a07b76-014d-7989-ba47-2f2e100f9d7b",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Authorized stakeholder downloads exact bytes",
+      "passed": true
+    },
+    {
+      "case": "Private file is attachment with nosniff",
+      "passed": true
+    },
+    {
+      "case": "Unrelated employee cannot download task evidence",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/auth/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Independent authenticated tenant B fixture is active",
+      "passed": true
+    },
+    {
+      "case": "Tenant B operator cannot download tenant A task attachment",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "Tenant B cannot read tenant A catalog",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "employee PATCH /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/checklist/01a07b75-fe16-715a-91da-a07ab766ecf1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/status",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Completed task protects work history",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b75-fc1e-7b12-b955-566a59213030/reopen",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Explicit reopen resumes completed task with recorded reason",
+      "passed": true
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b76-0ab8-7f95-8600-b7884cc15652/status",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-resources/tasks/01a07b76-0ab8-7f95-8600-b7884cc15652/progress",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-resources/tasks/01a07b76-0ab8-7f95-8600-b7884cc15652",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Actual progress survives separate reload",
+      "passed": true
+    },
+    {
+      "case": "Out-of-range progress rejected",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-resources/interviews",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Subject cannot read interview until subject visibility enabled",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Reference cannot read interview until reference visibility enabled",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "HR title does not bypass private interview visibility",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager PATCH /api/v1/evaluation-resources/interviews/01a07b76-0da8-7163-9b90-40556df317f6/visibility",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-resources/interviews/01a07b76-0da8-7163-9b90-40556df317f6",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Subject independently gains access",
+      "passed": true
+    },
+    {
+      "case": "Subject sharing does not grant reference access",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager PATCH /api/v1/evaluation-resources/interviews/01a07b76-0da8-7163-9b90-40556df317f6/visibility",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-resources/interviews/01a07b76-0da8-7163-9b90-40556df317f6",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Revoking subject visibility applies immediately",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Subject cannot edit author interview",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-resources/interviews/01a07b76-0da8-7163-9b90-40556df317f6",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Visibility changes leave audit history",
+      "passed": true
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-resources/interviews?view=REFERENCED",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Referenced view returns shared interview",
+      "passed": true
+    }
+  ]
+}

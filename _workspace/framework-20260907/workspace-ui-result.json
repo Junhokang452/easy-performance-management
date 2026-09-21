@@ -1,0 +1,24 @@
+{
+  "exitCode": 0,
+  "cycleName": "UI 전체흐름 639154",
+  "passedSteps": [
+    "PASS HR cycle create UI 전체흐름 639154",
+    "PASS server-search roster assignment",
+    "PASS HR open",
+    "PASS employee goal create + numeric hydration + submit",
+    "PASS manager goal approve",
+    "PASS HR advance check-in",
+    "PASS employee actual check-in + intermediate submit",
+    "PASS manager intermediate save + complete",
+    "PASS employee self review submit",
+    "PASS manager score + submit",
+    "PASS calibration create + apply + confirm + publish",
+    "PASS manager feedback complete",
+    "PASS employee acknowledge + accept",
+    "PASS HR close",
+    "PASS mobile final render 390"
+  ],
+  "pageErrors": [],
+  "mobileWidth": 390,
+  "firstRun": "All workflow steps passed but concurrent shared prebuild caused HMR context error; preserved in workspace-ui-during-build.log. Clean rerun without code changes passed."
+}

@@ -1,0 +1,37 @@
+{
+  "environment": {
+    "kind": "windows-temporary-copy",
+    "jdk": "Eclipse Temurin 21.0.12.1+1",
+    "gradle": "8.14.5",
+    "sourceTreeModified": false,
+    "programAuditSourceHashesMatchAfterRun": true
+  },
+  "focused": {
+    "class": "com.easyperformance.program.ProgramAuditQueryServiceTest",
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "log": "windows-focused-program-audit-test.log"
+  },
+  "backend": {
+    "tests": 272,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "log": "windows-backend-full-test.log"
+  },
+  "bootJar": {
+    "exitCode": 0,
+    "sha256": "e9e676457176a165841ff71371cd68e4195f535536e488bdb2700c8e6dd7bfb3",
+    "log": "windows-backend-bootjar.log"
+  },
+  "http": {
+    "passed": false,
+    "checks": 0,
+    "reason": "Windows PG harness exhausted its single retry before DB creation/Java start; no product failure observed",
+    "runtimeSummary": "windows-audit-runtime-summary.json"
+  }
+}

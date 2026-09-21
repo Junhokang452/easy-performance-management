@@ -1,0 +1,63 @@
+{
+  "completed": true,
+  "pdfs": [
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\generated-pdfs\\en-landscape.pdf",
+      "pages": 1,
+      "embeddedFontUses": 1,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\en-landscape-1.png"
+      ]
+    },
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\generated-pdfs\\ko-landscape.pdf",
+      "pages": 1,
+      "embeddedFontUses": 1,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-landscape-1.png"
+      ]
+    },
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\generated-pdfs\\ko-multipage-200.pdf",
+      "pages": 16,
+      "embeddedFontUses": 16,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-01.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-02.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-03.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-04.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-05.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-06.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-07.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-08.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-09.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-10.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-11.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-12.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-13.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-14.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-15.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-multipage-200-16.png"
+      ]
+    },
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\generated-pdfs\\ko-portrait.pdf",
+      "pages": 1,
+      "embeddedFontUses": 1,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\ko-portrait-1.png"
+      ]
+    }
+  ],
+  "totalPages": 19,
+  "contactSheets": [
+    "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\contact-1.png",
+    "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\contact-2.png",
+    "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-unit\\contact-3.png"
+  ],
+  "visualReview": "PENDING: main agent must inspect contact sheets and full-size pages"
+}

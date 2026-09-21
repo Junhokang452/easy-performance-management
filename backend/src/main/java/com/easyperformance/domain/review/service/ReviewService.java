@@ -13,6 +13,7 @@ import com.easyperformance.domain.evaluationpolicy.entity.RatingScale;
 import com.easyperformance.domain.evaluationpolicy.repository.EvaluationPolicyRepository;
 import com.easyperformance.domain.kpi.dto.KpiDtos.MyKpiAssignmentResponse;
 import com.easyperformance.domain.kpi.service.KpiService;
+import com.easyperformance.domain.kpi.service.KpiScorePolicy;
 import com.easyperformance.domain.review.dto.ReviewDtos.ReviewBulkCreateRequest;
 import com.easyperformance.domain.review.dto.ReviewDtos.ReviewBulkCreateResponse;
 import com.easyperformance.domain.review.dto.ReviewDtos.ReviewCreateRequest;
@@ -459,17 +460,7 @@ public class ReviewService {
 
     /** autoScore = clamp(round(achievementRate × 100, 2), 0, 100). achievementRate null → null. */
     private BigDecimal computeAutoScore(BigDecimal achievementRate) {
-        if (achievementRate == null) {
-            return null;
-        }
-        BigDecimal scaled = achievementRate.multiply(HUNDRED).setScale(SCORE_SCALE, RoundingMode.HALF_UP);
-        if (scaled.compareTo(ZERO) < 0) {
-            return ZERO.setScale(SCORE_SCALE);
-        }
-        if (scaled.compareTo(HUNDRED) > 0) {
-            return HUNDRED.setScale(SCORE_SCALE);
-        }
-        return scaled;
+        return KpiScorePolicy.autoScore(achievementRate);
     }
 
     /**

@@ -1,0 +1,65 @@
+# Isolated synthetic demonstration. Never selected automatically and no external integrations.
+server:
+  address: 0.0.0.0
+  port: 8087
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:55487/performance_demo
+    username: performance_demo
+    password: ${PERFORMANCE_DEMO_DB_PASSWORD}
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 4
+  jpa:
+    show-sql: false
+  flyway:
+    baseline-on-migrate: false
+app:
+  security:
+    jwt:
+      secret: ${PERFORMANCE_DEMO_JWT_SECRET}
+    auth:
+      dev-default-tenant-id: 00000000-0000-0000-0000-000000000001
+  tenancy:
+    default-tenant-id: ''
+    default-tenant-code: ''
+easyplatform:
+  jwt:
+    secret: ${PERFORMANCE_DEMO_JWT_SECRET}
+  error:
+    enabled: true
+  tenantctx:
+    enabled: true
+  audit:
+    enabled: true
+  b2c:
+    enabled: false
+  performance:
+    stage2:
+      enabled: false
+  tenantbootstrap:
+    enabled: false
+easyware:
+  neon:
+    multitenancy-enabled: false
+    api-key: ''
+neon:
+  api:
+    key: ''
+performance:
+  auth:
+    seed-dev-accounts: true
+    cookie-secure: false
+  s2s:
+    easytalent:
+      base-url: ''
+      bearer-token: ''
+      hmac-secret: ''
+    hcm:
+      bearer-token: ''
+      hmac-secret: ''
+logging:
+  level:
+    com.easyperformance: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN

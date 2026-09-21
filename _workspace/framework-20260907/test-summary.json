@@ -1,0 +1,25 @@
+{
+  "product": {
+    "suites": 30,
+    "tests": 219,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "core": {
+    "suites": 30,
+    "tests": 193,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "coreExcluded": {
+    "tag": "testcontainers",
+    "classes": [
+      "com.easyware.platform.tenant.ControlPlaneSelfMigrateTest",
+      "com.easyware.platform.tenant.TenantRouteRevalidationTest"
+    ],
+    "tests": 8,
+    "reason": "External PG/Docker integration; no external DB authorization in this migration."
+  }
+}

@@ -1,3 +1,4 @@
+import { readSavedLocale } from '../../i18n/locales';
 /**
  * ActualHistoryModal — KPI 실적 이력 모달 (My KPI 화면).
  *
@@ -137,5 +138,5 @@ function formatInstant(iso: string): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString();
+  return d.toLocaleString(readSavedLocale());
 }

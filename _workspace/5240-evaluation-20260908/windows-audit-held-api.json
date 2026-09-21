@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "checks": 17,
+  "results": [
+    {
+      "case": "Program list uses the expected page envelope",
+      "passed": true
+    },
+    {
+      "case": "Operator can read an existing program audit history",
+      "passed": true
+    },
+    {
+      "case": "Every audit row has the exact six-field response contract",
+      "passed": true
+    },
+    {
+      "case": "Audit projection never exposes detailsJson or tenantId",
+      "passed": true
+    },
+    {
+      "case": "Audit page is stably newest-first",
+      "passed": true
+    },
+    {
+      "case": "Page metadata exposes stable totalPages, number and size fields",
+      "passed": true
+    },
+    {
+      "case": "Pagination returns distinct adjacent rows",
+      "passed": true
+    },
+    {
+      "case": "Audit fixture contains a participant-scoped event",
+      "passed": true
+    },
+    {
+      "case": "eventType works as an independent filter",
+      "passed": true
+    },
+    {
+      "case": "participantId works as an independent filter",
+      "passed": true
+    },
+    {
+      "case": "eventType and participantId compose as tenant-scoped filters",
+      "passed": true
+    },
+    {
+      "case": "Employee audit access is forbidden",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Tenant B active operator has a valid cookie-free session",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Tenant B active operator can read its own program collection",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "A signed but nonexistent Tenant B actor is denied",
+      "passed": true,
+      "status": 401
+    },
+    {
+      "case": "Tenant B cannot read tenant A audit history",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "Page size above 100 is rejected",
+      "passed": true,
+      "status": 422
+    }
+  ],
+  "error": null,
+  "baseUrl": "http://127.0.0.1:8089",
+  "fixtureCoverage": {
+    "nullParticipant": "verified",
+    "nullActor": "verified"
+  }
+}

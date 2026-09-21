@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "programId": "01a07b6f-32c6-7620-b417-d86abfd753d3",
+  "checks": [
+    "Draft basic fields update through UI",
+    "1/2/3 reviewer plans saved with exact 100 percent totals",
+    "390px group editor no page overflow"
+  ]
+}

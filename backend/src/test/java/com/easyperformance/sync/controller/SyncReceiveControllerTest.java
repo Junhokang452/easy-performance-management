@@ -7,11 +7,15 @@ package com.easyperformance.sync.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.http.ResponseEntity;
 
 import com.easyperformance.sync.dto.SyncDtos.CoreMasterBatchRequest;
@@ -19,6 +23,9 @@ import com.easyperformance.sync.dto.SyncDtos.CoreMasterBatchResponse;
 import com.easyperformance.sync.service.ReadModelSyncService;
 import com.easyware.platform.error.ApiException;
 import com.easyware.platform.hmac.HmacService;
+import com.easyware.platform.TenantRoutingContext;
+import org.springframework.beans.factory.ObjectProvider;
+import com.easyware.platform.tenantctx.TenantContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -31,11 +38,29 @@ class SyncReceiveControllerTest {
     private static final String HCM_BEARER = "hcm-bearer-token-for-test";
     private static final String HCM_SECRET = "0123456789abcdef0123456789abcdef";          // 32 chars
     private static final String CORE_MASTER_BODY = "{\"employees\":[],\"orgUnits\":[],\"assignments\":[]}";
+    private static final java.util.UUID TENANT_ID = java.util.UUID.fromString("00000000-0000-0000-0000-000000000111");
+
+    @BeforeEach
+    void setTenant() {
+        TenantContext.set(TenantContext.b2b(TENANT_ID, java.util.UUID.randomUUID()));
+    }
+
+    @AfterEach
+    void clearTenant() {
+        TenantContext.clear();
+    }
 
     private final ReadModelSyncService syncService = mock(ReadModelSyncService.class);
 
     private SyncReceiveController configured() {
         return new SyncReceiveController(syncService, new ObjectMapper(), HCM_BEARER, HCM_SECRET);
+    }
+
+    private SyncReceiveController configuredExtended() {
+        @SuppressWarnings("unchecked")
+        ObjectProvider<TenantRoutingContext> provider = mock(ObjectProvider.class);
+        return new SyncReceiveController(syncService, new ObjectMapper(), HCM_BEARER, HCM_SECRET,
+            TENANT_ID.toString(), false, provider);
     }
 
     private static String sign(String secret, String body) {
@@ -108,14 +133,14 @@ class SyncReceiveControllerTest {
     void delegatesToServiceOnValidAuth() {
         SyncReceiveController controller = configured();
         CoreMasterBatchResponse expected = new CoreMasterBatchResponse(0, 0, 0, 0, 0, 0);
-        when(syncService.applyCoreMaster(any(CoreMasterBatchRequest.class))).thenReturn(expected);
+        when(syncService.applyCoreMaster(any(CoreMasterBatchRequest.class), eq(false))).thenReturn(expected);
 
         ResponseEntity<CoreMasterBatchResponse> response = controller.receiveCoreMaster(
             CORE_MASTER_BODY, "Bearer " + HCM_BEARER, sign(HCM_SECRET, CORE_MASTER_BODY));
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(expected);
-        verify(syncService).applyCoreMaster(any(CoreMasterBatchRequest.class));
+        verify(syncService).applyCoreMaster(any(CoreMasterBatchRequest.class), eq(false));
     }
 
     @Test
@@ -127,5 +152,79 @@ class SyncReceiveControllerTest {
             broken, "Bearer " + HCM_BEARER, sign(HCM_SECRET, broken)))
             .isInstanceOf(ApiException.class)
             .satisfies(ex -> assertThat(((ApiException) ex).errorCode().code()).isEqualTo("E9804005"));
+    }
+
+    @Test
+    void enablesExtendedFieldsOnlyWhenSignedBodyHeaderAndContextTenantMatch() {
+        String body = "{\"tenantId\":\"" + TENANT_ID
+            + "\",\"employees\":[],\"orgUnits\":[],\"assignments\":[]}";
+        CoreMasterBatchResponse expected = new CoreMasterBatchResponse(0, 0, 0, 0, 0, 0);
+        when(syncService.applyCoreMaster(any(CoreMasterBatchRequest.class), eq(true))).thenReturn(expected);
+
+        ResponseEntity<CoreMasterBatchResponse> response = configuredExtended().receiveCoreMaster(body,
+            "Bearer " + HCM_BEARER, sign(HCM_SECRET, body), TENANT_ID.toString());
+
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+        verify(syncService).applyCoreMaster(any(CoreMasterBatchRequest.class), eq(true));
+    }
+
+    @Test
+    void rejectsSignedBodyTenantMismatchBeforeMutation() {
+        String body = "{\"tenantId\":\"00000000-0000-0000-0000-000000000222\","
+            + "\"employees\":[],\"orgUnits\":[],\"assignments\":[]}";
+
+        assertThatThrownBy(() -> configuredExtended().receiveCoreMaster(body,
+            "Bearer " + HCM_BEARER, sign(HCM_SECRET, body), TENANT_ID.toString()))
+            .isInstanceOf(ApiException.class)
+            .satisfies(ex -> assertThat(((ApiException) ex).errorCode().code()).isEqualTo("E9804303"));
+    }
+
+    @Test
+    void installsAllowlistedTenantForOpaqueS2sBearerAndClearsItAfterService() {
+        TenantContext.clear();
+        String body = "{\"tenantId\":\"" + TENANT_ID
+            + "\",\"employees\":[],\"orgUnits\":[],\"assignments\":[]}";
+        CoreMasterBatchResponse expected = new CoreMasterBatchResponse(0, 0, 0, 0, 0, 0);
+        when(syncService.applyCoreMaster(any(CoreMasterBatchRequest.class), eq(true))).thenAnswer(call -> {
+            assertThat(TenantContext.get().getTenantId()).isEqualTo(TENANT_ID);
+            return expected;
+        });
+
+        configuredExtended().receiveCoreMaster(body, "Bearer " + HCM_BEARER,
+            sign(HCM_SECRET, body), TENANT_ID.toString());
+
+        assertThat(TenantContext.get()).isNull();
+    }
+
+    @Test
+    void rejectsLegacyBodyWhenOpaqueBearerHasNoAuthenticatedTenantContext() {
+        TenantContext.clear();
+
+        assertThatThrownBy(() -> configured().receiveCoreMaster(CORE_MASTER_BODY,
+            "Bearer " + HCM_BEARER, sign(HCM_SECRET, CORE_MASTER_BODY), TENANT_ID.toString()))
+            .isInstanceOf(ApiException.class)
+            .satisfies(ex -> assertThat(((ApiException) ex).errorCode().code()).isEqualTo("E9804105"));
+    }
+
+    @Test
+    void rejectsExistingSameTenantRouteWhenControlPlaneNoLongerMarksItActive() {
+        TenantRoutingContext routing = mock(TenantRoutingContext.class);
+        when(routing.current()).thenReturn(new TenantRoutingContext.Route(TENANT_ID, "previous-code"));
+        when(routing.setByActiveId(TENANT_ID)).thenReturn(false);
+        @SuppressWarnings("unchecked")
+        ObjectProvider<TenantRoutingContext> provider = mock(ObjectProvider.class);
+        when(provider.getIfAvailable()).thenReturn(routing);
+        SyncReceiveController controller = new SyncReceiveController(syncService, new ObjectMapper(),
+            HCM_BEARER, HCM_SECRET, TENANT_ID.toString(), true, provider);
+        String body = "{\"tenantId\":\"" + TENANT_ID
+            + "\",\"employees\":[],\"orgUnits\":[],\"assignments\":[]}";
+
+        assertThatThrownBy(() -> controller.receiveCoreMaster(body, "Bearer " + HCM_BEARER,
+            sign(HCM_SECRET, body), TENANT_ID.toString()))
+            .isInstanceOf(ApiException.class)
+            .satisfies(ex -> assertThat(((ApiException) ex).errorCode().code()).isEqualTo("E9804105"));
+
+        verify(routing, never()).clear();
+        verify(routing, never()).set(any(), any());
     }
 }

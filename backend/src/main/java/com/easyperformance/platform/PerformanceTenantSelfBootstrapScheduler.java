@@ -4,6 +4,7 @@
  */
 package com.easyperformance.platform;
 
+import com.easyware.platform.TenantProductDb;
 import com.easyware.platform.TenantProductDbStore;
 import com.easyware.platform.tenant.AbstractTenantSelfBootstrapScheduler;
 import com.easyware.platform.tenant.TenantBootstrap;
@@ -16,7 +17,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * performance (2026-06-15) — 자가 부트스트랩 스케줄러 — lib
@@ -43,11 +47,13 @@ import java.util.UUID;
 public class PerformanceTenantSelfBootstrapScheduler extends AbstractTenantSelfBootstrapScheduler {
 
     private static final String PERFORMANCE_APP_CODE = "PERFORMANCE";
-    /** db/migration 최상위 마이그(V20260612_001__app_user.sql = user_account 테이블) Flyway 정규화 버전. */
-    private static final String PERFORMANCE_SCHEMA_VERSION = "20260612.001";
+    /** db/migration 최상위 마이그(V20260908_003__responsible_reminders.sql) Flyway 정규화 버전. */
+    private static final String PERFORMANCE_SCHEMA_VERSION = "20260908.003";
 
     private final PerformanceInitialAdminSeeder adminSeeder;
     private final boolean selfMigrateEnabled;
+    private final boolean activeDriftEnabled;
+    private final Set<UUID> activeDriftCanaryTenantIds;
 
     public PerformanceTenantSelfBootstrapScheduler(
             ObjectProvider<TenantProductDbStore> productDbStore,
@@ -55,10 +61,15 @@ public class PerformanceTenantSelfBootstrapScheduler extends AbstractTenantSelfB
             ObjectProvider<MeterRegistry> meterRegistry,
             ObjectProvider<TenantSchemaMigrator> schemaMigrator,
             PerformanceInitialAdminSeeder adminSeeder,
-            @Value("${easyplatform.performance.stage2.self-migrate-enabled:false}") boolean selfMigrateEnabled) {
+            @Value("${easyplatform.performance.stage2.self-migrate-enabled:false}") boolean selfMigrateEnabled,
+            @Value("${easyplatform.performance.stage2.active-drift-enabled:false}") boolean activeDriftEnabled,
+            @Value("${easyplatform.performance.stage2.active-drift-canary-tenant-ids:}")
+            String activeDriftCanaryTenantIds) {
         super(productDbStore, tenantBootstrap, meterRegistry, schemaMigrator);
         this.adminSeeder = adminSeeder;
         this.selfMigrateEnabled = selfMigrateEnabled;
+        this.activeDriftEnabled = activeDriftEnabled;
+        this.activeDriftCanaryTenantIds = parseCanaryTenantIds(activeDriftCanaryTenantIds);
     }
 
     @Override
@@ -82,10 +93,26 @@ public class PerformanceTenantSelfBootstrapScheduler extends AbstractTenantSelfB
         return "classpath:db/migration";
     }
 
-    /** Option B — drift 판정 기준 schema_version(실측 확정, V20260612_001). */
+    /** Option B — drift 판정 기준 schema_version(현재 최상위 마이그와 일치). */
     @Override
     protected String expectedSchemaVersion() {
         return PERFORMANCE_SCHEMA_VERSION;
+    }
+
+    /**
+     * ACTIVE drift 는 명시 토글과 비어 있지 않은 canary 목록이 모두 있어야만 켠다.
+     * 토글만 잘못 켜도 전체 고객 DB fan-out 이 시작되지 않도록 fail-closed 한다.
+     */
+    @Override
+    protected boolean activeDriftEnabled() {
+        return activeDriftEnabled && !activeDriftCanaryTenantIds.isEmpty();
+    }
+
+    /** 신규 PROVISIONING 은 항상 허용하고, ACTIVE drift 만 고객 UUID canary 로 제한한다. */
+    @Override
+    protected boolean rolloutAllows(TenantProductDb candidate) {
+        return candidate.status() != TenantProductDb.Status.ACTIVE
+                || activeDriftCanaryTenantIds.contains(candidate.platformTenantId());
     }
 
     /** Option B — ACTIVE 전이 전, bootstrap owner DataSource 로 직접 시드(registry.get 우회). */
@@ -105,5 +132,22 @@ public class PerformanceTenantSelfBootstrapScheduler extends AbstractTenantSelfB
                initialDelayString = "${easyplatform.performance.stage2.initial-delay-ms:15000}")
     public void scanAndBootstrap() {
         super.scanAndBootstrap();
+    }
+
+    private static Set<UUID> parseCanaryTenantIds(String configuredIds) {
+        if (configuredIds == null || configuredIds.isBlank()) {
+            return Set.of();
+        }
+        try {
+            return Arrays.stream(configuredIds.split(","))
+                    .map(String::trim)
+                    .filter(value -> !value.isEmpty())
+                    .map(UUID::fromString)
+                    .collect(Collectors.toUnmodifiableSet());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException(
+                    "easyplatform.performance.stage2.active-drift-canary-tenant-ids must contain comma-separated UUIDs",
+                    ex);
+        }
     }
 }

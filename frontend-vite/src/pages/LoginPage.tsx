@@ -7,7 +7,7 @@
  */
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Stack, Text } from '@easy/ui-components/mantine';
+import { Group, Stack, Text } from '@easy/ui-components/mantine';
 import { useForm } from '@mantine/form';
 import { IconBuilding, IconChartBar, IconLock, IconLogin2, IconMail } from '@tabler/icons-react';
 import {
@@ -23,6 +23,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { useT } from '../i18n';
 import { getErrorMessage } from '../api/error';
 import { loginVisual } from './loginVisual';
+import { AppHeaderActions } from '../shared/AppHeaderActions';
 
 interface FromState {
   from?: { pathname?: string };
@@ -49,8 +50,8 @@ export function LoginPage(): React.ReactNode {
   const form = useForm({
     initialValues: { tenantCode: '', email: '', password: '' },
     validate: {
-      email: (v) => (!v.includes('@') ? '유효한 이메일이 필요합니다' : null),
-      password: (v) => (!v ? '비밀번호는 필수입니다' : null),
+      email: (v) => (!v.includes('@') ? t.validation.email : null),
+      password: (v) => (!v ? t.validation.password : null),
     },
   });
 
@@ -84,6 +85,7 @@ export function LoginPage(): React.ReactNode {
       visualImage={loginVisual.image}
       brandInitial={<IconChartBar size={18} />}
     >
+      <Group justify="flex-end"><AppHeaderActions /></Group>
       <Stack gap={4}>
         <Text size="xs" c="dimmed">
           {t.login.personaLabel}

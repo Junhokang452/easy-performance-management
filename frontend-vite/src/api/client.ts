@@ -12,6 +12,7 @@
  *
  * jobeval `cc1bc03` 패턴 정합.
  */
+import axios from 'axios';
 import { createHttpClient } from '@easy/http-client';
 import type { ApiError as EasyApiError } from '@easy/http-client';
 
@@ -21,10 +22,16 @@ export const setActiveTenantId = (tenantId: string | null): void => {
   currentTenantId = tenantId;
 };
 
+// The shared refresh interceptor uses axios directly. Configure the same singleton
+// so both ordinary requests and refresh use the browser mutation header.
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 export const apiClient = createHttpClient({
   eventPrefix: 'easyperformance',
   getTenantId: () => currentTenantId,
-  refreshEndpoint: '/auth/refresh',
+  refreshEndpoint: '/auth/session/refresh',
 });
+
+apiClient.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 export type ApiError = EasyApiError;

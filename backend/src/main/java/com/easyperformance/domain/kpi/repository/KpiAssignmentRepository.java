@@ -7,7 +7,11 @@ package com.easyperformance.domain.kpi.repository;
 import com.easyperformance.domain.kpi.entity.KpiAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import jakarta.persistence.LockModeType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +28,10 @@ import java.util.UUID;
 public interface KpiAssignmentRepository extends JpaRepository<KpiAssignment, UUID> {
 
     Optional<KpiAssignment> findByIdAndTenantId(UUID id, UUID tenantId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select a from KpiAssignment a where a.id = :id and a.tenantId = :tenantId")
+    Optional<KpiAssignment> findLocked(@Param("id") UUID id, @Param("tenantId") UUID tenantId);
 
     List<KpiAssignment> findAllByTenantIdAndKpiNodeIdOrderByCreatedAtAsc(UUID tenantId, UUID kpiNodeId);
 
@@ -48,4 +56,25 @@ public interface KpiAssignmentRepository extends JpaRepository<KpiAssignment, UU
     List<KpiAssignment> findMyAssignments(@Param("tenantId") UUID tenantId,
                                           @Param("cycleId") UUID cycleId,
                                           @Param("employeeId") UUID employeeId);
+
+    @Query(value = """
+        SELECT a FROM KpiAssignment a, KpiNode n, KpiTree t
+        WHERE a.tenantId = :tenantId
+          AND a.employeeId = :employeeId
+          AND n.id = a.kpiNodeId AND n.tenantId = :tenantId
+          AND t.id = n.treeId AND t.tenantId = :tenantId
+          AND t.cycleId = :cycleId
+        ORDER BY a.createdAt ASC
+        """, countQuery = """
+        SELECT count(a) FROM KpiAssignment a, KpiNode n, KpiTree t
+        WHERE a.tenantId = :tenantId
+          AND a.employeeId = :employeeId
+          AND n.id = a.kpiNodeId AND n.tenantId = :tenantId
+          AND t.id = n.treeId AND t.tenantId = :tenantId
+          AND t.cycleId = :cycleId
+        """)
+    Page<KpiAssignment> findCandidates(@Param("tenantId") UUID tenantId,
+                                       @Param("cycleId") UUID cycleId,
+                                       @Param("employeeId") UUID employeeId,
+                                       Pageable pageable);
 }

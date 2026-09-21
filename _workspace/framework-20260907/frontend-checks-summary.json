@@ -1,0 +1,17 @@
+{
+  "i18n": {
+    "tests": 7,
+    "passed": 7
+  },
+  "workspace": {
+    "tests": 5,
+    "passed": 5
+  },
+  "design": {
+    "hex": 0,
+    "inlineStyle": 0
+  },
+  "localUi": {
+    "violations": 0
+  }
+}

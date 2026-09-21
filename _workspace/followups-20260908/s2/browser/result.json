@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "programId": "01a07f99-1241-7816-94b6-5fc08144ab67",
+  "checks": [
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "ko",
+      "width": 1440
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "en",
+      "width": 1440
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "ja",
+      "width": 1440
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "zh-CN",
+      "width": 1440
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "vi",
+      "width": 1440
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "ko",
+      "width": 390
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "en",
+      "width": 390
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "ja",
+      "width": 390
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "zh-CN",
+      "width": 390
+    },
+    {
+      "case": "localized preview and layout",
+      "passed": true,
+      "locale": "vi",
+      "width": 390
+    },
+    {
+      "case": "reason required; cancelling does not save",
+      "passed": true
+    },
+    {
+      "case": "explicit apply and refreshed history",
+      "passed": true
+    },
+    {
+      "case": "read-only evidence",
+      "passed": true,
+      "role": "employee"
+    },
+    {
+      "case": "read-only evidence",
+      "passed": true,
+      "role": "manager"
+    },
+    {
+      "case": "self completion does not freeze KPI evidence",
+      "passed": true
+    },
+    {
+      "case": "completed reviewer freezes fresh preview and apply without new revision",
+      "passed": true
+    }
+  ]
+}

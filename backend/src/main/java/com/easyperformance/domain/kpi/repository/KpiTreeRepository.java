@@ -22,5 +22,7 @@ public interface KpiTreeRepository extends JpaRepository<KpiTree, UUID> {
 
     Optional<KpiTree> findByIdAndTenantId(UUID id, UUID tenantId);
 
+    List<KpiTree> findAllByTenantIdAndIdIn(UUID tenantId, List<UUID> ids);
+
     List<KpiTree> findAllByTenantIdAndCycleIdOrderByCreatedAtAsc(UUID tenantId, UUID cycleId);
 }

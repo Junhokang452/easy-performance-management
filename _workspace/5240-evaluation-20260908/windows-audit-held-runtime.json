@@ -1,0 +1,14 @@
+{
+  "javaPid": 14836,
+  "pgData": "C:\\Users\\SAMSUNG\\AppData\\Local\\Temp\\easy-performance-validation-b1ce4a863a3c41ffb3bd65cfa5fe87a3\\pg18-audit-55489-c278dbccdfc94f44b3e8943fcca965fb",
+  "baseUrl": "http://127.0.0.1:8089",
+  "openApi": "windows-audit-held-openapi.json",
+  "verifier": "windows-audit-held-api.json",
+  "held": false,
+  "participantId": "98a8a3b9-9b13-4c81-9aba-22b5384e11df",
+  "auditRowsMinimum": 31,
+  "programName": "Audit browser fixture 20260908124936",
+  "postgresPid": 16328,
+  "programId": "01a07f22-d19e-7ce6-af19-a8a54084e76d",
+  "stoppedAt": "2026-09-08T13:19:26.2078069+09:00"
+}

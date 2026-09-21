@@ -1,0 +1,64 @@
+{
+  "backend": {
+    "tests": 265,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "freshHttp": [
+    {
+      "file": "fresh-resources-api.json",
+      "passed": true,
+      "count": 75
+    },
+    {
+      "file": "fresh-program-api.json",
+      "passed": true,
+      "count": 147
+    },
+    {
+      "file": "fresh-program-policy.json",
+      "passed": true,
+      "count": 68
+    },
+    {
+      "file": "fresh-program-revisions.json",
+      "passed": true,
+      "count": 30
+    },
+    {
+      "file": "fresh-program-calculations.json",
+      "passed": true,
+      "count": 141
+    }
+  ],
+  "freshHttpCount": 461,
+  "legacyHttp": 97,
+  "coreHermeticTests": 205,
+  "coreExternalPgExcluded": 8,
+  "jarSha256": "6db3daa0b4bd9f52af94a179da2d3b35aca662041dea84865205b0ba755f36ef",
+  "grypeMatches": 0,
+  "grypeIgnored": 0,
+  "browser": [
+    {
+      "file": "browser-setup.json",
+      "passed": true
+    },
+    {
+      "file": "browser-analytics.json",
+      "passed": true
+    },
+    {
+      "file": "browser-grade.json",
+      "passed": true
+    },
+    {
+      "file": "browser-locales.json",
+      "passed": true
+    },
+    {
+      "file": "ui-program-draft-browser.json",
+      "passed": true
+    }
+  ]
+}

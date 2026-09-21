@@ -158,14 +158,15 @@ class ReportServiceTest {
     // ═══════════════════════════ publish (일괄) ═══════════════════════════
 
     @Test
-    void publish_cycleNotFinalized_isRejected() {
+    void publish_calibrationCycle_isAllowedBeforeClose() {
         when(cycleRepository.findByIdAndTenantId(eq(cycleId), any()))
             .thenReturn(java.util.Optional.of(cycle(CycleStatus.CALIBRATION)));
+        when(reviewRepository.findAllByTenantIdAndCycleIdOrderByCreatedAtAsc(any(), eq(cycleId)))
+            .thenReturn(List.of());
 
-        assertThatThrownBy(() -> service.publish(cycleId, UUID.randomUUID()))
-            .isInstanceOf(ApiException.class)
-            .extracting(e -> ((ApiException) e).errorCode())
-            .isEqualTo(PerformanceErrorCode.REPORT_CYCLE_NOT_FINALIZED);
+        ReportPublishResponse response = service.publish(cycleId, UUID.randomUUID());
+
+        assertThat(response.publishedCount()).isZero();
         verify(reportRepository, never()).save(any());
     }
 

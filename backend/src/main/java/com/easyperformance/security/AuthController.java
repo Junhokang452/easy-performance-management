@@ -4,6 +4,8 @@
  */
 package com.easyperformance.security;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,7 +83,7 @@ public class AuthController {
      * OFF(스토어 빈 부재) 면 기본 테넌트로 진행 — 기존 동작 보존(가산적·LIVE-safe). 미상/비활성 회사
      * 코드는 계정 존재 노출 차단을 위해 동일 로그인 실패(E9804101)로 환원.
      */
-    private AuthDtos.TokenResponse authenticateWithTenant(AuthDtos.LoginRequest req) {
+    AuthDtos.TokenResponse authenticateWithTenant(AuthDtos.LoginRequest req) {
         String code = req.tenantCode();
         if (code == null || code.isBlank()) {
             return authService.login(req);
@@ -101,7 +103,20 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthDtos.TokenResponse> refresh(@RequestBody @Valid AuthDtos.RefreshRequest req) {
-        return ResponseEntity.ok(authService.refresh(req));
+        return ResponseEntity.ok(refreshWithTenant(req));
+    }
+
+    /** Route refresh rotation and its account re-check to the refresh token's active tenant DB. */
+    AuthDtos.TokenResponse refreshWithTenant(AuthDtos.RefreshRequest req) {
+        PlatformTenantStore store = tenantStore.getIfAvailable();
+        if (store == null) {
+            return authService.refresh(req); // gate OFF single-DB mode
+        }
+        UUID tenantId = authService.refreshTenantId(req);
+        PlatformTenant tenant = store.findById(tenantId)
+            .filter(candidate -> candidate.status() == PlatformTenant.Status.ACTIVE)
+            .orElseThrow(() -> new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_INVALID));
+        return routingContext.within(tenant.id(), tenant.code(), () -> authService.refresh(req));
     }
 
     @PostMapping("/logout")

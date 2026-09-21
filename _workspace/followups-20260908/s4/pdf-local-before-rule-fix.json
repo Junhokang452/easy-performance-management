@@ -1,0 +1,457 @@
+{
+  "completed": true,
+  "checks": [
+    {
+      "case": "dedicated database identity",
+      "passed": true
+    },
+    {
+      "case": "non-finalized rejected before PDF body",
+      "passed": true
+    },
+    {
+      "case": "source uses existing active published result DTO",
+      "passed": true
+    },
+    {
+      "case": "employee cannot download operator PDF",
+      "passed": true
+    },
+    {
+      "case": "manager cannot download operator PDF",
+      "passed": true
+    },
+    {
+      "case": "anonymous PDF request rejected",
+      "passed": true
+    },
+    {
+      "case": "tenant A cannot download known tenant B program",
+      "passed": true
+    },
+    {
+      "case": "unknown ID same 404 as foreign program",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 0",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 1",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 2",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 3",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 4",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 5",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 6",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 7",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 8",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 9",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 10",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 11",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 12",
+      "passed": true
+    },
+    {
+      "case": "invalid option rejected 13",
+      "passed": true
+    },
+    {
+      "case": "unknown enum rejected {'locale': 'xx'}",
+      "passed": true
+    },
+    {
+      "case": "unknown enum rejected {'orientation': 'A0'}",
+      "passed": true
+    },
+    {
+      "case": "unknown enum rejected {'sections': ['HTML']}",
+      "passed": true
+    },
+    {
+      "case": "ko-landscape.pdf PDF transport headers",
+      "passed": true
+    },
+    {
+      "case": "ko-landscape.pdf no scripts embedded files or annotations",
+      "passed": true
+    },
+    {
+      "case": "Korean and exact source score survive extraction",
+      "passed": true
+    },
+    {
+      "case": "unpublished excluded and sensitive source never exported",
+      "passed": true
+    },
+    {
+      "case": "ko-portrait-grade-only.pdf PDF transport headers",
+      "passed": true
+    },
+    {
+      "case": "ko-portrait-grade-only.pdf no scripts embedded files or annotations",
+      "passed": true
+    },
+    {
+      "case": "column customization removes score and employee number",
+      "passed": true
+    },
+    {
+      "case": "en-summary.pdf PDF transport headers",
+      "passed": true
+    },
+    {
+      "case": "en-summary.pdf no scripts embedded files or annotations",
+      "passed": true
+    },
+    {
+      "case": "summary only excludes personal columns",
+      "passed": true
+    },
+    {
+      "case": "ko-multipage-200.pdf PDF transport headers",
+      "passed": true
+    },
+    {
+      "case": "ko-multipage-200.pdf no scripts embedded files or annotations",
+      "passed": true
+    },
+    {
+      "case": "200 rows paginate and final row retained",
+      "passed": true
+    },
+    {
+      "case": "long field truncation disclosed",
+      "passed": true
+    },
+    {
+      "case": "201 total rows rejected even if extra row excluded",
+      "passed": true
+    },
+    {
+      "case": "successful downloads have exactly three small-program audit events",
+      "passed": true
+    },
+    {
+      "case": "audit contains no plain title names or scores",
+      "passed": true
+    },
+    {
+      "case": "PDF generation did not change source results",
+      "passed": true
+    },
+    {
+      "case": "no published rows fails rather than issuing empty PDF",
+      "passed": true
+    },
+    {
+      "case": "existing XLSX unchanged and available",
+      "passed": true
+    }
+  ],
+  "documents": [
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\ko-landscape.pdf",
+      "pages": 1,
+      "bytes": 23857,
+      "sha256": "8f1051f4dbc514f8eea06300749d71184751bcd82d75a8816bd726225afb6c5d"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\ko-portrait-grade-only.pdf",
+      "pages": 1,
+      "bytes": 18386,
+      "sha256": "e39c3757c10773e32f610844c901f205c86ee08cbd66f90a502af84baa93388c"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\en-summary.pdf",
+      "pages": 1,
+      "bytes": 15211,
+      "sha256": "c6d98624504cdea8d9a6b0c7423be0be45807c7e0ec116785a27351a78e12ab7"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\ko-multipage-200.pdf",
+      "pages": 11,
+      "bytes": 41980,
+      "sha256": "0f2ae88f7b9bc3adcf6cc1954b4b3e0ac20fc459d46ba74118273921226509c9"
+    }
+  ],
+  "fixtureMethod": "API shells plus explicitly synthetic local final snapshots; not workflow verification",
+  "browserFixture": {
+    "id": "01a07ffa-e38d-74f3-8edc-b9768ab220f7",
+    "tenantId": "00000000-0000-0000-0000-000000000001",
+    "name": "S4 합성 결과 권한 2026090807454311fe",
+    "evaluationYear": 2026,
+    "kind": "PERFORMANCE",
+    "status": "DRAFT",
+    "asOfDate": "2026-01-01",
+    "startsOn": "2026-01-01",
+    "endsOn": "2026-12-31",
+    "definitionRevision": 1,
+    "configuration": {
+      "goalMode": "AGREEMENT",
+      "stages": [
+        {
+          "stage": "GOAL",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+          "itemOpinionEnabled": true,
+          "itemOpinionRequired": false,
+          "guideAttachmentId": null
+        },
+        {
+          "stage": "INTERMEDIATE",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": "DEFINITION_ONLY",
+          "itemOpinionEnabled": true,
+          "itemOpinionRequired": false,
+          "guideAttachmentId": null
+        },
+        {
+          "stage": "SELF_REVIEW",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+          "itemOpinionEnabled": true,
+          "itemOpinionRequired": false,
+          "guideAttachmentId": null
+        },
+        {
+          "stage": "REVIEW",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+          "itemOpinionEnabled": true,
+          "itemOpinionRequired": true,
+          "guideAttachmentId": null
+        },
+        {
+          "stage": "CALCULATION",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": null,
+          "itemOpinionEnabled": false,
+          "itemOpinionRequired": false,
+          "guideAttachmentId": null
+        },
+        {
+          "stage": "CALIBRATION",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": null,
+          "itemOpinionEnabled": false,
+          "itemOpinionRequired": false,
+          "guideAttachmentId": null
+        },
+        {
+          "stage": "FEEDBACK",
+          "enabled": true,
+          "startsOn": null,
+          "endsOn": null,
+          "formMode": "DEFINITION_ONLY",
+          "itemOpinionEnabled": true,
+          "itemOpinionRequired": false,
+          "guideAttachmentId": null
+        }
+      ],
+      "scales": [
+        {
+          "id": "01a07ffa-e358-74cd-ac3f-1c0254ddf376",
+          "name": "1-5 입력척도",
+          "use": "INPUT",
+          "kind": "GRADE",
+          "levels": [
+            {
+              "code": "1",
+              "label": "1",
+              "convertedScore": 20,
+              "lowerExclusive": null,
+              "upperInclusive": null,
+              "color": null
+            },
+            {
+              "code": "2",
+              "label": "2",
+              "convertedScore": 40,
+              "lowerExclusive": null,
+              "upperInclusive": null,
+              "color": null
+            },
+            {
+              "code": "3",
+              "label": "3",
+              "convertedScore": 60,
+              "lowerExclusive": null,
+              "upperInclusive": null,
+              "color": null
+            },
+            {
+              "code": "4",
+              "label": "4",
+              "convertedScore": 80,
+              "lowerExclusive": null,
+              "upperInclusive": null,
+              "color": null
+            },
+            {
+              "code": "5",
+              "label": "5",
+              "convertedScore": 100,
+              "lowerExclusive": null,
+              "upperInclusive": null,
+              "color": null
+            }
+          ]
+        },
+        {
+          "id": "01a07ffa-e358-74cd-ac40-40fe76c834bb",
+          "name": "S-A-B-C-D 결과척도",
+          "use": "RESULT",
+          "kind": "GRADE",
+          "levels": [
+            {
+              "code": "S",
+              "label": "S",
+              "convertedScore": 100,
+              "lowerExclusive": 95,
+              "upperInclusive": 100,
+              "color": null
+            },
+            {
+              "code": "A",
+              "label": "A",
+              "convertedScore": 90,
+              "lowerExclusive": 85,
+              "upperInclusive": 95,
+              "color": null
+            },
+            {
+              "code": "B",
+              "label": "B",
+              "convertedScore": 80,
+              "lowerExclusive": 75,
+              "upperInclusive": 85,
+              "color": null
+            },
+            {
+              "code": "C",
+              "label": "C",
+              "convertedScore": 70,
+              "lowerExclusive": 65,
+              "upperInclusive": 75,
+              "color": null
+            },
+            {
+              "code": "D",
+              "label": "D",
+              "convertedScore": 60,
+              "lowerExclusive": null,
+              "upperInclusive": 65,
+              "color": null
+            }
+          ]
+        }
+      ],
+      "calculation": {
+        "inputScaleId": "01a07ffa-e358-74cd-ac3f-1c0254ddf376",
+        "resultScaleId": "01a07ffa-e358-74cd-ac40-40fe76c834bb",
+        "departmentResultScaleId": null,
+        "departmentPerformanceEnabled": false,
+        "adjustmentTarget": "ALL",
+        "adjustmentMethod": "NONE",
+        "populationBasis": "DEPARTMENT",
+        "targetMean": null,
+        "targetStandardDeviation": null,
+        "componentWeights": [
+          {
+            "component": "PERFORMANCE",
+            "weightPercent": 100
+          }
+        ],
+        "decimalPlaces": 2
+      },
+      "publication": {
+        "previousRoundVisibility": "HIDDEN",
+        "showReviewerAllocation": false,
+        "memberResultVisibility": "SCORE_AND_GRADE",
+        "scoreAdjustmentAllowed": true,
+        "reviewerMeanMinimum": null,
+        "reviewerMeanMaximum": null,
+        "maximumGradeStepAdjustment": 1,
+        "multiRaterOpinionsVisible": false,
+        "feedbackEnabled": true,
+        "appealEnabled": true
+      },
+      "groups": [
+        {
+          "id": "01a07ffa-e358-74cd-ac41-bc295a4b724a",
+          "name": "전체 구성원",
+          "definition": "기본 그룹",
+          "itemAssignmentMode": "AGREEMENT",
+          "evaluationMethod": "ABSOLUTE",
+          "intermediateEnabled": true,
+          "selfReviewEnabled": true,
+          "priority": 0,
+          "conditions": [],
+          "reviewerWeightPlans": [
+            {
+              "actualReviewerCount": 1,
+              "reviewerWeights": {
+                "1": 100
+              },
+              "departmentWeight": 0
+            }
+          ]
+        }
+      ],
+      "commonItems": [],
+      "departmentPerformanceGroups": [],
+      "allocationRows": []
+    },
+    "openedAt": null,
+    "finalizedAt": null,
+    "createdAt": "2026-09-08T07:45:43.820311Z",
+    "updatedAt": "2026-09-08T07:45:43.820311Z"
+  },
+  "largeProgramId": "01a07ffa-ea93-7fcf-ae4f-23f50bf23f28"
+}

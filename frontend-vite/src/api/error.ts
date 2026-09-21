@@ -21,6 +21,9 @@
  * jobeval `cc1bc03` 패턴 정합.
  */
 import type { ApiError as EasyApiError } from '@easy/http-client';
+import { dictionaries } from '../i18n/dictionaries';
+import { readSavedLocale } from '../i18n/locales';
+import { workspaceErrorMessage } from '../features/evaluation-workspace/workspaceError';
 
 export type ApiError = EasyApiError;
 
@@ -35,14 +38,9 @@ export function isPerformanceError(err: unknown): err is ApiError {
   );
 }
 
-/** ApiError → 사용자 메시지 추출 (i18n 미정합 시 BE message fallback) */
+/** Translate stable error codes; do not leak an untranslated server message into the UI. */
 export function getErrorMessage(err: unknown): string {
-  if (err && typeof err === 'object') {
-    if ('message' in err && typeof (err as { message: unknown }).message === 'string') {
-      return (err as { message: string }).message;
-    }
-  }
-  return String(err);
+  return workspaceErrorMessage(dictionaries[readSavedLocale()], err);
 }
 
 /** ApiError → HTTP status 추출 (가능한 경우) */

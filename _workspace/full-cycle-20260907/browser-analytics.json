@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "Result XLSX downloaded from selected finalized evaluation",
+    "Item-level data rendered",
+    "Reviewer-level data rendered",
+    "Pivot count drills into source employee",
+    "맞춤 통계 엑셀",
+    "맞춤 통계 차트",
+    "Two evaluation grade matrix drilldown",
+    "Tendency shows actual metrics and method disclosure",
+    "390px no page horizontal overflow"
+  ]
+}

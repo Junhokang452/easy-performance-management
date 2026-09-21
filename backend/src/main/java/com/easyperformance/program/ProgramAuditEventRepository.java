@@ -1,0 +1,5 @@
+package com.easyperformance.program;import org.springframework.data.domain.*;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;
+public interface ProgramAuditEventRepository extends JpaRepository<ProgramAuditEvent,UUID>{Page<ProgramAuditEvent> findAllByTenantIdAndProgramIdOrderByCreatedAtDesc(UUID tenantId,UUID programId,Pageable pageable);
+ @org.springframework.data.jpa.repository.Query("select e from ProgramAuditEvent e where e.tenantId = :tenantId and e.programId = :programId and (:eventType is null or e.eventType = :eventType) and (:participantId is null or e.participantId = :participantId)")
+ Page<ProgramAuditEvent> searchAudit(@org.springframework.data.repository.query.Param("tenantId") UUID tenantId, @org.springframework.data.repository.query.Param("programId") UUID programId, @org.springframework.data.repository.query.Param("eventType") ProgramTypes.ProgramEventType eventType, @org.springframework.data.repository.query.Param("participantId") UUID participantId, Pageable pageable);
+}

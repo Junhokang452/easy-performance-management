@@ -1,0 +1,472 @@
+{
+  "environment": "isolated local PostgreSQL; tenant-ID access guards tested; Neon physical routing not exercised",
+  "verifiedAt": "2026-09-07T07:13:42.557858+00:00",
+  "cycleId": "01a07ab6-dd59-7bc1-b5fd-93718bee7eed",
+  "participantId": "01a07ab6-e377-7b5b-a4f0-a22d7b19a811",
+  "results": [
+    {
+      "case": "hr-admin: POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague: POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Browser metadata has no authentication credentials",
+      "passed": true
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Employee is explicitly bound to Core Master identity",
+      "passed": true
+    },
+    {
+      "case": "HR can search by employee name",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Employee cannot bypass workflow using legacy administrator API",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Invalid enum input returns a client error",
+      "passed": true,
+      "status": 400
+    },
+    {
+      "case": "hr-admin: POST /api/v1/cycles",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "Opening without participants is blocked",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "hr-admin: PUT /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/participants",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Open reaches goal setting",
+      "passed": true
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/cycles?page=0&size=100",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee discovers assigned cycle",
+      "passed": true
+    },
+    {
+      "case": "manager: GET /api/v1/evaluation-workspace/cycles?page=0&size=100",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager discovers assigned cycle",
+      "passed": true
+    },
+    {
+      "case": "colleague: GET /api/v1/evaluation-workspace/cycles?page=0&size=100",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unassigned colleague does not discover private cycle",
+      "passed": true
+    },
+    {
+      "case": "Unassigned colleague cannot read private cycle metadata",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "Unassigned colleague cannot read another employee goals",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin: POST /api/auth/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Valid second-tenant actor is authenticated",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Second-tenant context preserved",
+      "passed": true
+    },
+    {
+      "case": "Tenant B cannot read tenant A participants",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "Cannot leave goal setting before approved goals",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Request employee ID cannot replace authenticated actor",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/goals",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Goal reload preserves agreed weight, target and unit",
+      "passed": true
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b/submit",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Employee cannot approve own goal",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager: POST /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b/decision",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Rejected goal keeps numeric form values for revision",
+      "passed": true
+    },
+    {
+      "case": "employee: PATCH /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b/submit",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: POST /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b/decision",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Rejected goal can be revised, resubmitted and approved",
+      "passed": true
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/advance",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Actual numeric value is required",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "Invalid progress -1 is rejected",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "Invalid progress 101 is rejected",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b/check-ins",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/goals/01a07ab6-f80c-762d-affe-e02c959dff1b/check-ins",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Numeric actual check-in persisted",
+      "passed": true
+    },
+    {
+      "case": "Check-in progress survives reload",
+      "passed": true
+    },
+    {
+      "case": "Intermediate review completion gates self evaluation",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "employee: PUT /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me/intermediate-review",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me/intermediate-review/submit",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: PUT /api/v1/evaluation-workspace/participants/01a07ab6-e377-7b5b-a4f0-a22d7b19a811/intermediate-review",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: POST /api/v1/evaluation-workspace/participants/01a07ab6-e377-7b5b-a4f0-a22d7b19a811/intermediate-review/complete",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Manager completes intermediate performance review",
+      "passed": true
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/advance",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Manager cannot submit employee self evaluation",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Legacy operator mutation cannot bypass workflow: /api/v1/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/transition",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Legacy operator mutation cannot bypass workflow: /api/v1/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba/transition",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Legacy operator mutation cannot bypass workflow: /api/v1/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/reports/publish",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Unassigned colleague cannot read review",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba/self/draft",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba/self/submit",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/advance",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: GET /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba/kpi-items",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Manager sees latest numeric actual",
+      "passed": true
+    },
+    {
+      "case": "manager: POST /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba/manager/draft",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: POST /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba/manager/submit",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unpublished manager evaluation is masked: /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/me",
+      "passed": true
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unpublished manager evaluation is masked: /api/v1/evaluation-workspace/reviews/01a07ab6-e53d-7fa4-b2b0-10453e9348ba",
+      "passed": true
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/advance",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/calibration-sessions",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/calibration-sessions/01a07ab7-22e0-7f8a-9268-50a3c3658314/adjustments",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/calibration/confirm",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Calibration confirms actual review",
+      "passed": true
+    },
+    {
+      "case": "Cannot close before publication and feedback",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/reports/publish",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: GET /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/report",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Published result includes confirmed grade",
+      "passed": true
+    },
+    {
+      "case": "Colleague cannot acknowledge another employee result",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager: PUT /api/v1/evaluation-workspace/reports/01a07ab7-290c-74be-9ebf-c7617c3d5121/feedback",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager: POST /api/v1/evaluation-workspace/reports/01a07ab7-290c-74be-9ebf-c7617c3d5121/feedback/complete",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/reports/01a07ab7-290c-74be-9ebf-c7617c3d5121/appeal",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unresolved appeal prevents close",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Unimplemented grade correction cannot silently resolve an appeal",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/reports/01a07ab7-290c-74be-9ebf-c7617c3d5121/appeal/resolve",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "HR appeal decision persisted",
+      "passed": true
+    },
+    {
+      "case": "employee: POST /api/v1/evaluation-workspace/reports/01a07ab7-290c-74be-9ebf-c7617c3d5121/acknowledge",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin: POST /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/close",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Entire evaluation cycle closes",
+      "passed": true
+    },
+    {
+      "case": "Closed evaluation rejects goal mutation",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Closed evaluation rejects feedback mutation",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "hr-admin: GET /api/v1/evaluation-workspace/cycles/01a07ab6-dd59-7bc1-b5fd-93718bee7eed/results/summary",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Result summary matches actual completion",
+      "passed": true
+    }
+  ]
+}

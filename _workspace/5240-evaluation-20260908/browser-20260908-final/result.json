@@ -1,0 +1,91 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "case": "null actor and participant labels",
+      "passed": true
+    },
+    {
+      "case": "pagination and event filter",
+      "passed": true
+    },
+    {
+      "case": "participant filter and page reset",
+      "passed": true
+    },
+    {
+      "locale": "ko",
+      "width": 1440,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "en",
+      "width": 1440,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "ja",
+      "width": 1440,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "zh-CN",
+      "width": 1440,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "vi",
+      "width": 1440,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "ko",
+      "width": 390,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "ja",
+      "width": 390,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "zh-CN",
+      "width": 390,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "locale": "vi",
+      "width": 390,
+      "records": 25,
+      "overflow": false,
+      "passed": true
+    },
+    {
+      "case": "employee API denied and audit UI absent",
+      "passed": true
+    }
+  ]
+}

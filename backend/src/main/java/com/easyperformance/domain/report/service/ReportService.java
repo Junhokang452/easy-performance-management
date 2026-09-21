@@ -153,7 +153,7 @@ public class ReportService {
     @Transactional
     public ReportPublishResponse publish(UUID cycleId, UUID actorEmployeeId) {
         UUID tenantId = TenantSupport.currentTenantId();
-        requireFinalizedCycle(cycleId, tenantId);
+        requirePublishableCycle(cycleId, tenantId);
 
         // 발행 시점 분포 (FINALIZED finalGrade 비율) — 본 일괄 발행 동안 1회 산출 후 공통 동결.
         Map<String, BigDecimal> distribution = computeFinalizedDistribution(tenantId, cycleId);
@@ -319,6 +319,15 @@ public class ReportService {
     }
 
     /** cycle.status==FINALIZED 게이트 (publish/supersede) — 아니면 REPORT_CYCLE_NOT_FINALIZED 422. */
+    private void requirePublishableCycle(UUID cycleId, UUID tenantId) {
+        EvaluationCycle cycle = requireCycle(cycleId, tenantId);
+        if (cycle.getStatus() != CycleStatus.CALIBRATION && cycle.getStatus() != CycleStatus.FINALIZED) {
+            throw new ApiException(PerformanceErrorCode.REPORT_CYCLE_NOT_FINALIZED,
+                Map.of("cycleId", cycleId, "currentStatus", cycle.getStatus().name(),
+                    "requiredStatus", "CALIBRATION_OR_FINALIZED"));
+        }
+    }
+
     private void requireFinalizedCycle(UUID cycleId, UUID tenantId) {
         EvaluationCycle cycle = requireCycle(cycleId, tenantId);
         if (cycle.getStatus() != CycleStatus.FINALIZED) {

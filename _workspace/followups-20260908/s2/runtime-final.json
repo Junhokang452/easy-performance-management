@@ -1,0 +1,17 @@
+{
+  "held": false,
+  "baseUrl": "http://127.0.0.1:8089",
+  "javaPid": 20068,
+  "protected": [
+    {
+      "LocalPort": 5432,
+      "OwningProcess": 8920
+    },
+    {
+      "LocalPort": 5433,
+      "OwningProcess": 8664
+    }
+  ],
+  "pgData": "C:\\Users\\SAMSUNG\\AppData\\Local\\Temp\\easy-performance-validation-b1ce4a863a3c41ffb3bd65cfa5fe87a3\\pg18-audit-55489-c278dbccdfc94f44b3e8943fcca965fb",
+  "jarSha256": "8F1B2132EBAAB78166007F449CC791D2A3C1BC2F2E954F603F20C8D0DDA0FFDA"
+}

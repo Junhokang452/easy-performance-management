@@ -1,0 +1,16 @@
+{
+  "silentRefresh": [
+    {
+      "status": 200,
+      "hasMutationHeader": true
+    },
+    {
+      "status": 401,
+      "hasMutationHeader": true
+    }
+  ],
+  "httpOnly": true,
+  "noJsTokens": true,
+  "logoutPersists": true,
+  "pageErrors": []
+}

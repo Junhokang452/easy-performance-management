@@ -1,0 +1,57 @@
+{
+  "completed": true,
+  "pdfs": [
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\en-summary.pdf",
+      "pages": 1,
+      "embeddedFontUses": 1,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\en-summary-1.png"
+      ]
+    },
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\ko-landscape.pdf",
+      "pages": 1,
+      "embeddedFontUses": 1,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-landscape-1.png"
+      ]
+    },
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\ko-multipage-200.pdf",
+      "pages": 11,
+      "embeddedFontUses": 11,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-01.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-02.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-03.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-04.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-05.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-06.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-07.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-08.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-09.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-10.png",
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-multipage-200-11.png"
+      ]
+    },
+    {
+      "pdf": "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\output\\pdf\\s4-synthetic\\ko-portrait-grade-only.pdf",
+      "pages": 1,
+      "embeddedFontUses": 1,
+      "geometryPassed": true,
+      "pngs": [
+        "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\ko-portrait-grade-only-1.png"
+      ]
+    }
+  ],
+  "totalPages": 14,
+  "contactSheets": [
+    "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\contact-1.png",
+    "\\\\wsl.localhost\\Ubuntu\\home\\samsung\\code\\easy-performance-management\\_workspace\\followups-20260908\\s4\\visual-api-final\\contact-2.png"
+  ],
+  "visualReview": "PASS: Astra inspected all 14 pages on contact-1..2 and full-size 200-person first/last pages; long titles/cells, embedded Korean and table rules are clean."
+}

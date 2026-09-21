@@ -1,0 +1,988 @@
+{
+  "completed": true,
+  "baseUrl": "http://127.0.0.1:8089",
+  "cases": [
+    {
+      "name": "draft goal routes to employee, requested goal and current review route to assignee",
+      "passed": true
+    },
+    {
+      "name": "preview is read-only and deterministic",
+      "passed": true
+    },
+    {
+      "name": "UTC date, explicit absent due date and no source opinion in rendered text",
+      "passed": true
+    },
+    {
+      "name": "non-operator preview queue and history forbidden",
+      "passed": true
+    },
+    {
+      "name": "empty duplicate unsupported stage and locale inputs rejected",
+      "passed": true
+    },
+    {
+      "name": "unknown participant rejected without partial result",
+      "passed": true
+    },
+    {
+      "name": "dedicated synthetic tenant B fixture created",
+      "passed": true
+    },
+    {
+      "name": "actual tenant B program cannot be previewed queued or read by tenant A",
+      "passed": true
+    },
+    {
+      "name": "blank reason never queues",
+      "passed": true
+    },
+    {
+      "name": "concurrent same key exact replay creates three notifications once",
+      "passed": true
+    },
+    {
+      "name": "queue does not mutate participant stages",
+      "passed": true
+    },
+    {
+      "name": "new idempotency key same source reuses daily rows",
+      "passed": true
+    },
+    {
+      "name": "dedupe status does not change source preview hash",
+      "passed": true
+    },
+    {
+      "name": "same key different request conflicts",
+      "passed": true
+    },
+    {
+      "name": "inbox contains only recipient notifications and IN_APP SENT",
+      "passed": true
+    },
+    {
+      "name": "read is recipient-bound and replay remains immutable",
+      "passed": true
+    },
+    {
+      "name": "real source and owner change rejects old preview atomically",
+      "passed": true
+    },
+    {
+      "name": "new action episode changes owner without recipient fallback",
+      "passed": true
+    },
+    {
+      "name": "concurrent different keys dedupe under shared program lock",
+      "passed": true
+    },
+    {
+      "name": "INTERMEDIATE derives exact responsible owner",
+      "passed": true
+    },
+    {
+      "name": "SELF_REVIEW derives exact responsible owner",
+      "passed": true
+    },
+    {
+      "name": "FEEDBACK derives exact responsible owner",
+      "passed": true
+    },
+    {
+      "name": "delivered feedback routes to employee without leaking comment",
+      "passed": true
+    },
+    {
+      "name": "appealed feedback routes to actual FINAL_FEEDBACK assignee",
+      "passed": true
+    },
+    {
+      "name": "assignee really can resolve and completed stage is excluded",
+      "passed": true
+    },
+    {
+      "name": "missing calculation is blocked instead of fabricated owner message",
+      "passed": true
+    },
+    {
+      "name": "operator-only calculation has no inferred HR recipient",
+      "passed": true
+    },
+    {
+      "name": "not-started work is excluded",
+      "passed": true
+    },
+    {
+      "name": "blocked stage cannot be queued",
+      "passed": true
+    },
+    {
+      "name": "filter excludes unsupported current selection",
+      "passed": true
+    },
+    {
+      "name": "ko server message template is bounded and relative",
+      "passed": true
+    },
+    {
+      "name": "en server message template is bounded and relative",
+      "passed": true
+    },
+    {
+      "name": "ja server message template is bounded and relative",
+      "passed": true
+    },
+    {
+      "name": "zh-CN server message template is bounded and relative",
+      "passed": true
+    },
+    {
+      "name": "vi server message template is bounded and relative",
+      "passed": true
+    },
+    {
+      "name": "wrong UTC day requires new preview",
+      "passed": true
+    },
+    {
+      "name": "history page bound enforced",
+      "passed": true
+    },
+    {
+      "name": "actual reviewer completion excludes the old work episode",
+      "passed": true
+    },
+    {
+      "name": "S3 history excludes existing generic notification rows",
+      "passed": true
+    }
+  ],
+  "fixture": {
+    "program": {
+      "id": "01a07fd0-a920-7c62-97cb-9c79af20c6d8",
+      "tenantId": "00000000-0000-0000-0000-000000000001",
+      "name": "S3 reminder synthetic 20260908065936fd1752",
+      "evaluationYear": 2026,
+      "kind": "PERFORMANCE",
+      "status": "DRAFT",
+      "asOfDate": "2026-01-01",
+      "startsOn": "2026-01-01",
+      "endsOn": "2026-12-31",
+      "definitionRevision": 1,
+      "configuration": {
+        "goalMode": "AGREEMENT",
+        "stages": [
+          {
+            "stage": "GOAL",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "INTERMEDIATE",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_ONLY",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "SELF_REVIEW",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "REVIEW",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": true,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "CALCULATION",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": null,
+            "itemOpinionEnabled": false,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "CALIBRATION",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": null,
+            "itemOpinionEnabled": false,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "FEEDBACK",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_ONLY",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          }
+        ],
+        "scales": [
+          {
+            "id": "01a07fd0-a86f-795e-af0d-95c205545e39",
+            "name": "1-5 입력척도",
+            "use": "INPUT",
+            "kind": "GRADE",
+            "levels": [
+              {
+                "code": "1",
+                "label": "1",
+                "convertedScore": 20,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "2",
+                "label": "2",
+                "convertedScore": 40,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "3",
+                "label": "3",
+                "convertedScore": 60,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "4",
+                "label": "4",
+                "convertedScore": 80,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "5",
+                "label": "5",
+                "convertedScore": 100,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              }
+            ]
+          },
+          {
+            "id": "01a07fd0-a86f-795e-af0e-f97689c93a3b",
+            "name": "S-A-B-C-D 결과척도",
+            "use": "RESULT",
+            "kind": "GRADE",
+            "levels": [
+              {
+                "code": "S",
+                "label": "S",
+                "convertedScore": 100,
+                "lowerExclusive": 95,
+                "upperInclusive": 100,
+                "color": null
+              },
+              {
+                "code": "A",
+                "label": "A",
+                "convertedScore": 90,
+                "lowerExclusive": 85,
+                "upperInclusive": 95,
+                "color": null
+              },
+              {
+                "code": "B",
+                "label": "B",
+                "convertedScore": 80,
+                "lowerExclusive": 75,
+                "upperInclusive": 85,
+                "color": null
+              },
+              {
+                "code": "C",
+                "label": "C",
+                "convertedScore": 70,
+                "lowerExclusive": 65,
+                "upperInclusive": 75,
+                "color": null
+              },
+              {
+                "code": "D",
+                "label": "D",
+                "convertedScore": 60,
+                "lowerExclusive": null,
+                "upperInclusive": 65,
+                "color": null
+              }
+            ]
+          }
+        ],
+        "calculation": {
+          "inputScaleId": "01a07fd0-a86f-795e-af0d-95c205545e39",
+          "resultScaleId": "01a07fd0-a86f-795e-af0e-f97689c93a3b",
+          "departmentResultScaleId": null,
+          "departmentPerformanceEnabled": false,
+          "adjustmentTarget": "ALL",
+          "adjustmentMethod": "NONE",
+          "populationBasis": "DEPARTMENT",
+          "targetMean": null,
+          "targetStandardDeviation": null,
+          "componentWeights": [
+            {
+              "component": "PERFORMANCE",
+              "weightPercent": 100
+            }
+          ],
+          "decimalPlaces": 2
+        },
+        "publication": {
+          "previousRoundVisibility": "HIDDEN",
+          "showReviewerAllocation": false,
+          "memberResultVisibility": "SCORE_AND_GRADE",
+          "scoreAdjustmentAllowed": true,
+          "reviewerMeanMinimum": null,
+          "reviewerMeanMaximum": null,
+          "maximumGradeStepAdjustment": 1,
+          "multiRaterOpinionsVisible": false,
+          "feedbackEnabled": true,
+          "appealEnabled": true
+        },
+        "groups": [
+          {
+            "id": "01a07fd0-a86f-795e-af0f-a5ac7def1337",
+            "name": "전체 구성원",
+            "definition": "기본 그룹",
+            "itemAssignmentMode": "AGREEMENT",
+            "evaluationMethod": "ABSOLUTE",
+            "intermediateEnabled": true,
+            "selfReviewEnabled": true,
+            "priority": 0,
+            "conditions": [],
+            "reviewerWeightPlans": [
+              {
+                "actualReviewerCount": 1,
+                "reviewerWeights": {
+                  "1": 100
+                },
+                "departmentWeight": 0
+              }
+            ]
+          }
+        ],
+        "commonItems": [],
+        "departmentPerformanceGroups": [],
+        "allocationRows": []
+      },
+      "openedAt": null,
+      "finalizedAt": null,
+      "createdAt": "2026-09-08T06:59:36.348768900Z",
+      "updatedAt": "2026-09-08T06:59:36.348768900Z"
+    },
+    "participants": {
+      "employee": {
+        "id": "01a07fd0-aae1-71f9-9ee4-b27192cf0031",
+        "programId": "01a07fd0-a920-7c62-97cb-9c79af20c6d8",
+        "employee": {
+          "employeeId": "019ed002-0000-7000-8000-000000000001",
+          "employeeNo": "DEMO-001",
+          "name": "김나리",
+          "assignmentId": "019ed005-0000-7000-8000-000000000001",
+          "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+          "orgUnitName": "제품개발팀",
+          "positionCode": "MEMBER",
+          "gradeCode": "G3",
+          "jobCode": "SERVICE",
+          "employmentType": "REGULAR"
+        },
+        "groupId": "01a07fd0-a86f-795e-af0f-a5ac7def1337",
+        "groupName": "전체 구성원",
+        "status": "ACTIVE",
+        "weightPercent": 100,
+        "currentStage": "GOAL",
+        "stageStatus": "NOT_STARTED",
+        "currentRound": 0,
+        "resultPublished": false,
+        "exclusionReason": null,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:36.800117900Z"
+      },
+      "colleague": {
+        "id": "01a07fd0-ac88-788f-92d3-321b83c6d2a1",
+        "programId": "01a07fd0-a920-7c62-97cb-9c79af20c6d8",
+        "employee": {
+          "employeeId": "019ed002-0000-7000-8000-000000000006",
+          "employeeNo": "DEMO-006",
+          "name": "오지우",
+          "assignmentId": "019ed005-0000-7000-8000-000000000005",
+          "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+          "orgUnitName": "제품개발팀",
+          "positionCode": "MEMBER",
+          "gradeCode": "G2",
+          "jobCode": "SERVICE",
+          "employmentType": "REGULAR"
+        },
+        "groupId": "01a07fd0-a86f-795e-af0f-a5ac7def1337",
+        "groupName": "전체 구성원",
+        "status": "ACTIVE",
+        "weightPercent": 100,
+        "currentStage": "GOAL",
+        "stageStatus": "NOT_STARTED",
+        "currentRound": 0,
+        "resultPublished": false,
+        "exclusionReason": null,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:37.224535Z"
+      },
+      "director": {
+        "id": "01a07fd0-ad40-7cdf-9b86-62341c5738a1",
+        "programId": "01a07fd0-a920-7c62-97cb-9c79af20c6d8",
+        "employee": {
+          "employeeId": "019ed002-0000-7000-8000-000000000003",
+          "employeeNo": "DEMO-003",
+          "name": "이서준",
+          "assignmentId": "019ed005-0000-7000-8000-000000000004",
+          "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+          "orgUnitName": "제품개발팀",
+          "positionCode": "DIRECTOR",
+          "gradeCode": "G7",
+          "jobCode": "SERVICE",
+          "employmentType": "REGULAR"
+        },
+        "groupId": "01a07fd0-a86f-795e-af0f-a5ac7def1337",
+        "groupName": "전체 구성원",
+        "status": "ACTIVE",
+        "weightPercent": 100,
+        "currentStage": "GOAL",
+        "stageStatus": "NOT_STARTED",
+        "currentRound": 0,
+        "resultPublished": false,
+        "exclusionReason": null,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:37.407786800Z"
+      }
+    },
+    "goals": {
+      "employee": {
+        "id": "01a07fd0-af50-7b6b-b3b1-c97de918571d",
+        "participantId": "01a07fd0-aae1-71f9-9ee4-b27192cf0031",
+        "catalogItemId": null,
+        "departmentGoalId": null,
+        "title": "S3 합성 목표 employee",
+        "definition": "독려는 목표나 평가 점수를 변경하지 않는다.",
+        "weightPercent": 100,
+        "targetValue": 10,
+        "unit": "건",
+        "achievementLevels": [
+          {
+            "code": "A",
+            "label": "목표 달성",
+            "thresholdValue": 10
+          }
+        ],
+        "status": "DRAFT",
+        "draftOpinion": null,
+        "decisionOpinion": null,
+        "achievedLevelCode": null,
+        "achievementSummary": null,
+        "taskEvidence": [],
+        "revision": 1,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:37.936713700Z"
+      },
+      "colleague": {
+        "id": "01a07fd0-afd3-7116-9ca4-5907d7a5675e",
+        "participantId": "01a07fd0-ac88-788f-92d3-321b83c6d2a1",
+        "catalogItemId": null,
+        "departmentGoalId": null,
+        "title": "S3 합성 목표 colleague",
+        "definition": "독려는 목표나 평가 점수를 변경하지 않는다.",
+        "weightPercent": 100,
+        "targetValue": 10,
+        "unit": "건",
+        "achievementLevels": [
+          {
+            "code": "A",
+            "label": "목표 달성",
+            "thresholdValue": 10
+          }
+        ],
+        "status": "DRAFT",
+        "draftOpinion": null,
+        "decisionOpinion": null,
+        "achievedLevelCode": null,
+        "achievementSummary": null,
+        "taskEvidence": [],
+        "revision": 1,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:38.066049700Z"
+      },
+      "director": {
+        "id": "01a07fd0-b01d-74fa-9f38-b44d4ec0cf64",
+        "participantId": "01a07fd0-ad40-7cdf-9b86-62341c5738a1",
+        "catalogItemId": null,
+        "departmentGoalId": null,
+        "title": "S3 합성 목표 director",
+        "definition": "독려는 목표나 평가 점수를 변경하지 않는다.",
+        "weightPercent": 100,
+        "targetValue": 10,
+        "unit": "건",
+        "achievementLevels": [
+          {
+            "code": "A",
+            "label": "목표 달성",
+            "thresholdValue": 10
+          }
+        ],
+        "status": "DRAFT",
+        "draftOpinion": null,
+        "decisionOpinion": null,
+        "achievedLevelCode": null,
+        "achievementSummary": null,
+        "taskEvidence": [],
+        "revision": 1,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:38.141311100Z"
+      }
+    },
+    "stamp": "20260908065936fd1752"
+  },
+  "browserFixture": {
+    "program": {
+      "id": "01a07fd0-cb8d-797f-af56-64876014aa59",
+      "tenantId": "00000000-0000-0000-0000-000000000001",
+      "name": "S3 reminder synthetic 2026090806594592e979",
+      "evaluationYear": 2026,
+      "kind": "PERFORMANCE",
+      "status": "DRAFT",
+      "asOfDate": "2026-01-01",
+      "startsOn": "2026-01-01",
+      "endsOn": "2026-12-31",
+      "definitionRevision": 1,
+      "configuration": {
+        "goalMode": "AGREEMENT",
+        "stages": [
+          {
+            "stage": "GOAL",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "INTERMEDIATE",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_ONLY",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "SELF_REVIEW",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "REVIEW",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": true,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "CALCULATION",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": null,
+            "itemOpinionEnabled": false,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "CALIBRATION",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": null,
+            "itemOpinionEnabled": false,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "FEEDBACK",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_ONLY",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          }
+        ],
+        "scales": [
+          {
+            "id": "01a07fd0-cb89-7916-acd0-0a487ae1fcb7",
+            "name": "1-5 입력척도",
+            "use": "INPUT",
+            "kind": "GRADE",
+            "levels": [
+              {
+                "code": "1",
+                "label": "1",
+                "convertedScore": 20,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "2",
+                "label": "2",
+                "convertedScore": 40,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "3",
+                "label": "3",
+                "convertedScore": 60,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "4",
+                "label": "4",
+                "convertedScore": 80,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "5",
+                "label": "5",
+                "convertedScore": 100,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              }
+            ]
+          },
+          {
+            "id": "01a07fd0-cb89-7916-acd1-48ac86a9d1d2",
+            "name": "S-A-B-C-D 결과척도",
+            "use": "RESULT",
+            "kind": "GRADE",
+            "levels": [
+              {
+                "code": "S",
+                "label": "S",
+                "convertedScore": 100,
+                "lowerExclusive": 95,
+                "upperInclusive": 100,
+                "color": null
+              },
+              {
+                "code": "A",
+                "label": "A",
+                "convertedScore": 90,
+                "lowerExclusive": 85,
+                "upperInclusive": 95,
+                "color": null
+              },
+              {
+                "code": "B",
+                "label": "B",
+                "convertedScore": 80,
+                "lowerExclusive": 75,
+                "upperInclusive": 85,
+                "color": null
+              },
+              {
+                "code": "C",
+                "label": "C",
+                "convertedScore": 70,
+                "lowerExclusive": 65,
+                "upperInclusive": 75,
+                "color": null
+              },
+              {
+                "code": "D",
+                "label": "D",
+                "convertedScore": 60,
+                "lowerExclusive": null,
+                "upperInclusive": 65,
+                "color": null
+              }
+            ]
+          }
+        ],
+        "calculation": {
+          "inputScaleId": "01a07fd0-cb89-7916-acd0-0a487ae1fcb7",
+          "resultScaleId": "01a07fd0-cb89-7916-acd1-48ac86a9d1d2",
+          "departmentResultScaleId": null,
+          "departmentPerformanceEnabled": false,
+          "adjustmentTarget": "ALL",
+          "adjustmentMethod": "NONE",
+          "populationBasis": "DEPARTMENT",
+          "targetMean": null,
+          "targetStandardDeviation": null,
+          "componentWeights": [
+            {
+              "component": "PERFORMANCE",
+              "weightPercent": 100
+            }
+          ],
+          "decimalPlaces": 2
+        },
+        "publication": {
+          "previousRoundVisibility": "HIDDEN",
+          "showReviewerAllocation": false,
+          "memberResultVisibility": "SCORE_AND_GRADE",
+          "scoreAdjustmentAllowed": true,
+          "reviewerMeanMinimum": null,
+          "reviewerMeanMaximum": null,
+          "maximumGradeStepAdjustment": 1,
+          "multiRaterOpinionsVisible": false,
+          "feedbackEnabled": true,
+          "appealEnabled": true
+        },
+        "groups": [
+          {
+            "id": "01a07fd0-cb89-7916-acd2-c7ae6dfa66c6",
+            "name": "전체 구성원",
+            "definition": "기본 그룹",
+            "itemAssignmentMode": "AGREEMENT",
+            "evaluationMethod": "ABSOLUTE",
+            "intermediateEnabled": true,
+            "selfReviewEnabled": true,
+            "priority": 0,
+            "conditions": [],
+            "reviewerWeightPlans": [
+              {
+                "actualReviewerCount": 1,
+                "reviewerWeights": {
+                  "1": 100
+                },
+                "departmentWeight": 0
+              }
+            ]
+          }
+        ],
+        "commonItems": [],
+        "departmentPerformanceGroups": [],
+        "allocationRows": []
+      },
+      "openedAt": null,
+      "finalizedAt": null,
+      "createdAt": "2026-09-08T06:59:45.165593600Z",
+      "updatedAt": "2026-09-08T06:59:45.165593600Z"
+    },
+    "participants": {
+      "employee": {
+        "id": "01a07fd0-cbd5-7df5-8732-ef45aaebc4ef",
+        "programId": "01a07fd0-cb8d-797f-af56-64876014aa59",
+        "employee": {
+          "employeeId": "019ed002-0000-7000-8000-000000000001",
+          "employeeNo": "DEMO-001",
+          "name": "김나리",
+          "assignmentId": "019ed005-0000-7000-8000-000000000001",
+          "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+          "orgUnitName": "제품개발팀",
+          "positionCode": "MEMBER",
+          "gradeCode": "G3",
+          "jobCode": "SERVICE",
+          "employmentType": "REGULAR"
+        },
+        "groupId": "01a07fd0-cb89-7916-acd2-c7ae6dfa66c6",
+        "groupName": "전체 구성원",
+        "status": "ACTIVE",
+        "weightPercent": 100,
+        "currentStage": "GOAL",
+        "stageStatus": "NOT_STARTED",
+        "currentRound": 0,
+        "resultPublished": false,
+        "exclusionReason": null,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:45.237872400Z"
+      },
+      "colleague": {
+        "id": "01a07fd0-cc7d-76f5-ad63-1025d290eb11",
+        "programId": "01a07fd0-cb8d-797f-af56-64876014aa59",
+        "employee": {
+          "employeeId": "019ed002-0000-7000-8000-000000000006",
+          "employeeNo": "DEMO-006",
+          "name": "오지우",
+          "assignmentId": "019ed005-0000-7000-8000-000000000005",
+          "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+          "orgUnitName": "제품개발팀",
+          "positionCode": "MEMBER",
+          "gradeCode": "G2",
+          "jobCode": "SERVICE",
+          "employmentType": "REGULAR"
+        },
+        "groupId": "01a07fd0-cb89-7916-acd2-c7ae6dfa66c6",
+        "groupName": "전체 구성원",
+        "status": "ACTIVE",
+        "weightPercent": 100,
+        "currentStage": "GOAL",
+        "stageStatus": "NOT_STARTED",
+        "currentRound": 0,
+        "resultPublished": false,
+        "exclusionReason": null,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:45.404916800Z"
+      },
+      "director": {
+        "id": "01a07fd0-cd34-7f38-afae-5ffcad1d6b64",
+        "programId": "01a07fd0-cb8d-797f-af56-64876014aa59",
+        "employee": {
+          "employeeId": "019ed002-0000-7000-8000-000000000003",
+          "employeeNo": "DEMO-003",
+          "name": "이서준",
+          "assignmentId": "019ed005-0000-7000-8000-000000000004",
+          "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+          "orgUnitName": "제품개발팀",
+          "positionCode": "DIRECTOR",
+          "gradeCode": "G7",
+          "jobCode": "SERVICE",
+          "employmentType": "REGULAR"
+        },
+        "groupId": "01a07fd0-cb89-7916-acd2-c7ae6dfa66c6",
+        "groupName": "전체 구성원",
+        "status": "ACTIVE",
+        "weightPercent": 100,
+        "currentStage": "GOAL",
+        "stageStatus": "NOT_STARTED",
+        "currentRound": 0,
+        "resultPublished": false,
+        "exclusionReason": null,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:45.588441700Z"
+      }
+    },
+    "goals": {
+      "employee": {
+        "id": "01a07fd0-ce79-712f-9866-ef47dcacedae",
+        "participantId": "01a07fd0-cbd5-7df5-8732-ef45aaebc4ef",
+        "catalogItemId": null,
+        "departmentGoalId": null,
+        "title": "S3 합성 목표 employee",
+        "definition": "독려는 목표나 평가 점수를 변경하지 않는다.",
+        "weightPercent": 100,
+        "targetValue": 10,
+        "unit": "건",
+        "achievementLevels": [
+          {
+            "code": "A",
+            "label": "목표 달성",
+            "thresholdValue": 10
+          }
+        ],
+        "status": "DRAFT",
+        "draftOpinion": null,
+        "decisionOpinion": null,
+        "achievedLevelCode": null,
+        "achievementSummary": null,
+        "taskEvidence": [],
+        "revision": 1,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:45.912074400Z"
+      },
+      "colleague": {
+        "id": "01a07fd0-ceb6-7b43-ae35-5da72dedd847",
+        "participantId": "01a07fd0-cc7d-76f5-ad63-1025d290eb11",
+        "catalogItemId": null,
+        "departmentGoalId": null,
+        "title": "S3 합성 목표 colleague",
+        "definition": "독려는 목표나 평가 점수를 변경하지 않는다.",
+        "weightPercent": 100,
+        "targetValue": 10,
+        "unit": "건",
+        "achievementLevels": [
+          {
+            "code": "A",
+            "label": "목표 달성",
+            "thresholdValue": 10
+          }
+        ],
+        "status": "DRAFT",
+        "draftOpinion": null,
+        "decisionOpinion": null,
+        "achievedLevelCode": null,
+        "achievementSummary": null,
+        "taskEvidence": [],
+        "revision": 1,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:45.974193900Z"
+      },
+      "director": {
+        "id": "01a07fd0-cef5-7d0a-b18a-cc9cbcb17e02",
+        "participantId": "01a07fd0-cd34-7f38-afae-5ffcad1d6b64",
+        "catalogItemId": null,
+        "departmentGoalId": null,
+        "title": "S3 합성 목표 director",
+        "definition": "독려는 목표나 평가 점수를 변경하지 않는다.",
+        "weightPercent": 100,
+        "targetValue": 10,
+        "unit": "건",
+        "achievementLevels": [
+          {
+            "code": "A",
+            "label": "목표 달성",
+            "thresholdValue": 10
+          }
+        ],
+        "status": "DRAFT",
+        "draftOpinion": null,
+        "decisionOpinion": null,
+        "achievedLevelCode": null,
+        "achievementSummary": null,
+        "taskEvidence": [],
+        "revision": 1,
+        "rowVersion": 0,
+        "updatedAt": "2026-09-08T06:59:46.036785100Z"
+      }
+    },
+    "stamp": "2026090806594592e979"
+  }
+}

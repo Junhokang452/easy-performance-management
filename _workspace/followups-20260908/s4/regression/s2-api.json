@@ -1,0 +1,531 @@
+{
+  "synthetic": true,
+  "baseUrl": "http://127.0.0.1:8089",
+  "cases": [
+    {
+      "case": "candidate uses corrected leaf and current target override",
+      "passed": true
+    },
+    {
+      "case": "legacy My KPI now selects corrected successor",
+      "passed": true
+    },
+    {
+      "case": "explicit cutoff excludes future actual and includes boundary leaf",
+      "passed": true
+    },
+    {
+      "case": "server rate and recommended score preserved",
+      "passed": true
+    },
+    {
+      "case": "preview has no persisted evidence",
+      "passed": true
+    },
+    {
+      "case": "non-operators cannot preview linkage mutations",
+      "passed": true
+    },
+    {
+      "case": "cutoff outside program and cycle rejected",
+      "passed": true
+    },
+    {
+      "case": "candidate page bound enforced",
+      "passed": true
+    },
+    {
+      "case": "apply requires explicit reason",
+      "passed": true
+    },
+    {
+      "case": "concurrent apply persists one evidence revision",
+      "passed": true
+    },
+    {
+      "case": "same request replay is idempotent",
+      "passed": true
+    },
+    {
+      "case": "self and assigned reviewer can read frozen evidence",
+      "passed": true
+    },
+    {
+      "case": "unassigned colleague cannot read another employee evidence",
+      "passed": true
+    },
+    {
+      "case": "non-operators cannot apply linkage",
+      "passed": true
+    },
+    {
+      "case": "goal contents weight target and status remain unchanged",
+      "passed": true
+    },
+    {
+      "case": "changed source target invalidates old preview",
+      "passed": true
+    },
+    {
+      "case": "refresh creates linked immutable revision",
+      "passed": true
+    },
+    {
+      "case": "prior evidence retains captured values",
+      "passed": true
+    },
+    {
+      "case": "refresh goal A preserves goal B active evidence",
+      "passed": true
+    },
+    {
+      "case": "old retry returns prior evidence without reactivation",
+      "passed": true
+    },
+    {
+      "case": "zero target is blocked instead of converted into score",
+      "passed": true
+    },
+    {
+      "case": "foreign program context rejected",
+      "passed": true
+    },
+    {
+      "case": "another employee assignment cannot be bound",
+      "passed": true
+    },
+    {
+      "case": "dedicated synthetic tenant B source fixture prepared",
+      "passed": true
+    },
+    {
+      "case": "actual tenant B assignment is not exposed to tenant A",
+      "passed": true
+    },
+    {
+      "case": "future-dated correction never resurrects superseded root",
+      "passed": true
+    },
+    {
+      "case": "missing actual cannot produce zero-score evidence",
+      "passed": true
+    }
+  ],
+  "completed": true,
+  "fixture": {
+    "program": {
+      "id": "01a08001-6694-7a57-8116-a59a54a87554",
+      "tenantId": "00000000-0000-0000-0000-000000000001",
+      "name": "S2 KPI synthetic 20260908165250741090",
+      "evaluationYear": 2026,
+      "kind": "PERFORMANCE",
+      "status": "DRAFT",
+      "asOfDate": "2026-01-01",
+      "startsOn": "2026-01-01",
+      "endsOn": "2026-12-31",
+      "definitionRevision": 1,
+      "configuration": {
+        "goalMode": "AGREEMENT",
+        "stages": [
+          {
+            "stage": "GOAL",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "INTERMEDIATE",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_ONLY",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "SELF_REVIEW",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "REVIEW",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_AND_ACHIEVEMENT_LEVELS",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": true,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "CALCULATION",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": null,
+            "itemOpinionEnabled": false,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "CALIBRATION",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": null,
+            "itemOpinionEnabled": false,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          },
+          {
+            "stage": "FEEDBACK",
+            "enabled": true,
+            "startsOn": null,
+            "endsOn": null,
+            "formMode": "DEFINITION_ONLY",
+            "itemOpinionEnabled": true,
+            "itemOpinionRequired": false,
+            "guideAttachmentId": null
+          }
+        ],
+        "scales": [
+          {
+            "id": "01a08001-6693-7a35-8579-6d80c43bd5ea",
+            "name": "1-5 입력척도",
+            "use": "INPUT",
+            "kind": "GRADE",
+            "levels": [
+              {
+                "code": "1",
+                "label": "1",
+                "convertedScore": 20,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "2",
+                "label": "2",
+                "convertedScore": 40,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "3",
+                "label": "3",
+                "convertedScore": 60,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "4",
+                "label": "4",
+                "convertedScore": 80,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              },
+              {
+                "code": "5",
+                "label": "5",
+                "convertedScore": 100,
+                "lowerExclusive": null,
+                "upperInclusive": null,
+                "color": null
+              }
+            ]
+          },
+          {
+            "id": "01a08001-6693-7a35-857a-9ccdc76d6abc",
+            "name": "S-A-B-C-D 결과척도",
+            "use": "RESULT",
+            "kind": "GRADE",
+            "levels": [
+              {
+                "code": "S",
+                "label": "S",
+                "convertedScore": 100,
+                "lowerExclusive": 95,
+                "upperInclusive": 100,
+                "color": null
+              },
+              {
+                "code": "A",
+                "label": "A",
+                "convertedScore": 90,
+                "lowerExclusive": 85,
+                "upperInclusive": 95,
+                "color": null
+              },
+              {
+                "code": "B",
+                "label": "B",
+                "convertedScore": 80,
+                "lowerExclusive": 75,
+                "upperInclusive": 85,
+                "color": null
+              },
+              {
+                "code": "C",
+                "label": "C",
+                "convertedScore": 70,
+                "lowerExclusive": 65,
+                "upperInclusive": 75,
+                "color": null
+              },
+              {
+                "code": "D",
+                "label": "D",
+                "convertedScore": 60,
+                "lowerExclusive": null,
+                "upperInclusive": 65,
+                "color": null
+              }
+            ]
+          }
+        ],
+        "calculation": {
+          "inputScaleId": "01a08001-6693-7a35-8579-6d80c43bd5ea",
+          "resultScaleId": "01a08001-6693-7a35-857a-9ccdc76d6abc",
+          "departmentResultScaleId": null,
+          "departmentPerformanceEnabled": false,
+          "adjustmentTarget": "ALL",
+          "adjustmentMethod": "NONE",
+          "populationBasis": "DEPARTMENT",
+          "targetMean": null,
+          "targetStandardDeviation": null,
+          "componentWeights": [
+            {
+              "component": "PERFORMANCE",
+              "weightPercent": 100
+            }
+          ],
+          "decimalPlaces": 2
+        },
+        "publication": {
+          "previousRoundVisibility": "HIDDEN",
+          "showReviewerAllocation": false,
+          "memberResultVisibility": "SCORE_AND_GRADE",
+          "scoreAdjustmentAllowed": true,
+          "reviewerMeanMinimum": null,
+          "reviewerMeanMaximum": null,
+          "maximumGradeStepAdjustment": 1,
+          "multiRaterOpinionsVisible": false,
+          "feedbackEnabled": true,
+          "appealEnabled": true
+        },
+        "groups": [
+          {
+            "id": "01a08001-6693-7a35-857b-3458c9718cbd",
+            "name": "전체 구성원",
+            "definition": "기본 그룹",
+            "itemAssignmentMode": "AGREEMENT",
+            "evaluationMethod": "ABSOLUTE",
+            "intermediateEnabled": true,
+            "selfReviewEnabled": true,
+            "priority": 0,
+            "conditions": [],
+            "reviewerWeightPlans": [
+              {
+                "actualReviewerCount": 1,
+                "reviewerWeights": {
+                  "1": 100
+                },
+                "departmentWeight": 0
+              }
+            ]
+          }
+        ],
+        "commonItems": [],
+        "departmentPerformanceGroups": [],
+        "allocationRows": []
+      },
+      "openedAt": null,
+      "finalizedAt": null,
+      "createdAt": "2026-09-08T07:52:50.580646400Z",
+      "updatedAt": "2026-09-08T07:52:50.580646400Z"
+    },
+    "participant": {
+      "id": "01a08001-66b5-7a17-a3cd-d775de749b0e",
+      "programId": "01a08001-6694-7a57-8116-a59a54a87554",
+      "employee": {
+        "employeeId": "019ed002-0000-7000-8000-000000000001",
+        "employeeNo": "DEMO-001",
+        "name": "김나리",
+        "assignmentId": "019ed005-0000-7000-8000-000000000001",
+        "orgUnitId": "019ed001-0000-7000-8000-000000000001",
+        "orgUnitName": "제품개발팀",
+        "positionCode": "MEMBER",
+        "gradeCode": "G3",
+        "jobCode": "SERVICE",
+        "employmentType": "REGULAR"
+      },
+      "groupId": "01a08001-6693-7a35-857b-3458c9718cbd",
+      "groupName": "전체 구성원",
+      "status": "ACTIVE",
+      "weightPercent": 100,
+      "currentStage": "GOAL",
+      "stageStatus": "NOT_STARTED",
+      "currentRound": 0,
+      "resultPublished": false,
+      "exclusionReason": null,
+      "rowVersion": 0,
+      "updatedAt": "2026-09-08T07:52:50.613630800Z"
+    },
+    "goal": {
+      "id": "01a08001-674b-7494-8de3-c3c26d27ae37",
+      "participantId": "01a08001-66b5-7a17-a3cd-d775de749b0e",
+      "catalogItemId": null,
+      "departmentGoalId": null,
+      "title": "KPI 연계 근거 시연",
+      "definition": "수동 목표와 점수는 KPI 근거 저장으로 변경하지 않는다.",
+      "weightPercent": 50.0,
+      "targetValue": 777.0,
+      "unit": "건",
+      "achievementLevels": [
+        {
+          "code": "A",
+          "label": "목표 달성",
+          "thresholdValue": 777
+        }
+      ],
+      "status": "AGREED",
+      "draftOpinion": null,
+      "decisionOpinion": "S2 합성 목표 합의",
+      "achievedLevelCode": null,
+      "achievementSummary": null,
+      "taskEvidence": [],
+      "revision": 3,
+      "rowVersion": 2,
+      "updatedAt": "2026-09-08T07:52:50.894666Z"
+    },
+    "cycle": {
+      "id": "01a08001-682d-784f-9624-92da13a8109c",
+      "tenantId": "00000000-0000-0000-0000-000000000001",
+      "name": "S2 source 20260908165250741090",
+      "periodStart": "2026-01-01",
+      "periodEnd": "2026-12-31",
+      "cycleType": "ANNUAL",
+      "status": "PLANNED",
+      "policyId": "01a08001-6830-783e-be56-1b40569dc107",
+      "createdAt": "2026-09-08T07:52:50.989519400Z",
+      "updatedAt": "2026-09-08T07:52:50.989519400Z"
+    },
+    "secondGoal": {
+      "id": "01a08001-676a-700b-9f7b-c7462b4eea9e",
+      "participantId": "01a08001-66b5-7a17-a3cd-d775de749b0e",
+      "catalogItemId": null,
+      "departmentGoalId": null,
+      "title": "다른 목표 근거 보존",
+      "definition": "목표 A 갱신은 목표 B 근거에 영향을 주지 않는다.",
+      "weightPercent": 50,
+      "targetValue": 888,
+      "unit": "건",
+      "achievementLevels": [
+        {
+          "code": "A",
+          "label": "목표 달성",
+          "thresholdValue": 888
+        }
+      ],
+      "status": "DRAFT",
+      "draftOpinion": null,
+      "decisionOpinion": null,
+      "achievedLevelCode": null,
+      "achievementSummary": null,
+      "taskEvidence": [],
+      "revision": 1,
+      "rowVersion": 0,
+      "updatedAt": "2026-09-08T07:52:50.794002800Z"
+    },
+    "secondAssignment": {
+      "id": "01a08001-6908-7943-9b91-60b1cec86ff6",
+      "kpiNodeId": "01a08001-68f8-7042-beaa-a81b197d3887",
+      "employeeId": "019ed002-0000-7000-8000-000000000001",
+      "weight": 1,
+      "targetOverride": 100,
+      "createdAt": "2026-09-08T07:52:51.208579Z",
+      "updatedAt": "2026-09-08T07:52:51.208579Z"
+    },
+    "tree": {
+      "id": "01a08001-685b-7a0d-94aa-0b8c91693c29",
+      "cycleId": "01a08001-682d-784f-9624-92da13a8109c",
+      "name": "합성 개인 KPI",
+      "level": "INDIVIDUAL",
+      "ownerOrgUnitId": null,
+      "bscEnabled": false,
+      "createdAt": "2026-09-08T07:52:51.034460900Z",
+      "updatedAt": "2026-09-08T07:52:51.034460900Z"
+    },
+    "node": {
+      "id": "01a08001-6880-7a9e-9372-c987d07bfd51",
+      "treeId": "01a08001-685b-7a0d-94aa-0b8c91693c29",
+      "parentId": null,
+      "label": "처리 건수",
+      "weight": 0.5,
+      "target": 100,
+      "unit": "건",
+      "bscPerspective": null,
+      "source": "MANUAL",
+      "cascadeFromId": null,
+      "childWeightSum": 0,
+      "childWeightComplete": false,
+      "assignmentCount": 0,
+      "createdAt": "2026-09-08T07:52:51.072663700Z",
+      "updatedAt": "2026-09-08T07:52:51.072663700Z"
+    },
+    "assignment": {
+      "id": "01a08001-68a1-7b67-8577-8e31086019e1",
+      "kpiNodeId": "01a08001-6880-7a9e-9372-c987d07bfd51",
+      "employeeId": "019ed002-0000-7000-8000-000000000001",
+      "weight": 1,
+      "targetOverride": 200,
+      "createdAt": "2026-09-08T07:52:51.105712700Z",
+      "updatedAt": "2026-09-08T07:52:51.105712700Z"
+    },
+    "actual": {
+      "id": "01a08001-68c1-78b7-8d5c-bd770fa30e7c",
+      "kpiAssignmentId": "01a08001-68a1-7b67-8577-8e31086019e1",
+      "asOfDate": "2026-06-30",
+      "actualValue": 80,
+      "source": "MANUAL",
+      "reportedBy": null,
+      "evidenceUrl": null,
+      "comment": "합성 최초 실적",
+      "supersedesId": null,
+      "superseded": false,
+      "createdAt": "2026-09-08T07:52:51.137544700Z"
+    },
+    "corrected": {
+      "id": "01a08001-68db-7914-be6e-73217f183864",
+      "kpiAssignmentId": "01a08001-68a1-7b67-8577-8e31086019e1",
+      "asOfDate": "2026-06-30",
+      "actualValue": 120,
+      "source": "MANUAL",
+      "reportedBy": null,
+      "evidenceUrl": null,
+      "comment": "합성 정정 실적",
+      "supersedesId": "01a08001-68c1-78b7-8d5c-bd770fa30e7c",
+      "superseded": false,
+      "createdAt": "2026-09-08T07:52:51.163567500Z"
+    }
+  },
+  "browserProgramId": "01a08001-6694-7a57-8116-a59a54a87554",
+  "participantId": "01a08001-66b5-7a17-a3cd-d775de749b0e",
+  "goalId": "01a08001-674b-7494-8de3-c3c26d27ae37",
+  "cycleId": "01a08001-682d-784f-9624-92da13a8109c",
+  "kpiAssignmentId": "01a08001-68a1-7b67-8577-8e31086019e1",
+  "actualCutoffDate": "2026-06-30"
+}

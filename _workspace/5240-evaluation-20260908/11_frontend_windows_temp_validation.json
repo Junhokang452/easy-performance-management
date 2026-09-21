@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-08",
+  "mode": "windows-temp-copy-no-wsl",
+  "temporaryRoot": "C:\\Users\\SAMSUNG\\AppData\\Local\\Temp\\easy-performance-frontend-validation-5a65261bd15541a78de18e7c0bda4407",
+  "sourceChanged": false,
+  "copy": {
+    "exitCode": 0,
+    "excluded": ["node_modules", "build", "dist", "storybook-static", ".git", "*.tsbuildinfo"],
+    "frontendPackagePresent": true,
+    "corePackagePresent": true
+  },
+  "coreNpmCi": {
+    "command": "npm.cmd ci --ignore-scripts --legacy-peer-deps",
+    "exitCode": 1,
+    "stdout": "",
+    "outcome": "manually interrupted after approximately 2.5 minutes without output; not a source or package failure determination"
+  },
+  "notRun": [
+    "frontend npm.cmd ci --ignore-scripts --legacy-peer-deps",
+    "npm run typecheck",
+    "npm run test:i18n",
+    "npm run design:check",
+    "npm run local-ui:check",
+    "npm run build",
+    "npm run openapi:types"
+  ],
+  "retry": {
+    "residualProcessCheck": "no node/npm/cmd process command line referenced the temporary root; none terminated",
+    "coreNpmCi": {
+      "command": "npm.cmd ci --ignore-scripts --legacy-peer-deps --verbose --foreground-scripts=false",
+      "environment": { "npm": "10.9.3", "node": "22.20.0" },
+      "observations": [
+        "local npm cache reads succeeded",
+        "security advisory bulk POST returned HTTP 200",
+        "non-Windows optional dependencies were pruned during reify",
+        "no npm ERR!, network, registry, or package-resolution error emitted"
+      ],
+      "durationLimit": "5 minutes",
+      "exitCode": 1,
+      "outcome": "explicitly interrupted at the configured timeout without a completion line; install incomplete"
+    },
+    "frontendInstallAndGates": "not run because the required core installation did not complete"
+  },
+  "partialNodeModulesCheck": {
+    "frontend": {
+      "typescriptCli": false,
+      "viteCli": false,
+      "react": false,
+      "easyUiComponents": false
+    },
+    "core": {
+      "typescriptCli": true,
+      "viteCli": true,
+      "rolldownWindowsBinding": true,
+      "esbuildWindowsBinding": true
+    },
+    "outcome": "stopped before direct execution: frontend module links are absent; using core-only executables would be an invalid module-resolution failure"
+  },
+  "continuedBundledRuntimeValidation": {
+    "runtime": "C:/Users/SAMSUNG/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe (Node 24.19.0)",
+    "installPolicy": "No additional npm install; historical incomplete npm attempts retained above.",
+    "coreDistBuilds": {
+      "http-client": 0,
+      "query-client": 0,
+      "i18n-common": 0
+    },
+    "openapi": {
+      "input": "C:/Users/SAMSUNG/AppData/Local/Temp/easy-performance-validation-b1ce4a863a3c41ffb3bd65cfa5fe87a3/windows-audit-held-openapi.json",
+      "inputBytes": 188246,
+      "directCliExitCode": 0,
+      "generatedSchemaBytes": 319731,
+      "generatedSchemaSha256": "e8f06328bcd3c310ef488c64d0b36475c8d3c05f8a4f8011679944f56646858e",
+      "auditRoutePresent": true
+    },
+    "gates": {
+      "typecheck": { "exitCode": 0 },
+      "i18n": { "exitCode": 0, "passed": 7, "total": 7 },
+      "workspace": { "exitCode": 0, "passed": 5, "total": 5 },
+      "design": { "exitCode": 0, "hex": "0/0", "inlineStyle": "0/0" },
+      "localUi": { "exitCode": 0, "tags": "0/0", "blockedImports": "0/0" },
+      "viteBuild": { "exitCode": 0, "modulesTransformed": 7501, "duration": "5m 15s", "pid": 48068 }
+    },
+    "warnings": [
+      "Vite plugin timing report: vite:css 69%, rolldown:vite-resolve 18%, vite:css-post 11%",
+      "Vite chunk-size advisory for existing client bundle larger than 500 kB"
+    ],
+    "sourceChange": "Only the explicitly authorized mechanically generated frontend-vite/src/api/generated/schema.d.ts was synchronized; no package file or lockfile changed."
+  }
+}

@@ -29,3 +29,6 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Isolated local demo data, binaries, private credentials and process files
+.local-demo/

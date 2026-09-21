@@ -1,0 +1,16 @@
+{
+  "completed": true,
+  "date": "2026-09-08",
+  "dedicatedApiPort": 8089,
+  "dedicatedPgPort": 55489,
+  "javaPid": 18704,
+  "apiListenerAbsent": true,
+  "pgListenerAbsent": true,
+  "javaProcessAbsent": true,
+  "protectedListeners": [
+    { "port": 5432, "pid": 8920, "preserved": true },
+    { "port": 5433, "pid": 8664, "preserved": true }
+  ],
+  "syntheticDataAndEvidencePreserved": true,
+  "externalDeploymentOrDelivery": false
+}

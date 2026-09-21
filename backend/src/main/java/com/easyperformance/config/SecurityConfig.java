@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -51,6 +53,7 @@ import com.easyware.platform.web.PlatformSecurityMatchers;
  * 테넌트 DB 로 라우팅 ({@link TenantRoutingContext}). 미설정 시 no-op (단일 DB 모드 무영향).
  */
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtService jwtService;
@@ -63,23 +66,49 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http,
                                             ObjectProvider<TenantContextFilter> tenantContextFilterProvider,
                                             TenantRoutingContext tenantRoutingContext,
+                                            @Value("${easyware.neon.multitenancy-enabled:false}")
+                                            boolean multitenancyEnabled,
                                             @Value("${app.tenancy.default-tenant-id:}") String defaultTenantId,
                                             @Value("${app.tenancy.default-tenant-code:}") String defaultTenantCode)
             throws Exception {
         JwtAuthFilter jwtAuthFilter =
-            new JwtAuthFilter(jwtService, tenantRoutingContext, defaultTenantId, defaultTenantCode);
+            new JwtAuthFilter(jwtService, multitenancyEnabled ? tenantRoutingContext : null,
+                defaultTenantId, defaultTenantCode);
         http
             .csrf(AbstractHttpConfigurer::disable)
+            .exceptionHandling(errors -> errors.authenticationEntryPoint((request, response, exception) ->
+                response.sendError(401)))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(PlatformSecurityMatchers.ACTUATOR_HEALTH_INFO_PROMETHEUS_PUBLIC).permitAll()
                 .requestMatchers(PlatformSecurityMatchers.API_AUTH_ALL_PUBLIC).permitAll()
+                // Provisioning/admin handlers do not implement the Bearer+HMAC contract used by S2S receivers.
+                // Keep this narrower rule before the generic /api/internal/** permitAll matcher.
+                .requestMatchers("/api/internal/admin/**").hasAuthority("SUPER_ADMIN")
                 // S2S 수신 (P0-S6) — Bearer+HMAC 자체 인증 (SyncReceiveController 3중 가드). JWT 불요. 보존.
                 .requestMatchers(PlatformSecurityMatchers.INTERNAL_S2S).permitAll()
                 // OpenAPI spec endpoint (EC-FE-7) — FE openapi-typescript fetch.
                 .requestMatchers(PlatformSecurityMatchers.SWAGGER_UI_HTML_API_DOCS).permitAll()
                 // SystemAdmin (control plane tenants 콘솔) — SUPER_ADMIN 가드 (prefix 없는 authority 실측).
                 .requestMatchers(PlatformSecurityMatchers.ADMIN_SUPER_ADMIN).hasAuthority("SUPER_ADMIN")
+                // These facades enforce actor, tenant, assignment and stage rules inside their services.
+                .requestMatchers("/api/v1/evaluation-workspace/**", "/api/v1/evaluation-programs/**",
+                    "/api/v1/evaluation-resources/**").authenticated()
+                // Raw lifecycle mutations bypass roster/actor/phase gates even for HR; keep them HTTP-inaccessible.
+                .requestMatchers(HttpMethod.POST, "/api/v1/cycles/*/transition").denyAll()
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/reviews/**").denyAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/**").denyAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/reviews/*/submit-self",
+                    "/api/v1/reviews/*/submit-manager", "/api/v1/reviews/*/transition",
+                    "/api/v1/cycles/*/reviews", "/api/v1/cycles/*/reviews/bulk").denyAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/calibration-sessions/**",
+                    "/api/v1/cycles/*/calibration-sessions", "/api/v1/cycles/*/distribution/apply").denyAll()
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/calibration-sessions/**").denyAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/calibration-sessions/**").denyAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/cycles/*/reports/publish",
+                    "/api/v1/reports/*/acknowledge", "/api/v1/reports/*/supersede").denyAll()
+                // Remaining raw product surface is temporarily operator-only until object guards are migrated.
+                .requestMatchers("/api/v1/**").hasAnyAuthority("HR_ADMIN", "SUPER_ADMIN")
                 // mono 표면 — 인증 영역 = /api/** + /actuator**(위 health 등 외) 만 (store-hr 0c4a262 정합).
                 .requestMatchers(PlatformSecurityMatchers.API_AUTHENTICATED).authenticated()
                 .requestMatchers(PlatformSecurityMatchers.ACTUATOR_ALL).authenticated()

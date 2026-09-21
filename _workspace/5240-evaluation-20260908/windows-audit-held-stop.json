@@ -1,0 +1,23 @@
+{
+  "postgresPid": 16328,
+  "protectedPortsBefore": [
+    "5432:8920",
+    "5432:8920",
+    "5433:8664",
+    "5433:8664"
+  ],
+  "javaPid": 14836,
+  "javaPath": "C:\\Users\\SAMSUNG\\AppData\\Local\\Temp\\easy-performance-validation-b1ce4a863a3c41ffb3bd65cfa5fe87a3\\jdk21\\jdk-21.0.12.1+1\\bin\\java.exe",
+  "pgStopExitCode": 0,
+  "pgData": "C:\\Users\\SAMSUNG\\AppData\\Local\\Temp\\easy-performance-validation-b1ce4a863a3c41ffb3bd65cfa5fe87a3\\pg18-audit-55489-c278dbccdfc94f44b3e8943fcca965fb",
+  "portsReleased": true,
+  "stoppedAt": "2026-09-08T13:19:26.2078069+09:00",
+  "protectedPortsAfter": [
+    "5432:8920",
+    "5432:8920",
+    "5433:8664",
+    "5433:8664"
+  ],
+  "javaStopped": true,
+  "protectedPortsUntouched": true
+}

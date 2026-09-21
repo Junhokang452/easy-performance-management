@@ -1,3 +1,4 @@
+import { readSavedLocale } from '../i18n/locales';
 /**
  * HrCalibrationSessionsPage (#28) — Calibration 세션 관리 (`/hr/calibration-sessions`).
  *
@@ -263,5 +264,5 @@ function formatDateTime(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString();
+  return d.toLocaleString(readSavedLocale());
 }

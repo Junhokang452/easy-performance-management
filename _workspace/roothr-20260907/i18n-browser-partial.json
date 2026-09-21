@@ -1,0 +1,71 @@
+{
+  "verifiedAt": "2026-09-07T06:48:10.617Z",
+  "checks": [
+    {
+      "locale": "ko",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "en",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "ja",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "vi",
+      "loginLabels": true,
+      "localizedValidation": true,
+      "persistedAfterReload": true
+    },
+    {
+      "locale": "ko",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "en",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "ja",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "vi",
+      "workspaceLabels": true,
+      "authenticatedLanguageSwitch": true
+    },
+    {
+      "locale": "ko",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "en",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "ja",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    },
+    {
+      "locale": "vi",
+      "mobileLanguageControlVisible": true,
+      "mobileOverflow": false
+    }
+  ],
+  "pageErrors": [],
+  "passed": 12
+}

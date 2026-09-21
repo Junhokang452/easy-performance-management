@@ -14,6 +14,7 @@ import { Center } from '@easy/ui-components/mantine';
 
 import { RouteErrorBoundary } from './RouteErrorBoundary';
 import { UiLoader } from '@easy/ui-components';
+import { useT } from '../i18n';
 
 interface Props {
   children: ReactNode;
@@ -21,8 +22,9 @@ interface Props {
 
 export function PageBoundary({ children }: Props): React.ReactNode {
   const location = useLocation();
+  const t = useT();
   return (
-    <RouteErrorBoundary resetKey={location.pathname}>
+    <RouteErrorBoundary resetKey={location.pathname} t={t}>
       <Suspense
         fallback={
           <Center mih={200}>

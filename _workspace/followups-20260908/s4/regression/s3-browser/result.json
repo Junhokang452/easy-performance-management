@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "case": "ko 1440 preview, translations and overflow",
+      "passed": true,
+      "width": 1440,
+      "locale": "ko"
+    },
+    {
+      "case": "en 1440 preview, translations and overflow",
+      "passed": true,
+      "width": 1440,
+      "locale": "en"
+    },
+    {
+      "case": "ja 1440 preview, translations and overflow",
+      "passed": true,
+      "width": 1440,
+      "locale": "ja"
+    },
+    {
+      "case": "zh-CN 1440 preview, translations and overflow",
+      "passed": true,
+      "width": 1440,
+      "locale": "zh-CN"
+    },
+    {
+      "case": "vi 1440 preview, translations and overflow",
+      "passed": true,
+      "width": 1440,
+      "locale": "vi"
+    },
+    {
+      "case": "ko 390 preview, translations and overflow",
+      "passed": true,
+      "width": 390,
+      "locale": "ko"
+    },
+    {
+      "case": "en 390 preview, translations and overflow",
+      "passed": true,
+      "width": 390,
+      "locale": "en"
+    },
+    {
+      "case": "ja 390 preview, translations and overflow",
+      "passed": true,
+      "width": 390,
+      "locale": "ja"
+    },
+    {
+      "case": "zh-CN 390 preview, translations and overflow",
+      "passed": true,
+      "width": 390,
+      "locale": "zh-CN"
+    },
+    {
+      "case": "vi 390 preview, translations and overflow",
+      "passed": true,
+      "width": 390,
+      "locale": "vi"
+    },
+    {
+      "case": "blank reason blocked and cancellation sends no request",
+      "passed": true
+    },
+    {
+      "case": "lost response retry retains exact idempotency request and creates only three IN_APP rows",
+      "passed": true
+    },
+    {
+      "case": "same UTC day shows already registered rows and disables empty queue",
+      "passed": true
+    },
+    {
+      "case": "real source change returns 409 and UI requires fresh preview without partial registration",
+      "passed": true
+    },
+    {
+      "case": "actual recipient inbox renders reminder and accepts read",
+      "passed": true
+    },
+    {
+      "case": "employee surface has no operator reminder controls",
+      "passed": true
+    }
+  ],
+  "programId": "01a08001-97c6-7c7f-a5d2-dc3ee9cd23dc"
+}

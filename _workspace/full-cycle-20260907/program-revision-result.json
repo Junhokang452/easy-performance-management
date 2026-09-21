@@ -1,0 +1,151 @@
+{
+  "passed": true,
+  "fixtures": {
+    "programId": "01a07b30-f964-7d36-982f-8c8fcd9b4f4e",
+    "participantId": "01a07b31-018b-7cb3-8d09-1962f875b512",
+    "calculationRevision": 3,
+    "adjustmentRevision": 3
+  },
+  "count": 30,
+  "checks": [
+    {
+      "case": "Full-program fixture completed before revision verification",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e:cancel-finalization",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Finalization cancellation reopens the program",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/me/history",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Cancellation immediately withdraws the previously published result",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/stage:override",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Recalculation appends a new final calculation revision",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/stage:override",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/feedback",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/feedback:deliver",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/feedback/01a07b31-2012-793b-b681-0c8753c9215d:agree",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Fresh feedback is complete before isolating the stale-adjustment blocker",
+      "passed": true
+    },
+    {
+      "case": "Stale adjustment cannot finalize a recalculated result",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Finalization returns the incomplete-workflow contract when stale adjustment is the only blocker",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/stage:override",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/adjustment:complete",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "New calibration revision is linked to the new calculation",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/stage:override",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e:finalize",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Program can finalize only after fresh linked outcomes",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results:publish",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Republishing changes exactly the intended participant",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Published result uses the new adjustment rather than the stale one",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/me/history",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Grade-only member history republishes only the new effective grade",
+      "passed": true
+    }
+  ]
+}

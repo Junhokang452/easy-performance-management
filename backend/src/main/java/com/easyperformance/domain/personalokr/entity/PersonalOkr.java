@@ -4,7 +4,7 @@
  */
 package com.easyperformance.domain.personalokr.entity;
 
-import com.easyperformance.common.UuidV7;
+import com.easyware.platform.UuidV7;
 import com.easyware.platform.audit.TenantAwareAuditEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

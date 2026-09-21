@@ -1,0 +1,16 @@
+{
+  "name": "UI 목표수정 검증 7337460",
+  "steps": [
+    "employee created and requested goal agreement",
+    "manager rejected goal in UI",
+    "employee edited rejected goal, saved opinion, resubmitted, and opened history",
+    "manager approved revised goal in UI",
+    "employee created first self-review draft from null submission using numeric SCORE input"
+  ],
+  "errors": [],
+  "ids": {
+    "programId": "01a07b70-46ed-7f45-9eb6-5c314bd6d0cb",
+    "participantId": "01a07b70-474c-7bb5-9ee4-99e3dc867b77"
+  },
+  "ok": true
+}

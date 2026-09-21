@@ -1,0 +1,129 @@
+{
+  "scanKind": "final Spring Boot executable JAR SBOM/SCA and baseline comparison",
+  "input": {
+    "buildJarPath": "/home/samsung/code/easy-performance-management/backend/build/libs/easy-performance-management-backend-0.1.0.jar",
+    "frozenCopyPath": "/tmp/performance-framework-final.jar",
+    "sizeBytes": 71234877,
+    "sha256": "1e83919664e3ec9eee5923292d45f7fb0424278413c6f609f1ce0306f3ee3a8b",
+    "buildJarSha256": "1e83919664e3ec9eee5923292d45f7fb0424278413c6f609f1ce0306f3ee3a8b",
+    "copyHashMatchedBuildJar": true
+  },
+  "baselineInput": {
+    "path": "/tmp/performance-framework-baseline.jar",
+    "sha256": "bf9b0ea9e02151bc2ed0c8807494ff0e3f195e159683ecd3663e803e7097f72f"
+  },
+  "tools": {
+    "syft": {
+      "version": "1.51.0",
+      "sha256": "5a8b71e94f4607973145f02e27e01d50b9f7c7bc41e38d40b39606ad138b43b5"
+    },
+    "grype": {
+      "version": "0.116.1",
+      "sha256": "a8fff88f37a08af6a536e162f37f9902ec94af03df9928ee6295dffe7044dc43"
+    }
+  },
+  "database": {
+    "sameAsBaseline": true,
+    "schemaVersion": "v6.1.9",
+    "built": "2026-09-06T06:27:35Z",
+    "scanDataDay": "2026-09-06",
+    "source": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.9_2026-09-06T00:36:16Z_1788676055.tar.zst?checksum=sha256%3A3c93034d0475d25fc82addd47b2300f99564ea4f35fd9e0b957b701049a15020",
+    "sourceArchiveSha256": "3c93034d0475d25fc82addd47b2300f99564ea4f35fd9e0b957b701049a15020",
+    "path": "/home/samsung/.cache/grype/db/6/vulnerability.db",
+    "valid": true,
+    "sizeBytes": 2143162368,
+    "sha256": "b46475b87396aac20557f409356989900390786038759b213dc69a057051b598",
+    "importMetadataSha256": "5cf4f996f43ab32d70733fa4d03ec2e650f3c1e8b8566981357fb76ae840fc37"
+  },
+  "settings": {
+    "GRYPE_DB_AUTO_UPDATE": "false",
+    "GRYPE_CHECK_FOR_APP_UPDATE": "false",
+    "customSuppressions": [],
+    "highSeveritySuppressed": false,
+    "ignoredMatches": 0,
+    "note": "No custom Grype configuration or vulnerability suppression was supplied. Descriptor default kernel-header ignore rules do not apply to this Java archive."
+  },
+  "commands": [
+    "cp <build-jar> /tmp/performance-framework-final.jar",
+    "syft scan /tmp/performance-framework-final.jar -o syft-json=<output>/scan-final-sbom.json",
+    "GRYPE_DB_AUTO_UPDATE=false GRYPE_CHECK_FOR_APP_UPDATE=false grype sbom:<output>/scan-final-sbom.json -o json > <output>/scan-final-grype.json",
+    "GRYPE_DB_AUTO_UPDATE=false GRYPE_CHECK_FOR_APP_UPDATE=false grype db status -o json > <output>/scan-final-db-status.json"
+  ],
+  "result": {
+    "sbomArtifacts": 121,
+    "totalMatches": 0,
+    "baselineCountsBySeverity": {
+      "Critical": 8,
+      "High": 27,
+      "Medium": 30,
+      "Low": 13,
+      "Negligible": 0,
+      "Unknown": 0
+    },
+    "finalCountsBySeverity": {
+      "Critical": 0,
+      "High": 0,
+      "Medium": 0,
+      "Low": 0,
+      "Negligible": 0,
+      "Unknown": 0
+    },
+    "deltaFinalMinusBaseline": {
+      "Critical": -8,
+      "High": -27,
+      "Medium": -30,
+      "Low": -13,
+      "Negligible": 0,
+      "Unknown": 0
+    },
+    "baselineTotal": 78,
+    "finalTotal": 0,
+    "totalDelta": -78,
+    "baselineCriticalHigh": 35,
+    "finalCriticalHigh": 0,
+    "criticalHighDelta": -35,
+    "criticalHighFindings": [],
+    "selectedFinalVersions": {
+      "jackson-core": [
+        "2.21.5",
+        "3.1.5"
+      ],
+      "jackson-databind": [
+        "2.21.5",
+        "3.1.5"
+      ],
+      "micrometer-core": [
+        "1.17.1"
+      ],
+      "postgresql": [
+        "42.7.13"
+      ],
+      "spring-boot": [
+        "4.1.1"
+      ],
+      "spring-core": [
+        "7.0.9"
+      ],
+      "spring-security-core": [
+        "7.1.1"
+      ],
+      "tomcat-embed-core": [
+        "11.0.25"
+      ]
+    }
+  },
+  "artifacts": {
+    "scan-final-sbom.json": {
+      "sizeBytes": 858268,
+      "sha256": "bf292f991570f26c1e49a473e19a28be737378d356e5ad4df63556dcf16c9e2a"
+    },
+    "scan-final-grype.json": {
+      "sizeBytes": 5664,
+      "sha256": "6ac26d282d5e8159efb93bb3e945eed2eeeabf76b4aa048e438bd1aaa2d9714e"
+    },
+    "scan-final-db-status.json": {
+      "sizeBytes": 339,
+      "sha256": "44e8321f487131315a537dc5ac9a43c4c352f61a10a9e626f2d1311928109046"
+    }
+  }
+}

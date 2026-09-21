@@ -1,0 +1,2 @@
+package com.easyperformance.program;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;
+public interface ProgramGuideAttachmentRepository extends JpaRepository<ProgramGuideAttachment,UUID>{Optional<ProgramGuideAttachment> findByIdAndTenantId(UUID id,UUID tenantId);List<ProgramGuideAttachment> findAllByTenantIdAndProgramIdOrderByCreatedAtAsc(UUID tenantId,UUID programId);}

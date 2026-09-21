@@ -12,7 +12,7 @@
 # ============================================================================
 #
 # 목적:
-#   - 단일 컨테이너로 BE (Spring Boot 3.4.5 + Java 21) + FE (Vite 8 + React 19) 통합 빌드/배포.
+#   - 단일 컨테이너로 BE (Spring Boot 4.1.1 + Java 21) + FE (Vite 8 + React 19) 통합 빌드/배포.
 #   - Render Docker Web Service 호환 (port 10000 + healthcheck + Asia/Seoul TZ).
 #   - EC2 전환 100% 호환 (동일 Dockerfile + docker-compose).
 #
@@ -74,9 +74,9 @@ RUN npm install --no-fund --no-audit --legacy-peer-deps
 RUN npm run build
 
 # ============================================================================
-# Stage 2: Backend build (Spring Boot 3.4.5 + Gradle KDSL + Java 21)
+# Stage 2: Backend build (Spring Boot 4.1.1 + Gradle KDSL + Java 21)
 # ============================================================================
-FROM gradle:8.10-jdk21-alpine AS backend-build
+FROM gradle:8.14.5-jdk21-alpine@sha256:eb2209db6d5a025a0a8711a6f1a5556b654ecc07f05dc8703d2317eab410aa8e AS backend-build
 WORKDIR /workspace
 
 # lib easy-platform-core (composite build) — settings.gradle.kts includeBuild 해석.
@@ -97,7 +97,7 @@ RUN gradle bootJar -x test --no-daemon --console=plain
 # ============================================================================
 FROM eclipse-temurin:21-jre-alpine
 LABEL org.opencontainers.image.title="easy-performance-management"
-LABEL org.opencontainers.image.description="easy-performance-management (Spring Boot 3.4.5 + Vite 8 단일 컨테이너) — Apache-2.0"
+LABEL org.opencontainers.image.description="easy-performance-management (Spring Boot 4.1.1 + Vite 8 단일 컨테이너) — Apache-2.0"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.vendor="The easy-performance-management Authors"
 
@@ -112,7 +112,7 @@ ENV TZ=Asia/Seoul
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /app
 
-# BE jar (Spring Boot 3.4.5 bootJar).
+# BE jar (Spring Boot 4.1.1 bootJar).
 COPY --from=backend-build --chown=app:app /workspace/backend/build/libs/*.jar /app/app.jar
 
 # FE 정적 파일 (Spring Boot 가 file:/app/static/ 에서 서빙).

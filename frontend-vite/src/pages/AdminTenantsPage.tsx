@@ -1,3 +1,4 @@
+import { readSavedLocale } from '../i18n/locales';
 /**
  * AdminTenantsPage — /admin/tenants (SUPER_ADMIN 전용).
  *
@@ -314,7 +315,7 @@ export function AdminTenantsPage(): React.ReactNode {
                   </UiTable.Td>
                   <UiTable.Td>
                     <Text size="xs" c="dimmed">
-                      {tenant.createdAt ? new Date(tenant.createdAt).toLocaleDateString() : '—'}
+                      {tenant.createdAt ? new Date(tenant.createdAt).toLocaleDateString(readSavedLocale()) : '—'}
                     </Text>
                   </UiTable.Td>
                   <UiTable.Td>

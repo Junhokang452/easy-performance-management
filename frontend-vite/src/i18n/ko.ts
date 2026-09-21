@@ -1,923 +1,30 @@
-/**
- * 한국어 i18n bundle — performance FE 단계 4 진입 기본.
- *
- * Namespace 5 계층 (ADR-027 정합):
- * - common.action / status / message / label
- * - domain.app / nav / selfEvaluation / personalOkr / reflectionJournal / mentorFeedback
- * - error.E97* (performance 영역 prefix 가정)
- *
- * 5 locale (ko + en + ja + zh-CN + zh-TW) 확장은 lib FE 13 i18n-common 진입 후.
- */
-interface I18nShape {
+import { ko as sharedLabels } from '@easy/i18n-common/locales/ko';
+import { programKo, type ProgramI18n } from '../features/evaluation-programs/programI18n.ts';
+/** 한국어를 스키마 원본으로 삼아 자매품 표준 5개 언어의 키 정합성을 강제합니다. */
+export const ko = {
+  program: programKo as ProgramI18n,
   common: {
     action: {
-      create: string;
-      save: string;
-      cancel: string;
-      edit: string;
-      delete: string;
-      submit: string;
-      close: string;
-      retry: string;
-    };
-    status: {
-      active: string;
-      inactive: string;
-      loading: string;
-      empty: string;
-    };
-    message: {
-      created: string;
-      updated: string;
-      deleted: string;
-      loadError: string;
-    };
-    label: {
-      darkMode: string;
-      language: string;
-      logout: string;
-    };
-  };
-  nav: {
-    cockpit: string;
-    hr: {
-      cycles: string;
-    };
-    kpi: {
-      my: string;
-      alignment: string;
-      managerTree: string;
-      directorTree: string;
-    };
-    review: {
-      self: string;
-      manager: string;
-    };
-    calibration: {
-      sessions: string;
-      director: string;
-      analytics: string;
-      distribution: string;
-    };
-    report: {
-      hr: string;
-      my: string;
-    };
-    admin: {
-      tenants: string;
-    };
-  };
-  cockpit: {
-    title: string;
-    description: string;
-    empty: string;
-    emptyDescription: string;
-    stat: {
-      cycles: string;
-      cyclesHint: string;
-      reviewProgress: string;
-      reviewProgressHint: string;
-      calibrationReady: string;
-      calibrationReadyHint: string;
-      reports: string;
-      reportsHint: string;
-    };
-    pipeline: {
-      title: string;
-      description: string;
-    };
-    distribution: {
-      title: string;
-      description: string;
-      current: string;
-      total: string;
-      empty: string;
-    };
-    cycles: {
-      title: string;
-      description: string;
-      policy: string;
-    };
-  };
-  login: {
-    personaLabel: string;
-    personaHint: string;
-    tenantCode: string;
-    tenantCodePlaceholder: string;
-    emailLabel: string;
-    passwordLabel: string;
-    submit: string;
-    persona: {
-      superAdmin: string;
-      hrAdmin: string;
-      director: string;
-      manager: string;
-      employee: string;
-    };
-  };
-  adminTenants: {
-    title: string;
-    description: string;
-    gateOffTitle: string;
-    gateOffBody: string;
-    create: string;
-    empty: string;
-    emptyHint: string;
-    createTitle: string;
-    createHint: string;
-    createFailed: string;
-    field: {
-      code: string;
-      name: string;
-      region: string;
-      adminUsername: string;
-      adminEmail: string;
-    };
-    column: {
-      code: string;
-      name: string;
-      status: string;
-      region: string;
-      neonProject: string;
-      admin: string;
-      createdAt: string;
-    };
-    action: {
-      retry: string;
-      suspend: string;
-      resume: string;
-      cancel: string;
-      create: string;
-    };
-  };
-  cycles: {
-    title: string;
-    create: string;
-    empty: string;
-    policy: {
-      notSet: string;
-    };
-    action: {
-      edit: string;
-      transition: string;
-      policy: string;
-      delete: string;
-    };
-    field: {
-      name: string;
-      periodStart: string;
-      periodEnd: string;
-      cycleType: string;
-      status: string;
-    };
-    type: {
-      HALF_ANNUAL: string;
-      ANNUAL: string;
-      QUARTERLY: string;
-      MONTHLY: string;
-      CUSTOM: string;
-    };
-    status: {
-      PLANNED: string;
-      ACTIVE: string;
-      GOAL_SETTING: string;
-      MID_REVIEW: string;
-      SELF_REVIEW: string;
-      MANAGER_REVIEW: string;
-      CALIBRATION: string;
-      FINALIZED: string;
-      CANCELLED: string;
-    };
-    operating: {
-      total: string;
-      totalHint: string;
-      policyReady: string;
-      inOperation: string;
-      inOperationHint: string;
-      transitionable: string;
-      transitionableHint: string;
-      policyProgress: string;
-      timelineTitle: string;
-      timelineDescription: string;
-    };
-  };
-  policy: {
-    title: string;
-    field: {
-      distributionMode: string;
-      ratingScale: string;
-      appealEnabled: string;
-      bscEnabled: string;
-      achievementLogCutoffDays: string;
-      forcedDistribution: string;
-    };
-    distributionMode: {
-      HYBRID: string;
-      FORCED: string;
-      ABSOLUTE: string;
-    };
-    ratingScale: {
-      S_A_B_C_D: string;
-      ONE_TO_FIVE: string;
-      ONE_TO_HUNDRED: string;
-    };
-    distributionSum: string;
-    distributionSumMustBeOne: string;
-  };
-  kpi: {
-    selectCycle: string;
-    noCycle: string;
-    cyclePlaceholder: string;
-    level: {
-      CORPORATE: string;
-      DIVISION: string;
-      TEAM: string;
-      INDIVIDUAL: string;
-    };
-    bscPerspective: {
-      FINANCIAL: string;
-      CUSTOMER: string;
-      INTERNAL_PROCESS: string;
-      LEARNING_GROWTH: string;
-      UNASSIGNED: string;
-    };
-    source: {
-      MANUAL: string;
-      HCM: string;
-      EXTERNAL: string;
-    };
-    weightBadge: {
-      complete: string;
-      incomplete: string;
-      exceeded: string;
-    };
-    my: {
-      title: string;
-      description: string;
-      employeeId: string;
-      employeeIdPlaceholder: string;
-      load: string;
-      empty: string;
-      emptyHint: string;
-      needInput: string;
-      col: {
-        node: string;
-        tree: string;
-        weight: string;
-        target: string;
-        latestActual: string;
-        achievementRate: string;
-      };
-      reportActual: string;
-      actualHistory: string;
-    };
-    alignment: {
-      title: string;
-      description: string;
-      tree: string;
-      treePlaceholder: string;
-      needCycle: string;
-      empty: string;
-      emptyDescription: string;
-      treePanel: string;
-      personalPanel: string;
-      personalPanelDescription: string;
-      orgMatch: string;
-      matched: string;
-      unmatched: string;
-      stat: {
-        aligned: string;
-        alignedHint: string;
-        coverage: string;
-        coverageHint: string;
-        avgAchievement: string;
-        avgAchievementHint: string;
-        unmatched: string;
-        unmatchedHint: string;
-      };
-    };
-    manager: {
-      title: string;
-      description: string;
-      treeList: string;
-      createTree: string;
-      empty: string;
-      emptyTree: string;
-      addRootNode: string;
-      addChild: string;
-      editNode: string;
-      deleteNode: string;
-      manageAssignments: string;
-      editTree: string;
-      deleteTree: string;
-      childWeightSum: string;
-    };
-    director: {
-      title: string;
-      description: string;
-      bscToggle: string;
-      readonly: string;
-      empty: string;
-      operating: {
-        trees: string;
-        treesHint: string;
-        bscCoverage: string;
-        orgScoped: string;
-        orgScopedHint: string;
-        levels: string;
-        levelsHint: string;
-        bscProgress: string;
-        nodes: string;
-        nodesHint: string;
-        bscAssigned: string;
-        weightComplete: string;
-        assignments: string;
-        assignmentsHint: string;
-        weightProgress: string;
-      };
-    };
-    tree: {
-      name: string;
-      level: string;
-      ownerOrgUnitId: string;
-      bscEnabled: string;
-      create: string;
-    };
-    node: {
-      label: string;
-      weight: string;
-      target: string;
-      unit: string;
-      bscPerspective: string;
-      source: string;
-      cascadeFromId: string;
-      parent: string;
-      parentRoot: string;
-      assignments: string;
-      assignmentCount: string;
-      create: string;
-      weightHint: string;
-    };
-    assignment: {
-      title: string;
-      employeeId: string;
-      weight: string;
-      weightOverrideHint: string;
-      targetOverride: string;
-      add: string;
-      empty: string;
-      effectiveWeight: string;
-      effectiveTarget: string;
-    };
-    actual: {
-      title: string;
-      asOfDate: string;
-      actualValue: string;
-      evidenceUrl: string;
-      comment: string;
-      report: string;
-      history: string;
-      empty: string;
-      superseded: string;
-      latest: string;
-      correct: string;
-      correctTitle: string;
-      reportedAt: string;
-    };
-    confirmDeleteNode: string;
-    confirmDeleteTree: string;
-    confirmDeleteAssignment: string;
-  };
-  review: {
-    status: {
-      DRAFT: string;
-      SELF_PENDING: string;
-      SELF_SUBMITTED: string;
-      MANAGER_PENDING: string;
-      MANAGER_SUBMITTED: string;
-      CALIBRATION: string;
-      FINALIZED: string;
-      APPEAL_REQUESTED: string;
-      APPEAL_RESOLVED: string;
-      ARCHIVED: string;
-    };
-    field: {
-      kpiScore: string;
-      finalScore: string;
-      finalGrade: string;
-    };
-    action: {
-      transition: string;
-    };
-    kpi: {
-      empty: string;
-      col: {
-        node: string;
-        weight: string;
-        target: string;
-        actual: string;
-        achievementRate: string;
-        autoScore: string;
-        managerScore: string;
-        itemScore: string;
-      };
-    };
-    self: {
-      title: string;
-      description: string;
-      employeeId: string;
-      employeeIdPlaceholder: string;
-      load: string;
-      needInput: string;
-      empty: string;
-      emptyHint: string;
-      reviewTitle: string;
-      kpiSection: string;
-      selfComment: string;
-      selfCommentPlaceholder: string;
-      saveDraft: string;
-      submit: string;
-      submitted: string;
-      confirmSubmit: string;
-      lockedHint: string;
-    };
-    manager: {
-      title: string;
-      description: string;
-      create: string;
-      needCycle: string;
-      empty: string;
-      col: {
-        employeeId: string;
-        status: string;
-        kpiScore: string;
-        finalScore: string;
-      };
-      tabScore: string;
-      tabCompare: string;
-      managerComment: string;
-      managerCommentPlaceholder: string;
-      saveDraft: string;
-      submit: string;
-      submitted: string;
-      previewKpiScore: string;
-      previewHint: string;
-      notEditableHint: string;
-      workspace: {
-        queue: string;
-        queueHint: string;
-        managerPending: string;
-        managerPendingHint: string;
-        submitted: string;
-        avgKpi: string;
-        avgKpiHint: string;
-        progress: string;
-        reviewee: string;
-        revieweeHint: string;
-        serverScoreHint: string;
-        noGrade: string;
-        finalizedAt: string;
-        finalized: string;
-        notFinalized: string;
-        scoredItems: string;
-        scoredItemsHint: string;
-        scoringProgress: string;
-      };
-    };
-    create: {
-      title: string;
-      modeSingle: string;
-      modeBulk: string;
-      employeeId: string;
-      employeeIdPlaceholder: string;
-      employeeIds: string;
-      employeeIdsHint: string;
-      employeeIdsPlaceholder: string;
-      needEmployeeId: string;
-      needEmployeeIds: string;
-      bulkResult: string;
-      note: string;
-    };
-    compare: {
-      self: string;
-      manager: string;
-      noComment: string;
-      scoreCompare: string;
-      autoScore: string;
-      managerScore: string;
-      delta: string;
-    };
-  };
-  calibration: {
-    status: {
-      PLANNED: string;
-      IN_SESSION: string;
-      ADJUSTED: string;
-      CONFIRMED: string;
-      CLOSED: string;
-    };
-    grade: {
-      UNRATED: string;
-    };
-    action: {
-      transition: string;
-      confirm: string;
-      edit: string;
-      delete: string;
-    };
-    page: {
-      title: string;
-      description: string;
-      create: string;
-      needCycle: string;
-      empty: string;
-      companyWide: string;
-      confirmDelete: string;
-      col: {
-        status: string;
-        scheduledAt: string;
-        ownerOrgUnit: string;
-        participants: string;
-        adjustments: string;
-      };
-    };
-    form: {
-      createTitle: string;
-      editTitle: string;
-      ownerOrgUnitId: string;
-      ownerOrgUnitIdHint: string;
-      ownerOrgUnitIdPlaceholder: string;
-      scheduledAt: string;
-      scheduledAtPlaceholder: string;
-      participantIds: string;
-      participantIdsHint: string;
-      participantIdsPlaceholder: string;
-      createNote: string;
-      editNote: string;
-    };
-    confirm: {
-      title: string;
-      description: string;
-      finalizeReviews: string;
-      finalizeReviewsHint: string;
-      finalizeWarning: string;
-      resultConfirmed: string;
-      resultFinalized: string;
-      submit: string;
-    };
-    adjust: {
-      move: string;
-      selectGrade: string;
-      title: string;
-      reason: string;
-      reasonPlaceholder: string;
-      apply: string;
-      done: string;
-    };
-    director: {
-      title: string;
-      description: string;
-      needCycle: string;
-      selectSession: string;
-      sessionPlaceholder: string;
-      noSession: string;
-      notAdjustableHint: string;
-      reviewsHeading: string;
-      emptyReviews: string;
-      logHeading: string;
-      logEmpty: string;
-      col: {
-        employeeId: string;
-        status: string;
-        kpiScore: string;
-        grade: string;
-      };
-    };
-    analytics: {
-      title: string;
-      description: string;
-      needCycle: string;
-      distributionTitle: string;
-      distributionDescription: string;
-      sessionsTitle: string;
-      sessionsDescription: string;
-      timelineTitle: string;
-      timelineDescription: string;
-      stat: {
-        sessions: string;
-        sessionsHint: string;
-        ready: string;
-        readyHint: string;
-        adjustments: string;
-        adjustmentsHint: string;
-        forced: string;
-        forcedHint: string;
-      };
-      timelineCol: {
-        when: string;
-        employee: string;
-        grade: string;
-        reason: string;
-      };
-    };
-  };
-  distribution: {
-    bars: {
-      heading: string;
-      current: string;
-      target: string;
-      totalCount: string;
-      targetMarker: string;
-    };
-    policy: {
-      mode: string;
-      scale: string;
-      applied: string;
-      notApplied: string;
-      ready: string;
-    };
-    page: {
-      title: string;
-      description: string;
-      needCycle: string;
-      notSupported: string;
-    };
-    action: {
-      simulate: string;
-      apply: string;
-    };
-    apply: {
-      title: string;
-      warning: string;
-      confirmText: string;
-      result: string;
-    };
-    proposed: {
-      heading: string;
-      empty: string;
-      changed: string;
-      col: {
-        employeeId: string;
-        kpiScore: string;
-        currentGrade: string;
-        proposedGrade: string;
-      };
-    };
-    log: {
-      heading: string;
-      applied: string;
-      skipped: string;
-    };
-  };
-  report: {
-    hr: {
-      title: string;
-      description: string;
-      needCycle: string;
-      needFinalized: string;
-      summaryFinalized: string;
-      summaryPublished: string;
-      publish: string;
-      publishTitle: string;
-      publishConfirm: string;
-      publishResult: string;
-      empty: string;
-      emptyHint: string;
-      viewed: string;
-      notViewed: string;
-      acknowledged: string;
-      notAcknowledged: string;
-      superseded: string;
-      supersede: string;
-      supersedeTitle: string;
-      supersedeWarning: string;
-      supersedeDone: string;
-      governance: {
-        title: string;
-        description: string;
-        readiness: string;
-        readinessHint: string;
-        published: string;
-        viewed: string;
-        acknowledged: string;
-        superseded: string;
-        progressPublished: string;
-        progressViewed: string;
-        progressAcknowledged: string;
-        listTitle: string;
-        listDescription: string;
-        historyTitle: string;
-        historyDescription: string;
-        historyEmpty: string;
-      };
-      col: {
-        employeeId: string;
-        finalGrade: string;
-        publishedAt: string;
-        status: string;
-      };
-    };
-    my: {
-      title: string;
-      description: string;
-      employeeId: string;
-      employeeIdPlaceholder: string;
-      load: string;
-      needInput: string;
-      empty: string;
-      emptyHint: string;
-      acknowledgeDone: string;
-    };
-    card: {
-      finalGrade: string;
-      finalScore: string;
-      kpiScore: string;
-      mboScore: string;
-      competencyScore: string;
-      mraScore: string;
-      scoreP1: string;
-      kpiSection: string;
-      managerComment: string;
-      noComment: string;
-      distributionHeading: string;
-      distributionHint: string;
-      distributionEmpty: string;
-      distributionMine: string;
-      acknowledgeHeading: string;
-      acknowledgeHint: string;
-      acknowledge: string;
-      acknowledgedButton: string;
-      acknowledged: string;
-    };
-    packet: {
-      title: string;
-      description: string;
-      publishedAt: string;
-      kpiItems: string;
-      viewStatus: string;
-      viewed: string;
-      notViewed: string;
-      ackStatus: string;
-      acknowledged: string;
-      notAcknowledged: string;
-      lifecyclePending: string;
-      scoreTitle: string;
-      scoreDescription: string;
-      kpiDescription: string;
-      commentDescription: string;
-      developmentTitle: string;
-      developmentDescription: string;
-      developmentEmpty: string;
-      developmentEmptyDescription: string;
-    };
-  };
-  domain: {
-    app: {
-      title: string;
-      subtitle: string;
-    };
-    nav: {
-      section: string;
-      selfEvaluation: string;
-      personalOkr: string;
-      reflectionJournal: string;
-      mentorFeedback: string;
-    };
-    selfEvaluation: {
-      title: string;
-      description: string;
-      empty: string;
-      emptyDescription: string;
-      period: string;
-      content: string;
-      score: string;
-      status: string;
-      statusDraft: string;
-      statusSubmitted: string;
-      statusReviewed: string;
-      statusFinalized: string;
-    };
-    personalOkr: {
-      title: string;
-      description: string;
-      empty: string;
-      emptyDescription: string;
-      objective: string;
-      progress: string;
-      period: string;
-      status: string;
-      statusActive: string;
-      statusAtRisk: string;
-      statusCompleted: string;
-      statusArchived: string;
-    };
-    reflectionJournal: {
-      title: string;
-      description: string;
-      empty: string;
-      emptyDescription: string;
-      reflectionDate: string;
-      method: string;
-      content: string;
-      isPrivate: string;
-      methodKpt: string;
-      methodFourLs: string;
-      methodSsc: string;
-    };
-    mentorFeedback: {
-      title: string;
-      description: string;
-      empty: string;
-      emptyDescription: string;
-      feedbackDate: string;
-      mentor: string;
-      mentee: string;
-      category: string;
-      content: string;
-      acknowledged: string;
-      categoryGrowth: string;
-      categoryRecognition: string;
-      categoryCoaching: string;
-      categoryConversation: string;
-    };
-  };
-  error: {
-    boundary: string;
-    unknown: string;
-    network: string;
-    unauthorized: string;
-    forbidden: string;
-    E9804441: string;
-    E9804231: string;
-    E9804921: string;
-    E9804232: string;
-    E9804922: string;
-    E9804442: string;
-    E9804233: string;
-    E9804234: string;
-    E9804235: string;
-    E9804923: string;
-    E9804443: string;
-    E9804444: string;
-    E9804445: string;
-    E9804446: string;
-    E9804236: string;
-    E9804237: string;
-    E9804238: string;
-    E9804239: string;
-    E9804924: string;
-    E9804925: string;
-    E9804926: string;
-    E9804927: string;
-    E9804447: string;
-    E9804240: string;
-    E9804241: string;
-    E9804242: string;
-    E9804243: string;
-    E9804244: string;
-    E9804245: string;
-    E9804928: string;
-    E9804929: string;
-    E9804930: string;
-    E9804448: string;
-    E9804246: string;
-    E9804247: string;
-    E9804248: string;
-    E9804249: string;
-    E9804250: string;
-    E9804251: string;
-    E9804931: string;
-    E9804932: string;
-    E9804933: string;
-    E9804449: string;
-    E9804252: string;
-    E9804934: string;
-  };
-}
-
-export const ko: I18nShape = {
-  common: {
-    action: {
-      create: '추가',
-      save: '저장',
-      cancel: '취소',
-      edit: '수정',
-      delete: '삭제',
-      submit: '제출',
-      close: '닫기',
+      create: sharedLabels['common.action.add'],
+      save: sharedLabels['common.action.save'],
+      cancel: sharedLabels['common.action.cancel'],
+      edit: sharedLabels['common.action.edit'],
+      delete: sharedLabels['common.action.delete'],
+      submit: sharedLabels['common.action.submit'],
+      close: sharedLabels['common.action.close'],
       retry: '다시 시도',
     },
     status: {
-      active: '활성',
-      inactive: '비활성',
-      loading: '불러오는 중...',
-      empty: '데이터가 없습니다',
+      active: sharedLabels['common.status.active'],
+      inactive: sharedLabels['common.status.inactive'],
+      loading: sharedLabels['common.message.loading'],
+      empty: sharedLabels['common.message.no_data'],
     },
     message: {
       created: '추가되었습니다.',
-      updated: '수정되었습니다.',
+      updated: sharedLabels['common.message.save_success'],
       deleted: '삭제되었습니다.',
-      loadError: '불러오기 실패',
+      loadError: sharedLabels['common.message.load_failed'],
     },
     label: {
       darkMode: '다크 모드',
@@ -952,6 +59,23 @@ export const ko: I18nShape = {
     },
     admin: {
       tenants: '시스템 > 테넌트 관리',
+    },
+  },
+  workspace: {
+    navMy: '내 평가', navOperate: '평가 운영', appTitle: 'Easy 성과평가', appSubtitle: '목표부터 피드백까지', cycle: '평가 사이클', preparing: '평가 운영 화면을 준비하고 있습니다.',
+    myEvaluation: '내 평가', operations: '운영 제어', participants: '대상자와 평가자', participantSelect: '평가 대상자', reviewerSelect: '1차 평가자', assign: '배정 저장',
+    progress: '진행 상황', achievements: '달성한 성과', blockers: '막힌 점 또는 필요한 지원', supportNeeded: '필요한 지원',
+    goal: '목표', goalDescription: '성공 기준 또는 실행 계획', weight: '가중치(%)', saveDraft: '임시 저장', submit: '제출', open: '평가 열기', next: '다음 단계', publish: '결과 발행', close: '평가 마감', acknowledge: '결과 확인',
+    setup: '운영 준비', participantsPhase: '대상자·평가자', goals: '목표 합의', checkIn: '중간점검', selfReview: '자기평가', teamReview: '팀 평가', calibration: '보정', results: '결과·피드백', closure: '마감',
+    copy: {
+      mobileAppTitle: '성과평가', noAssignedCycleTitle: '배정된 평가가 없습니다', noAssignedCycleDescription: 'HR이 평가를 열고 대상자로 배정하면 이곳에 표시됩니다.', setupDescription: '평가 기간과 운영 정책을 확인합니다.', participantsDescription: '대상자와 1차 평가자를 배정합니다.', goalsDescription: '구성원이 목표를 작성하고 관리자가 승인합니다.', checkInDescription: '성과 진행과 필요한 지원을 확인합니다.', selfReviewPhaseDescription: '구성원이 성과와 근거를 정리합니다.', teamReviewDescription: '평가자가 배정된 구성원을 평가합니다.', calibrationDescription: '등급 분포와 평가 결과를 조정합니다.', resultsDescription: '발행된 결과를 확인하고 피드백을 남깁니다.', closureDescription: '발행과 피드백 완료 여부를 확인해 마감합니다.', currentPhase: '현재 단계', noCycleTitle: '운영 중인 평가가 없습니다', noCycleDescription: '평가 사이클을 만든 뒤 운영 공간에서 대상자와 단계를 관리하세요.', createCycle: '평가 사이클 만들기', loadingMyWork: '내 평가 업무를 확인하고 있습니다.', blockersTitle: '다음 단계로 진행하기 전에 확인할 사항', operationDescription: '단계 이동은 서버의 완료 조건과 차단 사유를 기준으로 처리됩니다.', calibrationOpen: '개별 보정 열기', employeeNamePlaceholder: '이름 또는 사번으로 선택', noParticipantsTitle: '배정된 대상자가 없습니다', noParticipantsDescription: '평가를 열기 전에 구성원과 1차 평가자를 배정하세요.', member: '구성원', org: '소속', reviewStatus: '평가 상태', unassigned: '미배정', notSpecified: '미지정', noTask: '현재 사이클에 배정된 평가 업무가 없습니다.', goalWrite: '목표 작성', checkInDescriptionShort: '출결이 아닌 목표 진행과 피드백을 기록합니다.', selfReviewDescription: '성과와 다음 성장 계획', resultsFeedback: '결과와 피드백', notCalculated: '미산정', acknowledged: '결과를 확인했습니다.', acknowledgeHint: '결과를 확인한 뒤 수령을 완료하세요.', appeal: '이의 제기', appealPlaceholder: '검토가 필요한 이유를 구체적으로 작성하세요.', teamLoading: '팀 평가 업무를 불러오는 중입니다.', noTeamTitle: '배정된 팀 평가가 없습니다', noTeamDescription: '배정된 구성원의 목표 합의, 중간점검, 최종 평가가 이곳에 표시됩니다.', reviewerFeedback: '중간점검 피드백', reviewerFeedbackPlaceholder: '성과 방향과 필요한 지원을 남겨주세요.', completeCheckIn: '중간점검 완료', teamScore: '팀 평가 점수', loadingItems: '평가 항목을 불러오는 중입니다.', reviewComment: '평가 의견', submitTeamReview: '팀 평가 제출', feedbackSave: '피드백 저장', feedbackSubmitted: '피드백을 저장했습니다.',
+      statusEmpty: '미착수', status_ACTIVE: '진행 중', status_EXCLUDED: '제외됨', status_DRAFT: '작성 중', status_PENDING_APPROVAL: '승인 대기', status_APPROVED: '승인됨', status_REJECTED: '수정 요청', status_EMPLOYEE_SUBMITTED: '구성원 제출', status_MANAGER_COMPLETED: '관리자 완료', status_SELF_PENDING: '자기평가 대기', status_SELF_SUBMITTED: '자기평가 제출', status_MANAGER_PENDING: '팀 평가 대기', status_MANAGER_SUBMITTED: '팀 평가 제출', status_CALIBRATION: '보정 중', status_FINALIZED: '확정', status_PLANNED: '계획', status_GOAL_SETTING: '목표 합의', status_MID_REVIEW: '중간점검', status_SELF_REVIEW: '자기평가', status_MANAGER_REVIEW: '팀 평가', status_IN_SESSION: '진행 중', status_CONFIRMED: '확정됨', status_COMPLETED: '피드백 완료', status_ACCEPTED: '수용됨', status_APPEALED: '이의 접수', status_RESOLVED: '처리 완료',
+      openConfirmTitle: '평가를 여시겠습니까?', openConfirmBody: '구성원에게 평가가 공개되고 목표 합의를 시작할 수 있습니다.', opened: '평가를 열었습니다.', noEmployeeMatches: '검색 결과가 없습니다.', advanced: '다음 단계로 이동했습니다.', published: '결과를 발행했습니다.', closed: '평가를 마감했습니다.', assigned: '대상자와 평가자를 저장했습니다.', peopleSuffix: '명', assignmentHint: '선택한 구성원 모두에게 같은 1차 평가자가 배정됩니다.', reviewerPlaceholder: '평가자를 선택하세요', loadingParticipants: '대상자를 불러오는 중입니다.',
+      nextWork: '다음 업무', nextWorkReady: '다음 업무를 진행할 수 있습니다.', pendingApprovalSuffix: '건 승인 대기', goalCountSuffix: '건 확인', reviewPersonSuffix: '님 검토', loadingGoals: '목표를 불러오는 중입니다.', noGoals: '제출된 목표가 없습니다.', target: '목표', requestRevision: '수정 요청', approve: '승인', goalDecisionComment: '목표 검토 의견', goalDecisionPlaceholder: '수정 요청 시 구체적인 사유를 입력하세요.', goalRejected: '목표 수정을 요청했습니다.', goalApproved: '목표를 승인했습니다.', feedbackSaved: '피드백을 저장했습니다.', checkInCompleted: '중간점검을 완료했습니다.', noReviewItems: '평가 항목이 없습니다.', actual: '실적', autoScore: '자동 점수', managerScore: '관리자 점수', managerReviewSaved: '팀 평가를 임시 저장했습니다.', managerReviewSubmitted: '팀 평가를 제출했습니다.', scoreRequiredHint: '모든 항목에 점수를 입력해야 제출할 수 있습니다.',
+      goalEdit: '목표 수정', targetValue: '목표 수치', unit: '단위', revisionReason: '수정 요청 사유', goalUpdated: '목표를 수정했습니다.', saveChanges: '수정 저장', goalSubmitted: '목표 승인을 요청했습니다.', requestApproval: '승인 요청', noDescription: '설명 없음', noCheckIns: '아직 등록된 진행 기록이 없습니다.', asOfDate: '기준일', actualValue: '실적 수치', progressPercent: '진행률(%)', note: '진행 내용', addCheckIn: '진행 실적 기록', evidenceUrl: '근거 링크', checkInAdded: '진행 실적을 기록했습니다.', saveCheckIn: '실적 기록', goalCreated: '목표를 저장했습니다.', saveGoal: '목표 저장', checkInSaved: '중간점검을 임시 저장했습니다.', checkInSubmitted: '중간점검을 제출했습니다.', submitToManager: '관리자에게 제출', selfReviewSaved: '자기평가를 임시 저장했습니다.', selfReviewSubmitted: '자기평가를 제출했습니다.', finalScore: '최종 점수', finalGrade: '등급', resultAcknowledged: '결과 확인을 완료했습니다.', feedbackFromManager: '관리자 피드백', feedbackAccepted: '피드백을 수용했습니다.', acceptFeedback: '피드백 수용', appealSubmitted: '이의 제기를 접수했습니다.', feedbackStatus: '피드백 상태',
+      loadingCalibration: '보정 업무를 불러오는 중입니다.', distributionTotal: '목표 합계', noCalibrationSession: '보정 세션이 없습니다', noCalibrationSessionHint: '전체 활성 대상자로 보정 세션을 만드세요.', createCalibrationSession: '보정 세션 만들기', calibrationSessionCreated: '보정 세션을 만들었습니다.', calibrationSession: '보정 세션', currentDistribution: '현재 분포', distributionApplied: '목표 분포를 적용했습니다.', applyDistribution: '분포 적용', noCalibrationRows: '보정할 평가 결과가 없습니다.', reviewSubject: '평가 대상자', adjustedGrade: '조정 등급', adjustmentReason: '조정 사유', adjustmentSaved: '보정 등급과 사유를 저장했습니다.', saveAdjustment: '보정 저장', calibrationConfirmed: '보정을 확정했습니다. 확정 평가', countSuffix: '건', confirmCalibration: '보정 확정',
+      loadingResults: '결과 분석을 불러오는 중입니다.', resultsAnalysis: '결과 분석', finalized: '확정', averageScore: '평균 점수', gradeDistribution: '등급 분포', companyWide: '전사', noResultRows: '집계된 결과가 없습니다.', loadingFeedback: '피드백 업무를 불러오는 중입니다.', feedbackOperations: '피드백·이의 처리', appealReason: '이의 제기 사유', feedbackComment: '결과 피드백', feedbackCompleted: '피드백을 완료했습니다.', completeFeedback: '피드백 완료', resolution: '처리 결과', resolutionUpheld: '기존 결과 유지', resolutionAdjustment: '결과 조정 필요', resolutionComment: '처리 의견', appealResolved: '이의 제기를 처리했습니다.', resolveAppeal: '이의 처리 완료', noFeedbackAction: '현재 처리할 피드백 업무가 없습니다.',
+      error_E9804253: '로그인 계정과 구성원 정보가 연결되지 않았습니다. HR 담당자에게 연결을 요청하세요.', error_E9804301: '이 평가 업무를 처리할 권한이 없습니다.', error_E9804450: '평가 대상자를 찾을 수 없습니다.', error_E9804451: '배정된 평가자를 찾을 수 없습니다.', error_E9804452: '아직 작성된 피드백이 없습니다.', error_E9804254: '재직 중인 구성원과 평가자를 선택하세요.', error_E9804935: '안내된 완료 조건을 해결한 뒤 다음 단계로 이동하세요.', error_E9804936: '이미 완료된 피드백은 수정할 수 없습니다.', error_E9804252: '현재 단계에서는 결과를 발행할 수 없습니다.', unknownError: '요청을 처리하지 못했습니다. 다시 시도해 주세요.',
     },
   },
   cockpit: {
@@ -991,7 +115,7 @@ export const ko: I18nShape = {
     personaHint: '페르소나 선택 시 dev 시드 계정이 자동 입력됩니다 (시더 게이트 ON 환경)',
     tenantCode: '회사 코드',
     tenantCodePlaceholder: '회사 코드 (선택)',
-    emailLabel: '이메일',
+    emailLabel: sharedLabels['common.label.email'],
     passwordLabel: '비밀번호',
     submit: '로그인',
     persona: {
@@ -1781,7 +905,48 @@ export const ko: I18nShape = {
     E9804449: '리포트를 찾을 수 없습니다',
     E9804252: '리포트 발행은 사이클이 확정(FINALIZED) 상태일 때만 가능합니다',
     E9804934: '이미 재발행된(이전) 리포트는 열람·확인·재발행할 수 없습니다',
+    E9804453: '평가 프로그램을 찾을 수 없습니다.',
+    E9804454: '평가 대상자를 찾을 수 없습니다.',
+    E9804455: '평가 목표를 찾을 수 없습니다.',
+    E9804456: '평가 제출 내용을 찾을 수 없습니다.',
+    E9804457: '점수 조정 내역을 찾을 수 없습니다.',
+    E9804458: '평가 피드백을 찾을 수 없습니다.',
+    E9804302: '이 평가 프로그램을 이용할 권한이 없습니다.',
+    E9804256: '평가 프로그램 설정값을 확인해 주세요.',
+    E9804257: '현재 평가 단계에서는 이 작업을 진행할 수 없습니다.',
+    E9804258: '현재 지원하지 않는 평가 유형입니다.',
+    E9804937: '진행 중이거나 완료된 평가는 설정을 바꿀 수 없습니다.',
+    E9804938: '다음 단계에 필요한 평가 업무가 완료되지 않았습니다.',
+    E9804939: '동일한 평가 프로그램 또는 배정 정보가 이미 존재합니다.',
+    E9804940: '평가 결과가 아직 공개되지 않았습니다.',
+    E9804460: '요청한 평가 자료를 찾을 수 없습니다.',
+    E9804360: '이 평가 자료를 이용할 권한이 없습니다.',
+    E9804260: '평가 자료의 입력값을 확인해 주세요.',
+    E9804960: '동일하거나 충돌하는 평가 자료가 이미 존재합니다.',
+    E9804961: '완료되었거나 잠긴 평가 자료는 변경할 수 없습니다.',
+    E9804261: '첨부파일은 20MB 이하만 등록할 수 있습니다.',
+    E9804262: '지원하지 않는 첨부파일 형식입니다.',
+  },
+  validation: {
+    email: '유효한 이메일을 입력해 주세요.', password: '비밀번호를 입력해 주세요.',
+  },
+  blockers: {
+    MISSING_EMPLOYEE_BINDING: '계정과 사원 정보 연결이 필요합니다.',
+    NO_ACTIVE_PARTICIPANTS: '평가 대상자를 배정해 주세요.',
+    PARTICIPANT_NOT_ACTIVE: '활성 상태의 평가 대상자가 필요합니다.',
+    MISSING_MANAGER: '1차 평가자를 배정해 주세요.',
+    GOAL_MISSING: '평가 목표를 작성해 주세요.',
+    GOAL_NOT_APPROVED: '평가 정책과 목표 승인 상태를 확인해 주세요.',
+    GOAL_ACTUAL_MISSING: '목표의 실적을 입력해 주세요.',
+    MID_REVIEW_INCOMPLETE: '중간점검을 완료해 주세요.',
+    SELF_REVIEW_INCOMPLETE: '자기평가를 제출해 주세요.',
+    MANAGER_REVIEW_INCOMPLETE: '팀 평가를 제출해 주세요.',
+    CALIBRATION_INCOMPLETE: '등급 보정을 확정해 주세요.',
+    REPORT_NOT_PUBLISHED: '결과를 발행해 주세요.',
+    REPORT_NOT_ACKNOWLEDGED: '구성원의 결과 확인이 필요합니다.',
+    FEEDBACK_INCOMPLETE: '피드백과 이의신청 처리를 완료해 주세요.',
   },
 };
 
-export type I18nDict = I18nShape;
+export type TranslationSchema = typeof ko;
+export type I18nDict = TranslationSchema;

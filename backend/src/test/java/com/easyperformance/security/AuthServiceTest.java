@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.easyperformance.common.UuidV7;
+import com.easyware.platform.UuidV7;
 import com.easyperformance.domain.account.PerformanceUser;
 import com.easyperformance.domain.account.PerformanceUserRepository;
 import com.easyperformance.error.PerformanceErrorCode;

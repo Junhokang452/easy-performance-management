@@ -1,3 +1,4 @@
+import { readSavedLocale } from '../i18n/locales';
 /**
  * CalibrationAnalyticsPage — 보정 분석 workspace.
  *
@@ -317,5 +318,5 @@ function formatDateTime(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString();
+  return d.toLocaleString(readSavedLocale());
 }

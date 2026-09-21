@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-09-08T04:53:29.726Z" hostname="DESKTOP-JPP56SN" time="1.22">
+  <properties/>
+  <testcase name="rejectsUnsafeConfiguredOrigins()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.675"/>
+  <testcase name="disabledOrMissingConfigurationDoesNotReadOrSend()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.009"/>
+  <testcase name="disabledControllerReports503AndOperatorAuthorityIsExplicit()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.033"/>
+  <testcase name="rejectsTenantBeforeSnapshot()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.071"/>
+  <testcase name="nonSuccessIncludingRedirectIsNotReportedAsSent()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.267"/>
+  <testcase name="exactSignedTenantBodyManagerAndDeletionAreSent()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.097"/>
+  <testcase name="rejectsCallerTransactionBeforeSnapshot()" classname="com.easyhcm.backend.sync.EasyPerformanceCoreMasterPushServiceTest" time="0.009"/>
+  <system-out><![CDATA[13:53:30.492 [Test worker] INFO com.easyware.platform.hmac.HmacService -- HmacService initialized — algorithm=HmacSHA256, secretLength=48
+13:53:30.540 [Test worker] INFO com.easyware.platform.hmac.HmacService -- HmacService initialized — algorithm=HmacSHA256, secretLength=48
+13:53:30.846 [Test worker] INFO com.easyware.platform.hmac.HmacService -- HmacService initialized — algorithm=HmacSHA256, secretLength=48
+13:53:30.897 [Test worker] INFO com.easyware.platform.hmac.HmacService -- HmacService initialized — algorithm=HmacSHA256, secretLength=48
+13:53:30.945 [Test worker] INFO com.easyware.platform.hmac.HmacService -- HmacService initialized — algorithm=HmacSHA256, secretLength=48
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

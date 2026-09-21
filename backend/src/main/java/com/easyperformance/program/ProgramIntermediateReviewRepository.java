@@ -1,0 +1,2 @@
+package com.easyperformance.program;import org.springframework.data.jpa.repository.JpaRepository;import java.util.*;
+public interface ProgramIntermediateReviewRepository extends JpaRepository<ProgramIntermediateReview,UUID>{Optional<ProgramIntermediateReview> findByTenantIdAndParticipantId(UUID tenantId,UUID participantId);List<ProgramIntermediateReview> findAllByTenantIdAndParticipantIdIn(UUID tenantId,Collection<UUID> participantIds);}

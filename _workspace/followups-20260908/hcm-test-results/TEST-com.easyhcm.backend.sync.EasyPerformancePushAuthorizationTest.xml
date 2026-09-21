@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.easyhcm.backend.sync.EasyPerformancePushAuthorizationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-08T04:53:30.948Z" hostname="DESKTOP-JPP56SN" time="1.8">
+  <properties/>
+  <testcase name="adminAndHrCanTriggerButDisabledSenderReturns503()" classname="com.easyhcm.backend.sync.EasyPerformancePushAuthorizationTest" time="1.72"/>
+  <testcase name="employeeCannotTriggerSender()" classname="com.easyhcm.backend.sync.EasyPerformancePushAuthorizationTest" time="0.079"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

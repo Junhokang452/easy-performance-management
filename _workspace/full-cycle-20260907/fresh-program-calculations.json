@@ -1,0 +1,1129 @@
+{
+  "passed": true,
+  "count": 141,
+  "fixtures": {
+    "guardProgramId": "01a07b76-4bf7-7df0-90d5-5ebec46e8c7e",
+    "gradeBoundaryProgramId": "01a07b76-4c3c-74f2-8751-dd174e6fe2c0",
+    "threeReviewerDepartmentProgramId": "01a07b76-4dee-7851-ac03-1647a3e4afb3",
+    "zeroDeviationProgramId": "01a07b76-4fdc-7c07-9e76-70b648a72ede",
+    "departmentNormalizationProgramId": "01a07b76-51b7-7ea4-8ab6-d82522adee24",
+    "allocationProgramId": "01a07b76-541e-72ab-a3b7-06faf1340f81"
+  },
+  "checks": [
+    {
+      "case": "hr-admin POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-resources/lookup/employees",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Department condition fixture has a concrete department",
+      "passed": true,
+      "evidence": {
+        "id": "019ed002-0000-7000-8000-000000000001",
+        "employeeNo": "DEMO-001",
+        "name": "김나리",
+        "departmentId": "019ed001-0000-7000-8000-000000000001"
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "SELF_REPORT and INTERMEDIATE enabled are rejected together",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b76-4bf7-7df0-90d5-5ebec46e8c7e",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Rejected self-report configuration leaves stored definition unchanged",
+      "passed": true
+    },
+    {
+      "case": "Department contribution requires a referenced department result scale",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "Allocation rows reject grade keys outside the result scale",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "GRADE input scale persists explicit conversion scores",
+      "passed": true,
+      "evidence": {
+        "id": "01a07b76-4c3b-763c-befe-29d703dfbd49",
+        "name": "1-5 입력척도",
+        "use": "INPUT",
+        "kind": "GRADE",
+        "levels": [
+          {
+            "code": "AT_85",
+            "label": "85 경계",
+            "convertedScore": 85,
+            "lowerExclusive": null,
+            "upperInclusive": null,
+            "color": null
+          },
+          {
+            "code": "AT_75",
+            "label": "75 경계",
+            "convertedScore": 75,
+            "lowerExclusive": null,
+            "upperInclusive": null,
+            "color": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-4c6f-7c6b-a883-997678466a27/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-4c87-7e2c-9886-3f785dab0f19/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/stages/REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "REVIEW starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 2,
+        "changedParticipantIds": [
+          "01a07b76-4c6f-7c6b-a883-997678466a27",
+          "01a07b76-4c87-7e2c-9886-3f785dab0f19"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-4c6f-7c6b-a883-997678466a27/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Configured GRADE rejects numeric bypass and ambiguous dual input",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "Configured GRADE rejects numeric bypass and ambiguous dual input",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-4c6f-7c6b-a883-997678466a27/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "c882919d-41e1-40f5-bf86-446fe13382ec",
+          "groupId": "01a07b76-4c3b-76db-bf00-5fb61d6bac43",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4c3b-763c-befe-29d703dfbd49",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-4c6f-7c6b-a883-997678466a27/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-4c87-7e2c-9886-3f785dab0f19/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "c882919d-41e1-40f5-bf86-446fe13382ec",
+          "groupId": "01a07b76-4c3b-76db-bf00-5fb61d6bac43",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4c3b-763c-befe-29d703dfbd49",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-4c87-7e2c-9886-3f785dab0f19/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/stages/CALCULATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "CALCULATION starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 2,
+        "changedParticipantIds": [
+          "01a07b76-4c6f-7c6b-a883-997678466a27",
+          "01a07b76-4c87-7e2c-9886-3f785dab0f19"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4c3c-74f2-8751-dd174e6fe2c0/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "GRADE conversion drives independent raw scores 85 and 75",
+      "passed": true,
+      "evidence": {
+        "01a07b76-4c6f-7c6b-a883-997678466a27": {
+          "raw": 85.0,
+          "grade": "B"
+        },
+        "01a07b76-4c87-7e2c-9886-3f785dab0f19": {
+          "raw": 75.0,
+          "grade": "C"
+        }
+      }
+    },
+    {
+      "case": "(lower, upper] result boundaries classify 85 as B and 75 as C",
+      "passed": true,
+      "evidence": {
+        "01a07b76-4c6f-7c6b-a883-997678466a27": {
+          "raw": 85.0,
+          "grade": "B"
+        },
+        "01a07b76-4c87-7e2c-9886-3f785dab0f19": {
+          "raw": 75.0,
+          "grade": "C"
+        }
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/stages/REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "REVIEW starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 1,
+        "changedParticipantIds": [
+          "01a07b76-4e27-7359-9cb9-8555d05c70cb"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "4678f144-517d-4972-b475-d07911a02ded",
+          "groupId": "01a07b76-4ded-7b38-a03c-c14a25e18241",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4ded-7ab5-a03a-4588224ed630",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Three-reviewer participant cannot be calculated after only round one",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Rejected premature calculation leaves no calculation revision",
+      "passed": true
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/review-context?round=2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 2 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "58315c66-2f1d-4750-91cf-069f07a5290a",
+          "groupId": "01a07b76-4ded-7b38-a03c-c14a25e18241",
+          "round": 2,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 2",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4ded-7ab5-a03a-4588224ed630",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/review-submission:complete?round=2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/review-context?round=3",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 3 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "4ee85176-3c08-4040-9b9c-d09311b75e14",
+          "groupId": "01a07b76-4ded-7b38-a03c-c14a25e18241",
+          "round": 3,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 3",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4ded-7ab5-a03a-4588224ed630",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "colleague POST /api/v1/evaluation-programs/participants/01a07b76-4e27-7359-9cb9-8555d05c70cb/review-submission:complete?round=3",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/stages/CALCULATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "CALCULATION starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 1,
+        "changedParticipantIds": [
+          "01a07b76-4e27-7359-9cb9-8555d05c70cb"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4dee-7851-ac03-1647a3e4afb3/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Three actual reviewer rounds retain configured 20/30/40 weights",
+      "passed": true,
+      "evidence": {
+        "REVIEWER_1": {
+          "score": 20.0,
+          "weight": 20.0
+        },
+        "REVIEWER_2": {
+          "score": 60.0,
+          "weight": 30.0
+        },
+        "REVIEWER_3": {
+          "score": 100.0,
+          "weight": 40.0
+        },
+        "DEPARTMENT_PERFORMANCE": {
+          "score": 90,
+          "weight": 10
+        }
+      }
+    },
+    {
+      "case": "Department grade A contributes converted score 90 at weight 10",
+      "passed": true,
+      "evidence": {
+        "REVIEWER_1": {
+          "score": 20.0,
+          "weight": 20.0
+        },
+        "REVIEWER_2": {
+          "score": 60.0,
+          "weight": 30.0
+        },
+        "REVIEWER_3": {
+          "score": 100.0,
+          "weight": 40.0
+        },
+        "DEPARTMENT_PERFORMANCE": {
+          "score": 90,
+          "weight": 10
+        }
+      }
+    },
+    {
+      "case": "Weighted result equals (20×20 + 60×30 + 100×40 + 90×10) / 100 = 71",
+      "passed": true,
+      "evidence": {
+        "id": "01a07b76-4fbf-775c-a20a-53a9364e1cca",
+        "participantId": "01a07b76-4e27-7359-9cb9-8555d05c70cb",
+        "revision": 1,
+        "contributions": [
+          {
+            "component": "REVIEWER_1",
+            "score": 20.0,
+            "weightPercent": 20.0
+          },
+          {
+            "component": "REVIEWER_2",
+            "score": 60.0,
+            "weightPercent": 30.0
+          },
+          {
+            "component": "REVIEWER_3",
+            "score": 100.0,
+            "weightPercent": 40.0
+          },
+          {
+            "component": "DEPARTMENT_PERFORMANCE",
+            "score": 90,
+            "weightPercent": 10
+          }
+        ],
+        "rawScore": 71.0,
+        "normalizedScore": 71.0,
+        "adjustedScore": 71.0,
+        "calculatedGrade": "C",
+        "status": "FINAL",
+        "formula": "sum(score*weight)/sum(weight)",
+        "warnings": [],
+        "calculatedAt": "2026-09-07T10:42:26.367488833Z"
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-501c-707a-bed2-2fd50dffabc5/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-5039-7a86-83ea-561a6e4b3c5c/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/stages/REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "REVIEW starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 2,
+        "changedParticipantIds": [
+          "01a07b76-501c-707a-bed2-2fd50dffabc5",
+          "01a07b76-5039-7a86-83ea-561a6e4b3c5c"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-501c-707a-bed2-2fd50dffabc5/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "741a62f4-a848-445f-908e-6c85c1321933",
+          "groupId": "01a07b76-4fda-7b55-8478-d29ee175acf6",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4fda-7ace-8476-fbc42a1e7b16",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-501c-707a-bed2-2fd50dffabc5/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-5039-7a86-83ea-561a6e4b3c5c/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "741a62f4-a848-445f-908e-6c85c1321933",
+          "groupId": "01a07b76-4fda-7b55-8478-d29ee175acf6",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-4fda-7ace-8476-fbc42a1e7b16",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-5039-7a86-83ea-561a6e4b3c5c/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/stages/CALCULATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "CALCULATION starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 2,
+        "changedParticipantIds": [
+          "01a07b76-501c-707a-bed2-2fd50dffabc5",
+          "01a07b76-5039-7a86-83ea-561a6e4b3c5c"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-4fdc-7c07-9e76-70b648a72ede/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Zero standard deviation preserves the explainable raw score instead of dividing by zero",
+      "passed": true,
+      "evidence": [
+        {
+          "raw": 80.0,
+          "normalized": 80.0,
+          "adjusted": 80.0,
+          "warnings": [
+            "ZERO_STANDARD_DEVIATION"
+          ]
+        },
+        {
+          "raw": 80.0,
+          "normalized": 80.0,
+          "adjusted": 80.0,
+          "warnings": [
+            "ZERO_STANDARD_DEVIATION"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "Zero standard deviation is explicit in every calculation warning",
+      "passed": true,
+      "evidence": [
+        {
+          "raw": 80.0,
+          "normalized": 80.0,
+          "adjusted": 80.0,
+          "warnings": [
+            "ZERO_STANDARD_DEVIATION"
+          ]
+        },
+        {
+          "raw": 80.0,
+          "normalized": 80.0,
+          "adjusted": 80.0,
+          "warnings": [
+            "ZERO_STANDARD_DEVIATION"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-51f4-7599-86c6-f8eae79f1e58/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-5216-7d28-b7c0-73495bbc5786/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-5238-73b0-a09a-1c257d277138/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/stages/REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "REVIEW starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 3,
+        "changedParticipantIds": [
+          "01a07b76-51f4-7599-86c6-f8eae79f1e58",
+          "01a07b76-5216-7d28-b7c0-73495bbc5786",
+          "01a07b76-5238-73b0-a09a-1c257d277138"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-programs/participants/01a07b76-51f4-7599-86c6-f8eae79f1e58/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "d90014d3-7a53-4147-bb44-2043c8e7ba10",
+          "groupId": "01a07b76-51b7-7160-8ab5-bf5d2753534c",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-51b7-702f-8ab3-8e41aa080e9b",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "colleague POST /api/v1/evaluation-programs/participants/01a07b76-51f4-7599-86c6-f8eae79f1e58/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-programs/participants/01a07b76-5216-7d28-b7c0-73495bbc5786/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "d90014d3-7a53-4147-bb44-2043c8e7ba10",
+          "groupId": "01a07b76-51b7-7160-8ab5-bf5d2753534c",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-51b7-702f-8ab3-8e41aa080e9b",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "colleague POST /api/v1/evaluation-programs/participants/01a07b76-5216-7d28-b7c0-73495bbc5786/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-programs/participants/01a07b76-5238-73b0-a09a-1c257d277138/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "d90014d3-7a53-4147-bb44-2043c8e7ba10",
+          "groupId": "01a07b76-51b7-7160-8ab5-bf5d2753534c",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-51b7-702f-8ab3-8e41aa080e9b",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "colleague POST /api/v1/evaluation-programs/participants/01a07b76-5238-73b0-a09a-1c257d277138/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Normalization fixture spans at least two distinct departments",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/stages/CALCULATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "CALCULATION starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 3,
+        "changedParticipantIds": [
+          "01a07b76-51f4-7599-86c6-f8eae79f1e58",
+          "01a07b76-5216-7d28-b7c0-73495bbc5786",
+          "01a07b76-5238-73b0-a09a-1c257d277138"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-51b7-7ea4-8ab6-d82522adee24/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Each department is normalized against its own mean, not the selected batch mean",
+      "passed": true,
+      "evidence": {
+        "expected": {
+          "01a07b76-51f4-7599-86c6-f8eae79f1e58": 60.0,
+          "01a07b76-5216-7d28-b7c0-73495bbc5786": 80.0,
+          "01a07b76-5238-73b0-a09a-1c257d277138": 70.0
+        },
+        "actual": {
+          "01a07b76-51f4-7599-86c6-f8eae79f1e58": 60.0,
+          "01a07b76-5216-7d28-b7c0-73495bbc5786": 80.0,
+          "01a07b76-5238-73b0-a09a-1c257d277138": 70.0
+        },
+        "populations": {
+          "019ed001-0000-7000-8000-000000000001": [
+            "01a07b76-51f4-7599-86c6-f8eae79f1e58",
+            "01a07b76-5216-7d28-b7c0-73495bbc5786"
+          ],
+          "019ed001-0000-7000-8000-000000000002": [
+            "01a07b76-5238-73b0-a09a-1c257d277138"
+          ]
+        }
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-5458-7c58-af70-352913df271a/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-5475-7d26-bd83-c644cc00eff4/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b76-5492-73eb-bf68-b80c9d6eb86a/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/stages/REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "REVIEW starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 3,
+        "changedParticipantIds": [
+          "01a07b76-5458-7c58-af70-352913df271a",
+          "01a07b76-5475-7d26-bd83-c644cc00eff4",
+          "01a07b76-5492-73eb-bf68-b80c9d6eb86a"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-5458-7c58-af70-352913df271a/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "763d2fb3-3cf1-4ca9-90a2-58bf35841916",
+          "groupId": "01a07b76-541d-7350-b071-cbafdc4e29c7",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-541d-72c2-b06f-5088aa6f3289",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-5458-7c58-af70-352913df271a/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-5475-7d26-bd83-c644cc00eff4/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "763d2fb3-3cf1-4ca9-90a2-58bf35841916",
+          "groupId": "01a07b76-541d-7350-b071-cbafdc4e29c7",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-541d-72c2-b06f-5088aa6f3289",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-5475-7d26-bd83-c644cc00eff4/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b76-5492-73eb-bf68-b80c9d6eb86a/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Round 1 exposes exactly one frozen policy item",
+      "passed": true,
+      "evidence": [
+        {
+          "id": "763d2fb3-3cf1-4ca9-90a2-58bf35841916",
+          "groupId": "01a07b76-541d-7350-b071-cbafdc4e29c7",
+          "round": 1,
+          "catalogItemId": null,
+          "title": "독립 계산 항목 1",
+          "definition": "환산과 가중치 검증",
+          "weightPercent": 100,
+          "scaleId": "01a07b76-541d-72c2-b06f-5088aa6f3289",
+          "displayOrder": 0,
+          "opinionRequired": false
+        }
+      ]
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b76-5492-73eb-bf68-b80c9d6eb86a/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/stages/CALCULATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "CALCULATION starts every selected participant without blockers",
+      "passed": true,
+      "evidence": {
+        "changedCount": 3,
+        "changedParticipantIds": [
+          "01a07b76-5458-7c58-af70-352913df271a",
+          "01a07b76-5475-7d26-bd83-c644cc00eff4",
+          "01a07b76-5492-73eb-bf68-b80c9d6eb86a"
+        ],
+        "excluded": []
+      }
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b76-541e-72ab-a3b7-06faf1340f81/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Exact N=3 allocation assigns one S, one A, and one B in score order",
+      "passed": true,
+      "evidence": {
+        "100.0": "S",
+        "80.0": "A",
+        "60.0": "B"
+      }
+    }
+  ]
+}

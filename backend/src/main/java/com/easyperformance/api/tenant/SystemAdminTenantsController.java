@@ -76,16 +76,21 @@ public class SystemAdminTenantsController {
 
     @PostMapping
     public ResponseEntity<PlatformTenantResponse> create(@Valid @RequestBody CreateTenantRequest body) {
+        // Owner-only dependencies must be present before the first control-plane write. In the normal
+        // performance consumer deployment control-plane-owner=false, so fail with 503 without leaving
+        // a PROVISIONING tenant/subscription orphan behind.
         PlatformTenantStore store = requireStore();
+        NeonProvisioningService provisioning = requireBean(provisioningProvider);
+        AppSubscriptionStore subscriptions = requireBean(subscriptionsProvider);
+        PlatformProductConfig productConfig = requireBean(productConfigProvider);
         var tenant = store.create(body.code(), body.name(), body.region().trim(),
                 body.adminUsername(), body.adminEmail());
         // 엔타이틀먼트 — performance 콘솔 생성 = PERFORMANCE 구독 시드.
         // NeonProvisioningService 는 활성 구독을 조회해 라이선스된 제품의 DB 만 만든다 (ware/recruit/store-hr 동일).
-        PlatformProductConfig productConfig = requireBean(productConfigProvider);
-        requireBean(subscriptionsProvider).ensureActive(tenant.id(), productConfig.appCode());
+        subscriptions.ensureActive(tenant.id(), productConfig.appCode());
         // fire-and-forget: background 풀에서 Neon 프로비저닝(수십 초) → 즉시 202.
         // FE 콘솔이 5초 폴링으로 PROVISIONING → ACTIVE 추적.
-        requireBean(provisioningProvider).provisionAsync(tenant.id());
+        provisioning.provisionAsync(tenant.id());
         return ResponseEntity.accepted().body(PlatformTenantResponse.from(store.require(tenant.id())));
     }
 

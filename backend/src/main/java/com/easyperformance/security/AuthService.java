@@ -168,6 +168,28 @@ public class AuthService {
             userId, tenantId, roles);
     }
 
+    /**
+     * Reads the signed tenant claim before rotation so Model B can select the product database first.
+     * This method deliberately does not mutate the refresh-token store.
+     */
+    UUID refreshTenantId(AuthDtos.RefreshRequest req) {
+        if (req == null || req.refreshToken() == null || req.refreshToken().isBlank()) {
+            throw new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_NOT_FOUND,
+                Map.of("reason", "refreshToken-required"));
+        }
+        try {
+            var parsed = jwtService.parse(req.refreshToken());
+            if (!"refresh".equals(parsed.type().orElse(null)) || parsed.subjectAsUuid().isEmpty()) {
+                throw new IllegalArgumentException("refresh claims invalid");
+            }
+            return parsed.tenantId().orElseThrow(() ->
+                new IllegalArgumentException("refresh tenant missing"));
+        } catch (RuntimeException ex) {
+            throw new ApiException(PerformanceErrorCode.AUTH_REFRESH_TOKEN_INVALID,
+                Map.of("reason", "parse-failed"));
+        }
+    }
+
     /** Logout — refresh 토큰 폐기. access 토큰은 stateless 라 만료 시까지 유효 (5분 한도). */
     public void logout(AuthDtos.LogoutRequest req) {
         if (req != null && req.refreshToken() != null) {

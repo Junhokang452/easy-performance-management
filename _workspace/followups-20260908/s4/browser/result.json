@@ -1,0 +1,76 @@
+{
+  "completed": true,
+  "checks": [
+    {
+      "case": "ko 1440 actual PDF download",
+      "passed": true,
+      "bytes": 23597
+    },
+    {
+      "case": "en 1440 actual PDF download",
+      "passed": true,
+      "bytes": 18272
+    },
+    {
+      "case": "ja 1440 actual PDF download",
+      "passed": true,
+      "bytes": 18274
+    },
+    {
+      "case": "zh-CN 1440 actual PDF download",
+      "passed": true,
+      "bytes": 18274
+    },
+    {
+      "case": "vi 1440 actual PDF download",
+      "passed": true,
+      "bytes": 18274
+    },
+    {
+      "case": "ko 390 actual PDF download",
+      "passed": true,
+      "bytes": 23597
+    },
+    {
+      "case": "en 390 actual PDF download",
+      "passed": true,
+      "bytes": 18278
+    },
+    {
+      "case": "ja 390 actual PDF download",
+      "passed": true,
+      "bytes": 18278
+    },
+    {
+      "case": "zh-CN 390 actual PDF download",
+      "passed": true,
+      "bytes": 18274
+    },
+    {
+      "case": "vi 390 actual PDF download",
+      "passed": true,
+      "bytes": 18278
+    },
+    {
+      "case": "cancel sends no PDF request",
+      "passed": true
+    },
+    {
+      "case": "portrait does not silently drop selected columns",
+      "passed": true
+    },
+    {
+      "case": "actual unsupported glyph 422 stays visible and recoverable",
+      "passed": true
+    },
+    {
+      "case": "corrected input retries to real PDF",
+      "passed": true
+    },
+    {
+      "case": "employee surface no PDF action and direct request 403",
+      "passed": true
+    }
+  ],
+  "consoleErrors": []
+}

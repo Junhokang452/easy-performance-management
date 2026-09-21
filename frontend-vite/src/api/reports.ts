@@ -1,3 +1,4 @@
+import { readSavedLocale } from '../i18n/locales';
 /**
  * PerformanceReport 도메인 API — P0-S5 슬라이스 (append-only 리포트 발행 + 본인 결과 조회).
  *
@@ -235,5 +236,5 @@ export function formatReportDateTime(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString();
+  return d.toLocaleString(readSavedLocale());
 }

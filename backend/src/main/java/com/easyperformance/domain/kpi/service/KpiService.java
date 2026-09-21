@@ -476,30 +476,14 @@ public class KpiService {
 
     /** supersede 안 된 actual 중 max(asOfDate, createdAt) — DESC 정렬 첫 행. */
     private KpiActual latestActual(UUID tenantId, UUID assignmentId) {
-        List<KpiActual> live = actualRepository
-            .findAllByTenantIdAndKpiAssignmentIdAndSupersedesIdIsNullOrderByAsOfDateDescCreatedAtDesc(tenantId, assignmentId);
-        if (live.isEmpty()) {
-            return null;
-        }
-        // supersede 안 된 row 중 후속 정정본이 있으면 그 정정본을 latest 로 — 정정 체인 추적.
-        // P0 단순화: supersedesId IS NULL 인 최초 row 는 정정되면 supersededIds 에 들어가 제외되어야 하나,
-        // append-only 모델에서 latest 는 "아무도 supersede 하지 않은 살아있는 row" 가 정답.
-        // 즉 이 row.id 를 supersedesId 로 가리키는 정정본이 없어야 함.
-        for (KpiActual a : live) {
-            if (!actualRepository.existsByTenantIdAndSupersedesId(tenantId, a.getId())) {
-                return a;
-            }
-        }
-        return null;
+        return KpiActualSelector.latestCurrentLeaf(
+            actualRepository.findAllByTenantIdAndKpiAssignmentIdOrderByAsOfDateDescCreatedAtDesc(tenantId, assignmentId),
+            null);
     }
 
     /** achievementRate = latestValue ÷ effectiveTarget. target null·0 또는 value null → null. */
     private BigDecimal computeAchievementRate(BigDecimal latestValue, BigDecimal effectiveTarget) {
-        if (latestValue == null || effectiveTarget == null
-            || effectiveTarget.compareTo(BigDecimal.ZERO) == 0) {
-            return null;
-        }
-        return latestValue.divide(effectiveTarget, 6, java.math.RoundingMode.HALF_UP);
+        return KpiScorePolicy.achievementRate(latestValue, effectiveTarget);
     }
 
     // ═════════════════════════════════════════════════════════════════════

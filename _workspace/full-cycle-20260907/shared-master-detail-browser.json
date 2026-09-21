@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "width": 1440,
+      "flow": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "flow": true,
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}

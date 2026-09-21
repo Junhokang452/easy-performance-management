@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -20,4 +21,6 @@ import java.util.UUID;
 public interface RmAssignmentRepository extends JpaRepository<RmAssignment, UUID> {
 
     List<RmAssignment> findAllByTenantIdAndEmployeeId(UUID tenantId, UUID employeeId);
+
+    Optional<RmAssignment> findByIdAndTenantId(UUID id, UUID tenantId);
 }

@@ -1,0 +1,29 @@
+{
+  "environment": {
+    "kind": "windows-temporary-copy",
+    "java": "Eclipse Temurin 21.0.12.1+1",
+    "gradle": "8.14.5",
+    "sourceTempChangedFileHashMatches": 23,
+    "sourceTempChangedFileHashTotal": 23
+  },
+  "focused": {
+    "tests": 36,
+    "failures": 0,
+    "errors": 0
+  },
+  "backend": {
+    "tests": 294,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "testSuites": 47
+  },
+  "bootJar": {
+    "exitCode": 0,
+    "bytes": 72533389,
+    "sha256": "1D3AABF5DCFEC0EFE13FF9DF39355FA185701F9CAA5990BF5E4C83F84483F454"
+  },
+  "runtimeHttp": {
+    "status": "delegated-to-root-runtime-summary"
+  }
+}

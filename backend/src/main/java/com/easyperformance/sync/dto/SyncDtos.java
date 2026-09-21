@@ -53,16 +53,33 @@ public final class SyncDtos {
         String positionCode,
         String gradeCode,
         String jobCode,
+        UUID managerEmployeeId,
         LocalDate effectiveFrom,
         LocalDate effectiveTo,
+        Boolean deleted,
         Long sourceVersion
-    ) {}
+    ) {
+        /** Legacy nine-field wire compatibility; legacy rows are never auto-line capable. */
+        public AssignmentUpsert(UUID id, UUID employeeId, UUID orgUnitId, String positionCode,
+                                String gradeCode, String jobCode, LocalDate effectiveFrom,
+                                LocalDate effectiveTo, Long sourceVersion) {
+            this(id, employeeId, orgUnitId, positionCode, gradeCode, jobCode, null,
+                effectiveFrom, effectiveTo, null, sourceVersion);
+        }
+    }
 
     public record CoreMasterBatchRequest(
+        UUID tenantId,
         List<EmployeeUpsert> employees,
         List<OrgUnitUpsert> orgUnits,
         List<AssignmentUpsert> assignments
-    ) {}
+    ) {
+        /** Legacy body compatibility; controller keeps manager/delete capability disabled. */
+        public CoreMasterBatchRequest(List<EmployeeUpsert> employees, List<OrgUnitUpsert> orgUnits,
+                                      List<AssignmentUpsert> assignments) {
+            this(null, employees, orgUnits, assignments);
+        }
+    }
 
     public record CoreMasterBatchResponse(
         int employeesApplied,

@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "programId": "01a08001-4c46-7f0d-9ecb-f96cd52167dd",
+  "participantIds": [
+    "01a08001-4c68-773b-b8bf-b3bc10219bbb",
+    "01a08001-4c6c-773b-bea3-ae16c8153d58"
+  ],
+  "checks": [
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "ko",
+      "width": 1440,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "en",
+      "width": 1440,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "ja",
+      "width": 1440,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "zh-CN",
+      "width": 1440,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "vi",
+      "width": 1440,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "ko",
+      "width": 390,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "en",
+      "width": 390,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "ja",
+      "width": 390,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "zh-CN",
+      "width": 390,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "locale preview and layout",
+      "passed": true,
+      "locale": "vi",
+      "width": 390,
+      "ready": 1,
+      "blocked": 1
+    },
+    {
+      "case": "reason required and confirmation close has no mutation",
+      "passed": true
+    },
+    {
+      "case": "fresh preview applies one and skips one",
+      "passed": true
+    },
+    {
+      "case": "employee API denied and reviewer-line UI absent",
+      "passed": true
+    }
+  ]
+}

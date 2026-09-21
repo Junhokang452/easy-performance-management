@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-08T04:53:27.584Z" hostname="DESKTOP-JPP56SN" time="1.534">
+  <properties/>
+  <testcase name="boundedProjectionPreservesDatesManagerAndTombstones()" classname="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" time="0.93"/>
+  <testcase name="microsecondVersionsDoNotCollapseWithinMillisecond()" classname="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" time="0.195"/>
+  <testcase name="differentRouteDeniesEvenWithGateOff()" classname="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" time="0.388"/>
+  <testcase name="missingModelBRouteDeniesBeforeSql()" classname="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" time="0.003"/>
+  <testcase name="missingVersionRejectsAndOverflowRejects()" classname="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" time="0.004"/>
+  <testcase name="wrongTenantDeniesBeforeSql()" classname="com.easyhcm.backend.service.EasyPerformanceSnapshotServiceTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\SAMSUNG\AppData\Local\Temp\easy-hcm-canonical-boot411-qa-20260908\gradle-user-home\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.18.11\82212e5b3633e7a65fca8bec525762cfb6c9bae4\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

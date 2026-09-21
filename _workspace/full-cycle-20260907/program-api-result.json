@@ -1,0 +1,705 @@
+{
+  "passed": true,
+  "count": 147,
+  "fixtures": {
+    "programId": "01a07b30-f964-7d36-982f-8c8fcd9b4f4e",
+    "participantId": "01a07b31-018b-7cb3-8d09-1962f875b512",
+    "goalId": "01a07b31-08ac-7d7e-a41a-7a2123441d34",
+    "copiedProgramId": "01a07b31-2a75-7f9a-aed4-4cd20a2d5dba"
+  },
+  "checks": [
+    {
+      "case": "hr-admin POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague POST /api/auth/session/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "colleague GET /api/v1/evaluation-workspace/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Member cannot create evaluation programs",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/auth/login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Tenant B operator cannot read tenant A program",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "Reviewer weights must total exactly 100",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/definition",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Definition revision advances on actual edit",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/participants",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Draft definition is hidden from assigned employee",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/guides",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/common-items:apply",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/open",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Program opening is distinct from participant stage execution",
+      "passed": true
+    },
+    {
+      "case": "Full administrative definition stays operator-only",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/me",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Same program participant cannot read another employee goals",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/GOAL:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/goals",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34:request-agreement",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Goal author cannot approve own agreement",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "Administrator preview cannot alter reviewer-authored content",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager PUT /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34/opinion",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34:decide",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee PUT /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34:request-agreement",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34:decide",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/goals/01a07b31-08ac-7d7e-a41a-7a2123441d34/history",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Agreement history preserves rejection and subsequent approval",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/INTERMEDIATE:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Batch transition advances ready employee and excludes unready employee independently",
+      "passed": true
+    },
+    {
+      "case": "manager PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/intermediate",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/intermediate:complete",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/SELF_REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-context?round=0",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee receives actual evaluable items",
+      "passed": true
+    },
+    {
+      "case": "employee PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-submission?round=0",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-submission:complete?round=0",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee submission is locked when completed",
+      "passed": true
+    },
+    {
+      "case": "Submitted round cannot be silently overwritten",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/REVIEW:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Second-round reviewer cannot act as first-round reviewer",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "manager GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-context?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager receives actual evaluable items",
+      "passed": true
+    },
+    {
+      "case": "manager PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-submission?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-submission:complete?round=1",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "manager submission is locked when completed",
+      "passed": true
+    },
+    {
+      "case": "Submitted round cannot be silently overwritten",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Caller cannot raise round parameter to bypass previous-round visibility",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-context?round=2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Hidden previous-round policy excludes prior scores and opinions",
+      "passed": true
+    },
+    {
+      "case": "director GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-context?round=2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director receives actual evaluable items",
+      "passed": true
+    },
+    {
+      "case": "director PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-submission?round=2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/review-submission:complete?round=2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director submission is locked when completed",
+      "passed": true
+    },
+    {
+      "case": "Submitted round cannot be silently overwritten",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/CALCULATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Actual two-reviewer plan calculates 80×40% + 90×60% = 86",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/calculations",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Unpublished employee cannot obtain calculation scores through direct endpoint",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/CALIBRATION:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/adjustment",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/adjustment:complete",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/stages/FEEDBACK:start",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director PUT /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/feedback",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/feedback:deliver",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/feedback/01a07b31-2012-793b-b681-0c8753c9215d:appeal",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "director POST /api/v1/evaluation-programs/feedback/01a07b31-2012-793b-b681-0c8753c9215d:resolve",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Appeal correction creates a new calculation revision",
+      "passed": true
+    },
+    {
+      "case": "hr-admin PATCH /api/v1/evaluation-programs/participants/01a07b31-0268-70ee-a197-4f28087cf194",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e:finalize",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Finalization closes program without implicit individual publication",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/me/history",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unpublished result does not appear in personal history",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results:publish",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/me/history",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Published grade-only result contains grade but no score",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Grade-only member cannot bypass masking through calculation detail",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/calculations",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Operator retains corrected score evidence",
+      "passed": true
+    },
+    {
+      "case": "Finalization also locks agreement opinions",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "Finalized program blocks arbitrary state rewrite",
+      "passed": true,
+      "status": 409
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Final result summary contains the corrected real participant",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results/items",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results/reviewers",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/analytics/reviewer-tendencies",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Reviewer tendency uses actual two reviewer records",
+      "passed": true
+    },
+    {
+      "case": "Member cannot fetch organization-wide result analysis",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/analytics/pivot",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Pivot counts only the finalized active population",
+      "passed": true
+    },
+    {
+      "case": "Pivot requires an explicit grade dimension",
+      "passed": true,
+      "status": 422
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results.xlsx",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Real OOXML export: /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/results.xlsx",
+      "passed": true
+    },
+    {
+      "case": "Spreadsheet download is attachment and nosniff",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/participants.xlsx",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Real OOXML export: /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/participants.xlsx",
+      "passed": true
+    },
+    {
+      "case": "Spreadsheet download is attachment and nosniff",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/reviewers.xlsx",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Real OOXML export: /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/reviewers.xlsx",
+      "passed": true
+    },
+    {
+      "case": "Spreadsheet download is attachment and nosniff",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/analytics/pivot.xlsx",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Real OOXML export: /api/v1/evaluation-programs/analytics/pivot.xlsx",
+      "passed": true
+    },
+    {
+      "case": "Spreadsheet download is attachment and nosniff",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/analytics/pivot.svg",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Pivot chart image is a valid SVG document",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/employee-preview",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Operator preview identifies the actual participant",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/participants/01a07b31-018b-7cb3-8d09-1962f875b512/employee-preview",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/guides/01a07b31-04cb-75b1-a180-807e21e319a2",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Assigned employee downloads the original private guide bytes",
+      "passed": true
+    },
+    {
+      "case": "Guide lookup remains tenant-bound",
+      "passed": true,
+      "status": 404
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/notifications:preview",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Notification preview substitutes the intended template fields",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/notifications:queue",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "In-app notification is durably delivered",
+      "passed": true
+    },
+    {
+      "case": "employee GET /api/v1/evaluation-programs/me/notifications",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Recipient inbox contains queued notification",
+      "passed": true
+    },
+    {
+      "case": "colleague POST /api/v1/evaluation-programs/me/notifications/01a07b31-28a3-7726-b942-98744165db19:read",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "case": "employee POST /api/v1/evaluation-programs/me/notifications/01a07b31-28a3-7726-b942-98744165db19:read",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Read acknowledgement is recorded",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/notifications:queue",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Unconfigured SMTP does not claim email delivery",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/notifications:dispatch",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Local runtime sends no external email",
+      "passed": true
+    },
+    {
+      "case": "hr-admin POST /api/v1/evaluation-programs/01a07b30-f964-7d36-982f-8c8fcd9b4f4e/copy",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "case": "Copy starts a distinct draft without copying completed participants",
+      "passed": true
+    },
+    {
+      "case": "hr-admin GET /api/v1/evaluation-programs/01a07b31-2a75-7f9a-aed4-4cd20a2d5dba/participants",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Copy has no participant execution records",
+      "passed": true
+    },
+    {
+      "case": "hr-admin PUT /api/v1/evaluation-programs/01a07b31-2a75-7f9a-aed4-4cd20a2d5dba/basic",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "case": "Draft basic information is editable",
+      "passed": true
+    },
+    {
+      "case": "Unfinalized program cannot generate reviewer tendencies",
+      "passed": true,
+      "status": 409
+    }
+  ]
+}

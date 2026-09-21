@@ -18,7 +18,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.mockito.ArgumentCaptor;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityExistsException;
+import static org.mockito.Mockito.doThrow;
 
 import com.easyperformance.common.TenantSupport;
 import com.easyperformance.readmodel.entity.RmAssignment;
@@ -43,24 +48,38 @@ class ReadModelSyncServiceTest {
     private final RmEmployeeRepository employees = mock(RmEmployeeRepository.class);
     private final RmOrgUnitRepository orgUnits = mock(RmOrgUnitRepository.class);
     private final RmAssignmentRepository assignments = mock(RmAssignmentRepository.class);
+    private final EntityManager entityManager = mock(EntityManager.class);
 
     private final ReadModelSyncService service = new ReadModelSyncService(
-        employees, orgUnits, assignments);
+        employees, orgUnits, assignments, entityManager);
 
     private static CoreMasterBatchRequest employeeOnly(EmployeeUpsert row) {
         return new CoreMasterBatchRequest(List.of(row), List.of(), List.of());
     }
 
     @Test
+    void bothPublicSyncEntrypointsRequireRepeatableReadForMonotonicConcurrentUpdates() throws Exception {
+        Transactional legacy = ReadModelSyncService.class
+            .getMethod("applyCoreMaster", CoreMasterBatchRequest.class)
+            .getAnnotation(Transactional.class);
+        Transactional extended = ReadModelSyncService.class
+            .getMethod("applyCoreMaster", CoreMasterBatchRequest.class, boolean.class)
+            .getAnnotation(Transactional.class);
+
+        assertThat(legacy.isolation()).isEqualTo(Isolation.REPEATABLE_READ);
+        assertThat(extended.isolation()).isEqualTo(Isolation.REPEATABLE_READ);
+    }
+
+    @Test
     void coreMaster_insertsWithExternalIdAndTenant() {
         UUID id = UUID.randomUUID();
-        when(employees.findById(id)).thenReturn(Optional.empty());
+        when(employees.findByIdAndTenantId(id, TenantSupport.FALLBACK_TENANT_ID)).thenReturn(Optional.empty());
 
         CoreMasterBatchResponse result = service.applyCoreMaster(employeeOnly(
             new EmployeeUpsert(id, "E001", "홍길동", "ACTIVE", UUID.randomUUID(), "FULL_TIME", 1L)));
 
         ArgumentCaptor<RmEmployee> captor = ArgumentCaptor.forClass(RmEmployee.class);
-        verify(employees).save(captor.capture());
+        verify(entityManager).persist(captor.capture());
         assertThat(captor.getValue().getId()).isEqualTo(id);
         assertThat(captor.getValue().getTenantId()).isEqualTo(TenantSupport.FALLBACK_TENANT_ID);
         assertThat(captor.getValue().getSourceVersion()).isEqualTo(1L);
@@ -80,7 +99,7 @@ class ReadModelSyncServiceTest {
         existing.setStatus("ACTIVE");
         existing.setSourceVersion(1L);
         existing.setSyncedAt(OffsetDateTime.now().minusDays(1));
-        when(employees.findById(id)).thenReturn(Optional.of(existing));
+        when(employees.findByIdAndTenantId(id, TenantSupport.FALLBACK_TENANT_ID)).thenReturn(Optional.of(existing));
 
         CoreMasterBatchResponse result = service.applyCoreMaster(employeeOnly(
             new EmployeeUpsert(id, "E001", "새이름", "ACTIVE", null, "PART_TIME", 2L)));
@@ -102,7 +121,7 @@ class ReadModelSyncServiceTest {
         existing.setStatus("ACTIVE");
         existing.setSourceVersion(5L);
         existing.setSyncedAt(OffsetDateTime.now());
-        when(employees.findById(id)).thenReturn(Optional.of(existing));
+        when(employees.findByIdAndTenantId(id, TenantSupport.FALLBACK_TENANT_ID)).thenReturn(Optional.of(existing));
 
         CoreMasterBatchResponse result = service.applyCoreMaster(employeeOnly(
             new EmployeeUpsert(id, "E001", "과거", "ACTIVE", null, null, 5L)));
@@ -115,7 +134,7 @@ class ReadModelSyncServiceTest {
     @Test
     void coreMaster_skipsMalformedRowsWithoutFailingBatch() {
         UUID goodOrgId = UUID.randomUUID();
-        when(orgUnits.findById(goodOrgId)).thenReturn(Optional.empty());
+        when(orgUnits.findByIdAndTenantId(goodOrgId, TenantSupport.FALLBACK_TENANT_ID)).thenReturn(Optional.empty());
 
         CoreMasterBatchResponse result = service.applyCoreMaster(new CoreMasterBatchRequest(
             List.of(new EmployeeUpsert(null, "E001", "무ID", "ACTIVE", null, null, 1L)),
@@ -126,8 +145,8 @@ class ReadModelSyncServiceTest {
         assertThat(result.employeesSkipped()).isEqualTo(1);   // id null
         assertThat(result.orgUnitsApplied()).isEqualTo(1);
         assertThat(result.assignmentsSkipped()).isEqualTo(1); // sourceVersion null
-        verify(orgUnits).save(any(RmOrgUnit.class));
-        verify(assignments, never()).save(any());
+        verify(entityManager).persist(any(RmOrgUnit.class));
+        verify(entityManager, never()).persist(any(RmAssignment.class));
     }
 
     @Test
@@ -147,8 +166,8 @@ class ReadModelSyncServiceTest {
         UUID orgId = UUID.randomUUID();
         UUID asgId = UUID.randomUUID();
         UUID empId = UUID.randomUUID();
-        when(orgUnits.findById(orgId)).thenReturn(Optional.empty());
-        when(assignments.findById(asgId)).thenReturn(Optional.empty());
+        when(orgUnits.findByIdAndTenantId(orgId, TenantSupport.FALLBACK_TENANT_ID)).thenReturn(Optional.empty());
+        when(assignments.findByIdAndTenantId(asgId, TenantSupport.FALLBACK_TENANT_ID)).thenReturn(Optional.empty());
 
         CoreMasterBatchResponse result = service.applyCoreMaster(new CoreMasterBatchRequest(
             List.of(),
@@ -157,13 +176,13 @@ class ReadModelSyncServiceTest {
                 LocalDate.of(2026, 1, 1), null, 4L))));
 
         ArgumentCaptor<RmOrgUnit> orgCaptor = ArgumentCaptor.forClass(RmOrgUnit.class);
-        verify(orgUnits).save(orgCaptor.capture());
+        verify(entityManager).persist(orgCaptor.capture());
         assertThat(orgCaptor.getValue().getId()).isEqualTo(orgId);
         assertThat(orgCaptor.getValue().getTenantId()).isEqualTo(TenantSupport.FALLBACK_TENANT_ID);
         assertThat(orgCaptor.getValue().getOrgType()).isEqualTo("DIVISION");
 
         ArgumentCaptor<RmAssignment> asgCaptor = ArgumentCaptor.forClass(RmAssignment.class);
-        verify(assignments).save(asgCaptor.capture());
+        verify(entityManager).persist(asgCaptor.capture());
         assertThat(asgCaptor.getValue().getId()).isEqualTo(asgId);
         assertThat(asgCaptor.getValue().getEmployeeId()).isEqualTo(empId);
         assertThat(asgCaptor.getValue().getJobCode()).isEqualTo("SALES.MGR");
@@ -171,5 +190,100 @@ class ReadModelSyncServiceTest {
 
         assertThat(result.orgUnitsApplied()).isEqualTo(1);
         assertThat(result.assignmentsApplied()).isEqualTo(1);
+    }
+
+    @Test
+    void extendedAssignmentPersistsManagerDeleteAndSourceCapability() {
+        UUID assignmentId = UUID.randomUUID();
+        UUID employeeId = UUID.randomUUID();
+        UUID managerId = UUID.randomUUID();
+        when(assignments.findByIdAndTenantId(assignmentId, TenantSupport.FALLBACK_TENANT_ID))
+            .thenReturn(Optional.empty());
+        AssignmentUpsert row = new AssignmentUpsert(assignmentId, employeeId, null, null, null,
+            null, managerId, LocalDate.of(2026, 1, 1), null, false, 9_999_999L);
+
+        service.applyCoreMaster(new CoreMasterBatchRequest(TenantSupport.FALLBACK_TENANT_ID,
+            List.of(), List.of(), List.of(row)), true);
+
+        ArgumentCaptor<RmAssignment> captor = ArgumentCaptor.forClass(RmAssignment.class);
+        verify(entityManager).persist(captor.capture());
+        assertThat(captor.getValue().getManagerEmployeeId()).isEqualTo(managerId);
+        assertThat(captor.getValue().getDeleted()).isFalse();
+        assertThat(captor.getValue().getSourceSystem()).isEqualTo("HCM");
+        assertThat(captor.getValue().getSourceVersion()).isEqualTo(9_999_999L);
+    }
+
+    @Test
+    void extendedAssignmentRejectsMissingStartDateAndNonPositiveVersion() {
+        AssignmentUpsert missingDate = new AssignmentUpsert(UUID.randomUUID(), UUID.randomUUID(), null,
+            null, null, null, UUID.randomUUID(), null, null, false, 1L);
+        AssignmentUpsert badVersion = new AssignmentUpsert(UUID.randomUUID(), UUID.randomUUID(), null,
+            null, null, null, UUID.randomUUID(), LocalDate.of(2026, 1, 1), null, false, 0L);
+
+        CoreMasterBatchResponse response = service.applyCoreMaster(new CoreMasterBatchRequest(
+            TenantSupport.FALLBACK_TENANT_ID, List.of(), List.of(), List.of(missingDate, badVersion)), true);
+
+        assertThat(response.assignmentsApplied()).isZero();
+        assertThat(response.assignmentsSkipped()).isEqualTo(2);
+        verify(entityManager, never()).persist(any(RmAssignment.class));
+    }
+
+    @Test
+    void rejectsKnownCrossTenantPrimaryKeyCollisionAsTypedForbiddenWithoutMergeUpdate() {
+        UUID collidingId = UUID.randomUUID();
+        when(employees.findByIdAndTenantId(collidingId, TenantSupport.FALLBACK_TENANT_ID))
+            .thenReturn(Optional.empty());
+        when(employees.existsById(collidingId)).thenReturn(true);
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> service.applyCoreMaster(employeeOnly(
+            new EmployeeUpsert(collidingId, "E-X", "collision", "ACTIVE", null, null, 3L))))
+            .isInstanceOf(com.easyware.platform.error.ApiException.class)
+            .satisfies(error -> assertThat(((com.easyware.platform.error.ApiException) error)
+                .errorCode().code()).isEqualTo("E9804303"));
+
+        verify(employees, never()).save(any());
+        verify(entityManager, never()).persist(any(RmEmployee.class));
+    }
+
+    @Test
+    void keepsInsertOnlyPersistForUnseenIdsSoRacesCannotMergeAcrossTenants() {
+        UUID racingId = UUID.randomUUID();
+        when(employees.findByIdAndTenantId(racingId, TenantSupport.FALLBACK_TENANT_ID))
+            .thenReturn(Optional.empty());
+        when(employees.existsById(racingId)).thenReturn(false);
+        doThrow(new EntityExistsException("race"))
+            .when(entityManager).persist(any(RmEmployee.class));
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> service.applyCoreMaster(employeeOnly(
+            new EmployeeUpsert(racingId, "E-R", "race", "ACTIVE", null, null, 4L))))
+            .isInstanceOf(EntityExistsException.class);
+
+        verify(employees, never()).save(any());
+    }
+
+    @Test
+    void guardsOrgUnitAndAssignmentIdsBeforeInsertOnlyPersist() {
+        UUID orgId = UUID.randomUUID();
+        UUID assignmentId = UUID.randomUUID();
+        when(orgUnits.findByIdAndTenantId(orgId, TenantSupport.FALLBACK_TENANT_ID))
+            .thenReturn(Optional.empty());
+        when(orgUnits.existsById(orgId)).thenReturn(true);
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> service.applyCoreMaster(
+            new CoreMasterBatchRequest(List.of(),
+                List.of(new OrgUnitUpsert(orgId, "O", "Org", null, null, 1L)),
+                List.of(new AssignmentUpsert(assignmentId, UUID.randomUUID(), null, null, null,
+                    null, LocalDate.of(2026, 1, 1), null, 1L)))))
+            .isInstanceOf(com.easyware.platform.error.ApiException.class);
+
+        when(orgUnits.existsById(orgId)).thenReturn(false);
+        when(assignments.findByIdAndTenantId(assignmentId, TenantSupport.FALLBACK_TENANT_ID))
+            .thenReturn(Optional.empty());
+        when(assignments.existsById(assignmentId)).thenReturn(true);
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> service.applyCoreMaster(
+            new CoreMasterBatchRequest(List.of(), List.of(),
+                List.of(new AssignmentUpsert(assignmentId, UUID.randomUUID(), null, null, null,
+                    null, LocalDate.of(2026, 1, 1), null, 1L)))))
+            .isInstanceOf(com.easyware.platform.error.ApiException.class);
     }
 }

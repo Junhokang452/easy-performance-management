@@ -1,0 +1,37 @@
+{
+  "passed": false,
+  "classification": "windows-harness-process-wait",
+  "productFailureObserved": false,
+  "retryExhausted": true,
+  "attempts": [
+    {
+      "dataDirectorySuffix": "c35b5a248f094727a356a232b5fb55a2",
+      "initdb": "passed",
+      "postgresListen": "127.0.0.1:55489",
+      "blockedAt": "pg_ctl stdout pipeline retained by descendant postgres process"
+    },
+    {
+      "dataDirectorySuffix": "a1b726ebda184209a1c6e839bffbf802",
+      "initdb": "passed",
+      "postgresListen": "127.0.0.1:55489",
+      "blockedAt": "Start-Process -Wait waited for the descendant postgres process tree"
+    }
+  ],
+  "databaseCreated": false,
+  "javaStarted": false,
+  "httpChecks": 0,
+  "cleanup": {
+    "pgCtlStatus": "no server running",
+    "pgCtlStatusExitCode": 3,
+    "port55489Listening": false,
+    "port8089Listening": false,
+    "existingPort5432Listening": true,
+    "existingPort5433Listening": true
+  },
+  "logs": [
+    "windows-audit-lifecycle.log",
+    "windows-audit-postgres.log",
+    "windows-audit-pgctl-start.stdout.log",
+    "windows-audit-pgctl-start.stderr.log"
+  ]
+}

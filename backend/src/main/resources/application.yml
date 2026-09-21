@@ -18,6 +18,12 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
+  servlet:
+    multipart:
+      # XLSX imports allow 20 MiB; individual attachment services enforce their smaller limits.
+      max-file-size: 20MB
+      max-request-size: 21MB
+
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/easy_performance_management}
     username: ${DB_USERNAME:easy_performance_management}
@@ -63,7 +69,12 @@ spring:
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=10m
 
-  jackson:
+  http:
+    converters:
+      # Boot 4 compatibility seam: preserve existing com.fasterxml.jackson.* wire contracts.
+      preferred-json-mapper: jackson2
+
+  jackson2:
     serialization:
       write-dates-as-timestamps: false
     time-zone: Asia/Seoul
@@ -157,6 +168,10 @@ easyplatform:
       # true 면 PerformanceTenantSelfBootstrapScheduler 가 TenantSchemaMigrator 로 db/migration Flyway 자체 적용 +
       # legacy PerformanceTenantBootstrapConfig/Controller 미등록(이중 경로 차단). 실 canary 활성은 env 로 결정.
       self-migrate-enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_SELF_MIGRATE_ENABLED:false}
+      # 기존 ACTIVE tenant DB drift fan-out 은 이 토글 + 아래 UUID canary 목록이 모두 있어야 활성.
+      # 토글만 true 이거나 목록이 비면 fail-closed. 검증된 UUID 를 쉼표로 추가해 단계적으로 확대한다.
+      active-drift-enabled: ${EASYPLATFORM_PERFORMANCE_STAGE2_ACTIVE_DRIFT_ENABLED:false}
+      active-drift-canary-tenant-ids: ${EASYPLATFORM_PERFORMANCE_STAGE2_ACTIVE_DRIFT_CANARY_TENANT_IDS:}
     smb:
       enabled: ${EASYPLATFORM_PERFORMANCE_SMB_ENABLED:false}
   # 단계 2 진입 — lib TenantBootstrap autoconfig 게이트 (NeonProvisioningService dev 검증).
@@ -225,6 +240,8 @@ performance:
     hcm:
       bearer-token: ${HCM_S2S_BEARER_TOKEN:}
       hmac-secret: ${HCM_S2S_HMAC_SECRET:}
+      # Signed body/header allowlist. Extended manager/delete sync is disabled when empty.
+      tenant-id: ${HCM_S2S_TENANT_ID:}
 
 # easy-platform-core (공유 lib) 의 easyware.neon.* 키 — 게이트 OFF (단계 1 기본) 면 lib 멀티테넌시 빈 미로드
 # → 로컬 단일 DB 부팅. 단계 2 Model B 진입 시 control-plane-owner=false (자매품 공유 control DB 소비).

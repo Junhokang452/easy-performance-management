@@ -4,7 +4,7 @@
  */
 package com.easyperformance;
 
-import com.easyperformance.common.UuidV7;
+import com.easyware.platform.UuidV7;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -12,6 +12,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * UuidV7 단위 테스트 — Spring 컨텍스트 미부팅.
@@ -23,10 +24,16 @@ class UuidV7Test {
 
     @Test
     void generate_returnsVersion7Uuid() {
+        long before = System.currentTimeMillis();
         UUID u = UuidV7.generate();
+        long after = System.currentTimeMillis();
         assertNotNull(u);
         // UUIDv7 version nibble = 7 (variant bits 0b10 in clock_seq_hi)
         assertEquals(7, u.version(), "UUIDv7 expected, got version " + u.version());
+        assertEquals(2, u.variant(), "RFC 4122 variant expected");
+        long encodedEpochMillis = (u.getMostSignificantBits() >>> 16) & 0xFFFFFFFFFFFFL;
+        assertTrue(encodedEpochMillis >= before && encodedEpochMillis <= after,
+            "UUIDv7 must retain the current epoch-millisecond prefix");
     }
 
     @Test

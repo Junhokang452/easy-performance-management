@@ -26,6 +26,8 @@ public interface KpiActualRepository extends JpaRepository<KpiActual, UUID> {
     List<KpiActual> findAllByTenantIdAndKpiAssignmentIdOrderByAsOfDateDescCreatedAtDesc(
         UUID tenantId, UUID kpiAssignmentId);
 
+    List<KpiActual> findAllByTenantIdAndKpiAssignmentIdIn(UUID tenantId, List<UUID> kpiAssignmentIds);
+
     /** supersede 안 된 실적만 (latestActual 계산용) — asOfDate DESC, createdAt DESC. */
     List<KpiActual> findAllByTenantIdAndKpiAssignmentIdAndSupersedesIdIsNullOrderByAsOfDateDescCreatedAtDesc(
         UUID tenantId, UUID kpiAssignmentId);

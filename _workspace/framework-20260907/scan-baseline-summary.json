@@ -1,0 +1,687 @@
+{
+  "scanKind": "baseline Spring Boot executable JAR SBOM/SCA",
+  "input": {
+    "path": "/tmp/performance-framework-baseline.jar",
+    "sizeBytes": 70621297,
+    "sha256": "bf9b0ea9e02151bc2ed0c8807494ff0e3f195e159683ecd3663e803e7097f72f"
+  },
+  "tools": {
+    "syft": {
+      "path": "/home/samsung/code/_workspace/easy-time-ware-current-head-audit-20260831/40_approved_dev_upgrade/security-tools/syft",
+      "version": "1.51.0",
+      "sha256": "5a8b71e94f4607973145f02e27e01d50b9f7c7bc41e38d40b39606ad138b43b5"
+    },
+    "grype": {
+      "path": "/home/samsung/code/_workspace/easy-time-ware-current-head-audit-20260831/40_approved_dev_upgrade/security-tools/grype",
+      "version": "0.116.1",
+      "sha256": "a8fff88f37a08af6a536e162f37f9902ec94af03df9928ee6295dffe7044dc43"
+    }
+  },
+  "database": {
+    "schemaVersion": "v6.1.9",
+    "built": "2026-09-06T06:27:35Z",
+    "scanDataDay": "2026-09-06",
+    "source": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.9_2026-09-06T00:36:16Z_1788676055.tar.zst?checksum=sha256%3A3c93034d0475d25fc82addd47b2300f99564ea4f35fd9e0b957b701049a15020",
+    "sourceArchiveSha256": "3c93034d0475d25fc82addd47b2300f99564ea4f35fd9e0b957b701049a15020",
+    "path": "/home/samsung/.cache/grype/db/6/vulnerability.db",
+    "valid": true,
+    "sizeBytes": 2143162368,
+    "sha256": "b46475b87396aac20557f409356989900390786038759b213dc69a057051b598",
+    "importMetadataSha256": "5cf4f996f43ab32d70733fa4d03ec2e650f3c1e8b8566981357fb76ae840fc37"
+  },
+  "settings": {
+    "GRYPE_DB_AUTO_UPDATE": "false",
+    "GRYPE_CHECK_FOR_APP_UPDATE": "false",
+    "customSuppressions": [],
+    "highSeveritySuppressed": false,
+    "note": "No custom Grype configuration was passed. Grype reports only its built-in kernel-header ignore rules; they do not apply to this Java archive."
+  },
+  "commands": [
+    "syft scan /tmp/performance-framework-baseline.jar -o syft-json=<output>/scan-baseline-sbom.json",
+    "GRYPE_DB_AUTO_UPDATE=false GRYPE_CHECK_FOR_APP_UPDATE=false grype sbom:<output>/scan-baseline-sbom.json -o json > <output>/scan-baseline-grype.json",
+    "GRYPE_DB_AUTO_UPDATE=false GRYPE_CHECK_FOR_APP_UPDATE=false grype db status -o json"
+  ],
+  "result": {
+    "sbomArtifacts": 100,
+    "totalMatches": 78,
+    "countsBySeverity": {
+      "Critical": 8,
+      "High": 27,
+      "Low": 13,
+      "Medium": 30
+    },
+    "critical": 8,
+    "high": 27,
+    "criticalHighTotal": 35,
+    "criticalHighFindings": [
+      {
+        "severity": "Critical",
+        "package": "spring-security-core",
+        "installedVersion": "6.4.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-9pp5-9c7g-4r83",
+        "cves": [
+          "CVE-2025-41232"
+        ],
+        "fixedVersions": [
+          "6.4.6"
+        ],
+        "fixState": "fixed",
+        "description": "Spring Security authorization bypass for method security annotations on private methods",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "spring-security-web",
+        "installedVersion": "6.4.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-mf92-479x-3373",
+        "cves": [
+          "CVE-2026-22732"
+        ],
+        "fixedVersions": [],
+        "fixState": "not-fixed",
+        "description": "Spring Security HTTP Headers Are not Written Under Some Conditions",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-5m62-pw8w-7w9f",
+        "cves": [
+          "CVE-2026-43515"
+        ],
+        "fixedVersions": [
+          "10.1.55"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat - Security constraints not correctly applied",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-9xv2-5v5q-p794",
+        "cves": [
+          "CVE-2026-65905"
+        ],
+        "fixedVersions": [
+          "10.1.58"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat's DIGEST authenticator has an Authentication Bypass by Capture-replay vulnerability",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-gcx9-497g-6cp6",
+        "cves": [
+          "CVE-2026-65182"
+        ],
+        "fixedVersions": [
+          "10.1.58"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat has an Improper Access Control, Incorrect Authorization vulnerability",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-h3x4-894j-xpx5",
+        "cves": [
+          "CVE-2026-68525"
+        ],
+        "fixedVersions": [
+          "10.1.58"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat's FORM authentication process has an Incorrect Authorization vulnerability",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-h6fc-48rj-7qqh",
+        "cves": [
+          "CVE-2026-43512"
+        ],
+        "fixedVersions": [
+          "10.1.55"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat - Digest authenticator will authenticate any unknown user",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "Critical",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-r29c-68gh-xp6x",
+        "cves": [
+          "CVE-2026-41293"
+        ],
+        "fixedVersions": [
+          "10.1.55"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat - HTTP/2 request headers not validated",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "jackson-core",
+        "installedVersion": "2.18.3",
+        "packageType": "java-archive",
+        "advisory": "GHSA-r7wm-3cxj-wff9",
+        "cves": [],
+        "fixedVersions": [
+          "2.18.8"
+        ],
+        "fixState": "fixed",
+        "description": "jackson-core: Async parser maxNumberLength bypass via chunked digit accumulation (incomplete fix for GHSA-72hv-8253-57qq)",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "jackson-databind",
+        "installedVersion": "2.18.3",
+        "packageType": "java-archive",
+        "advisory": "GHSA-j3rv-43j4-c7qm",
+        "cves": [
+          "CVE-2026-54512"
+        ],
+        "fixedVersions": [
+          "2.18.8"
+        ],
+        "fixState": "fixed",
+        "description": "jackson-databind has a PolymorphicTypeValidator bypass via generic type parameters that allows arbitrary class instantiation",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "jackson-databind",
+        "installedVersion": "2.18.3",
+        "packageType": "java-archive",
+        "advisory": "GHSA-rmj7-2vxq-3g9f",
+        "cves": [
+          "CVE-2026-54513"
+        ],
+        "fixedVersions": [
+          "2.18.8"
+        ],
+        "fixState": "fixed",
+        "description": "jackson-databind has an array subtype allowlist bypass in BasicPolymorphicTypeValidator (allowIfSubTypeIsArray)",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "micrometer-core",
+        "installedVersion": "1.14.6",
+        "packageType": "java-archive",
+        "advisory": "GHSA-g3pr-3p32-fp23",
+        "cves": [
+          "CVE-2026-40984"
+        ],
+        "fixedVersions": [],
+        "fixState": "not-fixed",
+        "description": "Micrometer HTTP server instrumentations DoS",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "postgresql",
+        "installedVersion": "42.7.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-98qh-xjc8-98pq",
+        "cves": [
+          "CVE-2026-42198"
+        ],
+        "fixedVersions": [
+          "42.7.11"
+        ],
+        "fixState": "fixed",
+        "description": "pgjdbc: Unbounded PBKDF2 iterations in SCRAM authentication allows CPU exhaustion DoS",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "postgresql",
+        "installedVersion": "42.7.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-hq9p-pm7w-8p54",
+        "cves": [
+          "CVE-2025-49146"
+        ],
+        "fixedVersions": [
+          "42.7.7"
+        ],
+        "fixState": "fixed",
+        "description": "pgjdbc Client Allows Fallback to Insecure Authentication Despite channelBinding=require Configuration",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "postgresql",
+        "installedVersion": "42.7.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-j92g-9f8w-j867",
+        "cves": [
+          "CVE-2026-54291"
+        ],
+        "fixedVersions": [
+          "42.7.12"
+        ],
+        "fixState": "fixed",
+        "description": "PostgreSQL JDBC Driver: Silent channel-binding authentication downgrade via unsupported certificate algorithms",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-boot",
+        "installedVersion": "3.4.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-wwpq-f5c3-7hvx",
+        "cves": [
+          "CVE-2026-40973"
+        ],
+        "fixedVersions": [],
+        "fixState": "not-fixed",
+        "description": "Spring Boot accepts predictable temp directory without ownership verification",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-core",
+        "installedVersion": "6.2.6",
+        "packageType": "java-archive",
+        "advisory": "GHSA-jmp9-x22r-554x",
+        "cves": [
+          "CVE-2025-41249"
+        ],
+        "fixedVersions": [
+          "6.2.11"
+        ],
+        "fixState": "fixed",
+        "description": "Spring Framework annotation detection mechanism may result in improper authorization",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-data-commons",
+        "installedVersion": "3.4.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-88fw-v6x4-3f58",
+        "cves": [
+          "CVE-2026-41695"
+        ],
+        "fixedVersions": [],
+        "fixState": "not-fixed",
+        "description": "Spring Data: Unbounded property-path cache keyed by externally-supplied path string",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-data-commons",
+        "installedVersion": "3.4.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-9fw2-h3hf-293r",
+        "cves": [
+          "CVE-2026-41716"
+        ],
+        "fixedVersions": [],
+        "fixState": "not-fixed",
+        "description": "Spring Data Commons: Heap exhaustion from unbounded property-lookup cache retaining crafted string keys",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-expression",
+        "installedVersion": "6.2.6",
+        "packageType": "java-archive",
+        "advisory": "GHSA-r5w3-xv2f-j59q",
+        "cves": [
+          "CVE-2026-41850"
+        ],
+        "fixedVersions": [
+          "6.2.19"
+        ],
+        "fixState": "fixed",
+        "description": "Spring Framework Algorithmic Denial of Service via SpEL Expressions",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-security-core",
+        "installedVersion": "6.4.5",
+        "packageType": "java-archive",
+        "advisory": "GHSA-8v5q-rhf3-jphm",
+        "cves": [
+          "CVE-2025-41248"
+        ],
+        "fixedVersions": [
+          "6.4.10"
+        ],
+        "fixState": "fixed",
+        "description": "Spring Security annotation detection mechanism has authorization bypass",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-webmvc",
+        "installedVersion": "6.2.6",
+        "packageType": "java-archive",
+        "advisory": "GHSA-3chg-m5w7-qfv5",
+        "cves": [
+          "CVE-2026-41845"
+        ],
+        "fixedVersions": [
+          "6.2.19"
+        ],
+        "fixState": "fixed",
+        "description": "Spring Framework Cross-site Scripting via JavaScriptUtils",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "spring-webmvc",
+        "installedVersion": "6.2.6",
+        "packageType": "java-archive",
+        "advisory": "GHSA-x23c-287f-qqv5",
+        "cves": [
+          "CVE-2026-41842"
+        ],
+        "fixedVersions": [
+          "6.2.19"
+        ],
+        "fixState": "fixed",
+        "description": "Spring Framework Denial of Service via Versioned Resources in Spring MVC and WebFlux",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-25xr-qj8w-c4vf",
+        "cves": [
+          "CVE-2025-53506"
+        ],
+        "fixedVersions": [
+          "10.1.43"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat Coyote vulnerable to Denial of Service via excessive HTTP/2 streams",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-563x-q5rq-57qp",
+        "cves": [
+          "CVE-2026-24880"
+        ],
+        "fixedVersions": [
+          "10.1.52"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat has an HTTP Request/Response Smuggling vulnerability",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-5mp6-jrq3-r938",
+        "cves": [
+          "CVE-2026-43513"
+        ],
+        "fixedVersions": [
+          "10.1.55"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat: LockOutRealm treats user names as case-sensitive",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-fv25-8xcx-gqjc",
+        "cves": [
+          "CVE-2026-42498"
+        ],
+        "fixedVersions": [
+          "10.1.55"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat - WebSocket authentication header exposure",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-gqp3-2cvr-x8m3",
+        "cves": [
+          "CVE-2025-48989"
+        ],
+        "fixedVersions": [
+          "10.1.44"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat Improper Resource Shutdown or Release vulnerability",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-gx5v-xp9w-j4cg",
+        "cves": [
+          "CVE-2026-41284"
+        ],
+        "fixedVersions": [
+          "10.1.55"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat: Unbounded read in WebDAV LOCK and  PROPFIND handling",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-h3gc-qfqq-6h8f",
+        "cves": [
+          "CVE-2025-48988"
+        ],
+        "fixedVersions": [
+          "10.1.42"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat - DoS in multipart upload",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-mgp5-rv84-w37q",
+        "cves": [
+          "CVE-2026-24734"
+        ],
+        "fixedVersions": [
+          "10.1.52"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat has an Improper Input Validation vulnerability",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-rv64-5gf8-9qq8",
+        "cves": [
+          "CVE-2026-34483"
+        ],
+        "fixedVersions": [
+          "10.1.54"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat has an Improper Encoding or Escaping of Output vulnerability in the JsonAccessLogValve",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-wmwf-9ccg-fff5",
+        "cves": [
+          "CVE-2025-55752"
+        ],
+        "fixedVersions": [
+          "10.1.45"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat Vulnerable to Relative Path Traversal",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-wr62-c79q-cv37",
+        "cves": [
+          "CVE-2025-52520"
+        ],
+        "fixedVersions": [
+          "10.1.43"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat Catalina is vulnerable to DoS attack through bypassing of size limits",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      },
+      {
+        "severity": "High",
+        "package": "tomcat-embed-core",
+        "installedVersion": "10.1.40",
+        "packageType": "java-archive",
+        "advisory": "GHSA-x4m4-345f-5h5g",
+        "cves": [
+          "CVE-2026-34487"
+        ],
+        "fixedVersions": [
+          "10.1.54"
+        ],
+        "fixState": "fixed",
+        "description": "Apache Tomcat vulnerable to Insertion of Sensitive Information into Log File",
+        "locations": [
+          "/performance-framework-baseline.jar"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "scan-baseline-sbom.json": {
+      "sizeBytes": 772568,
+      "sha256": "a6048d0e61442fe92af9ae047b6b46ab55f7b544a0c763f03e02c98a0b0a6e51"
+    },
+    "scan-baseline-grype.json": {
+      "sizeBytes": 370816,
+      "sha256": "7bd022bedeee06aa441a1bdffd7c51e20c8ea1375dfeb37afb9fb175fc4a899b"
+    }
+  }
+}

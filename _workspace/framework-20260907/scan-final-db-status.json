@@ -1,0 +1,7 @@
+{
+ "schemaVersion": "v6.1.9",
+ "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.9_2026-09-06T00:36:16Z_1788676055.tar.zst?checksum=sha256%3A3c93034d0475d25fc82addd47b2300f99564ea4f35fd9e0b957b701049a15020",
+ "built": "2026-09-06T06:27:35Z",
+ "path": "/home/samsung/.cache/grype/db/6/vulnerability.db",
+ "valid": true
+}
